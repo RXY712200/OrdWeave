@@ -1,6 +1,6 @@
 # Fixed six-phase roadmap
 
-Each phase is one complete implementation task. Bug fixes stay within their original phase. Only Phase 1 is implemented in this foundation; later phases are planned.
+Each phase is one complete implementation task. Bug fixes stay within their original phase. Phases 1 and 2 are implemented; Phases 3¨C6 remain planned. Phase 1 passed independent review; Phase 2 awaits independent review.
 
 1. **Project foundation and LayerKeySort integration.**
 

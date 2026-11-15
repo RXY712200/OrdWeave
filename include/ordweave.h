@@ -1,10 +1,88 @@
 #ifndef ORDWEAVE_H
 #define ORDWEAVE_H
+#include <stddef.h>
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-/* Static string owned by the library; never free it. */
 const char *ordweave_version(void);
+typedef struct OwDatabase OwDatabase;
+typedef struct {
+  uint64_t value;
+} OwRecordId;
+typedef struct {
+  uint64_t value;
+} OwCollectionId;
+typedef struct {
+  uint64_t value;
+} OwOccurrenceId;
+typedef enum {
+  OW_OK,
+  OW_INVALID,
+  OW_NOT_FOUND,
+  OW_CONFLICT,
+  OW_CAPACITY,
+  OW_NOMEM,
+  OW_INTERNAL
+} OwStatus;
+typedef enum {
+  OW_NULL,
+  OW_BOOL,
+  OW_INT,
+  OW_FLOAT,
+  OW_STRING,
+  OW_BINARY
+} OwType;
+/* Strings are length-delimited UTF-8 (embedded NUL is valid); binary is
+ * arbitrary. Returned buffers are immutable copies, owned until
+ * ow_value_release. */
+typedef struct {
+  OwType type;
+  union {
+    int boolean;
+    int64_t integer;
+    double real;
+    struct {
+      const void *data;
+      size_t size;
+    } bytes;
+  } as;
+} OwValue;
+typedef enum { OW_FRONT, OW_BACK, OW_BEFORE, OW_AFTER } OwPlacement;
+#define OW_FIELD_LIMIT ((size_t)1048576)
+#define OW_RECORD_LIMIT ((size_t)8388608)
+OwStatus ow_database_create(OwDatabase **out);
+void ow_database_destroy(OwDatabase *db);
+OwStatus ow_revision(const OwDatabase *db, uint64_t *out);
+OwStatus ow_record_create(OwDatabase *db, OwRecordId *out);
+OwStatus ow_record_delete(OwDatabase *db, OwRecordId id);
+OwStatus ow_record_exists(OwDatabase *db, OwRecordId id, int *out);
+OwStatus ow_field_set(OwDatabase *db, OwRecordId id, const char *name,
+                      const OwValue *value);
+OwStatus ow_field_get(OwDatabase *db, OwRecordId id, const char *name,
+                      OwValue *out);
+OwStatus ow_field_remove(OwDatabase *db, OwRecordId id, const char *name);
+void ow_value_release(OwValue *value);
+OwStatus ow_collection_create(OwDatabase *db, OwCollectionId *out);
+OwStatus ow_collection_delete(OwDatabase *db, OwCollectionId id);
+OwStatus ow_collection_count(OwDatabase *db, OwCollectionId id, size_t *out);
+OwStatus ow_collection_members(OwDatabase *db, OwCollectionId id,
+                               OwOccurrenceId **out, size_t *count);
+OwStatus ow_occurrence_insert(OwDatabase *db, OwCollectionId collection,
+                              OwRecordId record, OwPlacement placement,
+                              OwOccurrenceId anchor, OwOccurrenceId *out);
+OwStatus ow_occurrence_move(OwDatabase *db, OwOccurrenceId id,
+                            OwPlacement placement, OwOccurrenceId anchor);
+OwStatus ow_occurrence_remove(OwDatabase *db, OwOccurrenceId id);
+OwStatus ow_occurrence_get(OwDatabase *db, OwOccurrenceId id,
+                           OwCollectionId *collection, OwRecordId *record);
+OwStatus ow_occurrence_compare(OwDatabase *db, OwOccurrenceId left,
+                               OwOccurrenceId right, int *out);
+OwStatus ow_query_equal(OwDatabase *db, const char *name, const OwValue *value,
+                        OwRecordId **out, size_t *count);
+/* Arrays are immutable independent copies. Only this function may release them.
+ */
+void ow_array_release(void *array);
 #ifdef __cplusplus
 }
 #endif
