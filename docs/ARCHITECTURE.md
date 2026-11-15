@@ -2,7 +2,7 @@
 
 ## Implemented foundation
 
-OrdWeave implements an opaque in-memory database with typed fields, stable type-specific IDs, collections, and independently ordered occurrences. An internal adapter centralizes ID lookup/uniqueness, insertion/removal, ordered mutations, status translation, and handle expiry. Each of three ID indexes is a public LksManagedOrder. Each collection owns a public LksOrder. Comparator-visible IDs never change. Only the standalone Phase 1 test uses snapshots; the database performs no persistence.
+OrdWeave implements an opaque in-memory database with typed fields, stable type-specific IDs, collections, and independently ordered occurrences. An internal adapter centralizes ID lookup/uniqueness, insertion/removal, ordered mutations, status translation, and handle expiry. Each of three ID indexes is a public LksManagedOrder. Each collection owns a public LksOrder. Comparator-visible IDs never change. Only the standalone Phase 1 test uses LKS snapshots. Phase 3 adds a Windows append-only operation WAL; no database checkpoints exist.
 
 LayerKeySort remains an independent upstream project: https://github.com/RXY712200/LayerKeySort. Its Full v4.1.0 Stable source is pinned as a Git submodule at `70d7f0ef5857b54381b863d292a213909d87459f`. Upstream sources are unmodified, embedded tests/examples/benchmarks/install rules are disabled, and integration uses `LayerKeySort::layerkeysort`.
 
@@ -12,7 +12,7 @@ Database Core owns records, IDs, data semantics, and transactions. The OrdWeave-
 
 The database will use LKS4SNP1 snapshots for order persistence while owning its own records, WAL, and recovery. The Phase 1 test's deterministic application identifiers demonstrate association and resolution only; they are not database ID allocation.
 
-Future persistence code may selectively incorporate modified code from the user's MIT-licensed Obscura64 project, retaining applicable attribution. No such code is included now. ProbSpan is not a required runtime dependency.
+Future persistence code may selectively incorporate modified code from the user's MIT-licensed Obscura64 project, retaining applicable attribution. The SHA-256 helper is now selectively adapted from Obscura64; see THIRD_PARTY_NOTICES.md. ProbSpan is not a required runtime dependency.
 
 The initial stable scope is Windows x64, single-writer operation, and up to three retained checkpoint generations. Linux and macOS support has not been validated. Known future optimization work is technical debt, not permission to compromise correctness; ownership, durability, and recovery invariants must take priority.
 
@@ -34,4 +34,10 @@ Central public limits are 1 MiB per field payload and 8 MiB per Record budget. N
 
 Tests cover typed data, copying, constraints, references, queries, no-ops, deterministic array-model operations, allocation failures at OrdWeave-owned boundaries, and counter exhaustion. Fault injection is confined to a separately compiled white-box test translation unit; no global production fault hook exists. Upstream allocation failures are handled via public strong-atomicity contracts but are not exhaustively injected.
 
-No disk persistence, durable transactions, historical Revision queries, SQL, secondary field indexes, cross-collection atomic transfer, or unsupported concurrency promises are implemented. The caller must serialize all database access; objects and returned IDs must not be used with a different database.
+No multi-operation transactions, historical Revision queries, SQL, secondary field indexes, cross-collection atomic transfer, or unsupported concurrency promises are implemented. The caller must serialize all database access; objects and returned IDs must not be used with a different database.
+
+## Phase 3 persistence boundary
+
+Public API wrappers in persistence.c dispatch to the same core implementation via private names. Ordinary in-memory calls bypass WAL encoding. Persistent calls prepare a deterministic frame, mark the session busy, apply the core operation, append and flush, then acknowledge outputs. An uncertain append quarantines the session until close/reopen; it cannot expose mutated memory through any database query. Recovery calls that same core and checks exact IDs and Revision, preserving one data model and the unchanged LKS adapter.
+
+wal_format.c owns explicit encoding/bounded parsing; wal_windows.c owns path validation, handles, exclusive coordination, segmentation, append/flush and recovery. sha256.c is selectively transplanted from Obscura64. Exact ownership, format, initialization/rotation publication and failure states are specified in PERSISTENCE.md. No files are written by ordinary ow_database_create. Persistent destruction closes OS ownership after freeing core memory and does not create a final shutdown snapshot.

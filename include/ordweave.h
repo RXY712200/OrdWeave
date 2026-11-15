@@ -23,7 +23,13 @@ typedef enum {
   OW_CONFLICT,
   OW_CAPACITY,
   OW_NOMEM,
-  OW_INTERNAL
+  OW_INTERNAL,
+  OW_IO,
+  OW_CORRUPT,
+  OW_UNSUPPORTED,
+  OW_BUSY,
+  OW_COMMIT_UNKNOWN,
+  OW_RECOVERY_REQUIRED
 } OwStatus;
 typedef enum {
   OW_NULL,
@@ -53,6 +59,12 @@ typedef enum { OW_FRONT, OW_BACK, OW_BEFORE, OW_AFTER } OwPlacement;
 #define OW_RECORD_LIMIT ((size_t)8388608)
 OwStatus ow_database_create(OwDatabase **out);
 void ow_database_destroy(OwDatabase *db);
+/* Absolute UTF-8 drive paths on Windows; create requires a nonexistent
+ * directory. */
+OwStatus ow_database_create_persistent(const char *path, OwDatabase **out);
+OwStatus ow_database_open(const char *path, OwDatabase **out);
+OwStatus ow_database_close(OwDatabase *db);
+OwStatus ow_database_identity(const OwDatabase *db, unsigned char out[16]);
 OwStatus ow_revision(const OwDatabase *db, uint64_t *out);
 OwStatus ow_record_create(OwDatabase *db, OwRecordId *out);
 OwStatus ow_record_delete(OwDatabase *db, OwRecordId id);

@@ -1,0 +1,20 @@
+/* Private names for the existing in-memory implementation. */
+#define ow_database_create ow_core_database_create
+#define ow_database_destroy ow_core_database_destroy
+#define ow_revision ow_core_revision
+#define ow_record_create ow_core_record_create
+#define ow_record_delete ow_core_record_delete
+#define ow_record_exists ow_core_record_exists
+#define ow_field_set ow_core_field_set
+#define ow_field_get ow_core_field_get
+#define ow_field_remove ow_core_field_remove
+#define ow_collection_create ow_core_collection_create
+#define ow_collection_delete ow_core_collection_delete
+#define ow_collection_count ow_core_collection_count
+#define ow_collection_members ow_core_collection_members
+#define ow_occurrence_insert ow_core_occurrence_insert
+#define ow_occurrence_move ow_core_occurrence_move
+#define ow_occurrence_remove ow_core_occurrence_remove
+#define ow_occurrence_get ow_core_occurrence_get
+#define ow_occurrence_compare ow_core_occurrence_compare
+#define ow_query_equal ow_core_query_equal

@@ -51,3 +51,16 @@ Placements are FRONT, BACK, BEFORE, AFTER. FRONT/BACK require anchor ID zero. BE
 Equality queries scan Records and return matching Record IDs in increasing ID order. Missing fields do not equal null. Empty results are NULL/zero. Queries never change Revision.
 
 All failures preserve observable database contents, membership, ordering, IDs, Revision, and index consistency. Caller serialization is mandatory, including reads versus writes/destruction. No internal locking or cross-collection atomic transfer is promised. Limits and logical Record budget are specified in ARCHITECTURE.md.
+
+## Phase 3 persistence additions
+
+```c
+OwStatus ow_database_create_persistent(const char *path, OwDatabase **out);
+OwStatus ow_database_open(const char *path, OwDatabase **out);
+OwStatus ow_database_close(OwDatabase *db);
+OwStatus ow_database_identity(const OwDatabase *db, unsigned char out[16]);
+```
+
+Create requires a new safe absolute UTF-8 drive path; open never initializes missing/corrupt data. Successful open/create returns an owned database. Close consumes it (including poisoned sessions); NULL is accepted. BUSY close does not consume an in-progress session. Existing destroy remains a compatibility cleanup function, discarding close status. Identity copies 16 database-owned identity bytes into caller storage; it is INVALID for ordinary in-memory databases. Its output is zeroed on failure.
+
+New statuses appended without renumbering existing values: OW_IO, OW_CORRUPT, OW_UNSUPPORTED, OW_BUSY, OW_COMMIT_UNKNOWN, OW_RECOVERY_REQUIRED. On uncertain commit, all database reads and mutations are blocked until close/reopen. Required outputs stay safe on failed mutations. Returned previously copied results remain valid. Revision is published only after durable acknowledgement; no-op operations emit no WAL frame. Caller synchronization remains mandatory. See PERSISTENCE.md for error handling, format and durability boundaries.

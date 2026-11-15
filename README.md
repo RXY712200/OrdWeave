@@ -1,8 +1,8 @@
 # OrdWeave
 
-OrdWeave is a C17 embedded database project built around independently maintained LayerKeySort Full. Phase 2 provides a usable in-memory database: typed record fields, collections, repeated occurrences, dynamic ordering, ID lookup, equality queries, and a logical Revision counter. The Phase 1 ordering/snapshot integration test remains intact.
+OrdWeave is a C17 embedded database project built around independently maintained LayerKeySort Full. Phase 3 provides a usable in-memory database: typed record fields, collections, repeated occurrences, dynamic ordering, ID lookup, equality queries, and a logical Revision counter. The Phase 1 ordering/snapshot integration test remains intact.
 
-The intended first stable release targets Windows x64, single-writer operation, persistent records and ordering, WAL recovery, and up to three retained checkpoint generations. Persistence, durable transactions, checkpoints, and recovery are planned, not implemented. A small internal LKS adapter now supports runtime ordering and ID indexes. Linux and macOS have not been validated.
+The intended first stable release targets Windows x64, single-writer operation, persistent records and ordering, WAL recovery, and up to three retained checkpoint generations. Single-operation durable WAL commits and restart recovery are implemented on Windows x64. Checkpoints and backup recovery remain planned. A small internal LKS adapter now supports runtime ordering and ID indexes. Linux and macOS have not been validated.
 
 ## Build
 
@@ -48,4 +48,10 @@ int main(void) {
 }
 ```
 
-Limitations: no disk persistence, durable transactions, historical Revision queries, SQL, secondary field indexes, complex cross-collection atomic transfers, or concurrency guarantees. Occurrence insertion/removal currently rebuilds the global occurrence index for failure atomicity; see architecture notes.
+Limitations: no multi-operation transactions, checkpoints, historical Revision queries, SQL, secondary field indexes, complex cross-collection atomic transfers, or concurrency guarantees. Occurrence insertion/removal currently rebuilds the global occurrence index for failure atomicity; see architecture notes.
+
+## Persistent lifecycle (Windows x64)
+
+Use an explicitly new absolute UTF-8 path, for example `D:/data/my-new-ordweave-db` (its parent must exist). Replace `ow_database_create` in the example with `ow_database_create_persistent(path, &db)`. Mutate through the same API, then call `ow_database_close(db)`. Reopen using `ow_database_open(path, &db)`; query and modify normally. Close never supplies missing durability: each acknowledged state-changing operation was already appended and flushed.
+
+On OW_COMMIT_UNKNOWN, stop using that session, close it and reopen to establish the committed result before deciding whether to retry. See [exact persistence format and recovery rules](docs/PERSISTENCE.md). Python 3 is required for the independent format CTest oracle when BUILD_TESTING is enabled.

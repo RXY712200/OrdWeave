@@ -1,4 +1,6 @@
 #include "ordweave.h"
+#include "core_internal.h"
+#include "core_names.h"
 #include "lks_adapter.h"
 #include <float.h>
 #include <math.h>
@@ -29,6 +31,7 @@ typedef struct {
 struct OwDatabase {
   LksManagedOrder *records, *collections, *occurrences;
   uint64_t rid, cid, oid, revision;
+  OwStore *store;
 };
 const char *ordweave_version(void) { return "0.1.0-dev"; }
 static int utf8(const unsigned char *s, size_t n) {
@@ -680,4 +683,18 @@ OwStatus ow_query_equal(OwDatabase *d, const char *name, const OwValue *v,
   *out = a;
   *count = n;
   return OW_OK;
+}
+
+OwStore *ow_core_store(const OwDatabase *db) { return db ? db->store : NULL; }
+void ow_core_attach(OwDatabase *db, OwStore *store) {
+  if (db)
+    db->store = store;
+}
+OwStatus ow_core_validate(const char *name, const OwValue *value) {
+  OwStatus s = OW_OK;
+  if (name)
+    s = name_valid(name);
+  if (s == OW_OK && value)
+    s = value_valid(value);
+  return s;
 }
