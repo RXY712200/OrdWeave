@@ -1,0 +1,17 @@
+name: Windows build and test
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  windows-x64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Verify pinned dependency
+        shell: pwsh
+        run: |
+          $sha = git -C third_party/LayerKeySort rev-parse HEAD
+          if ($sha -ne '70d7f0ef5857b54381b863d292a213909d87459f') { throw "Unexpected LKS commit: $sha" }
+      - run: cmake -S . -B build -A x64
+      - run: cmake --build build --config Release
+      - run: ctest --test-dir build -C Release --output-on-failure
