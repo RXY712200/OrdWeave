@@ -64,3 +64,13 @@ OwStatus ow_database_identity(const OwDatabase *db, unsigned char out[16]);
 Create requires a new safe absolute UTF-8 drive path; open never initializes missing/corrupt data. Successful open/create returns an owned database. Close consumes it (including poisoned sessions); NULL is accepted. BUSY close does not consume an in-progress session. Existing destroy remains a compatibility cleanup function, discarding close status. Identity copies 16 database-owned identity bytes into caller storage; it is INVALID for ordinary in-memory databases. Its output is zeroed on failure.
 
 New statuses appended without renumbering existing values: OW_IO, OW_CORRUPT, OW_UNSUPPORTED, OW_BUSY, OW_COMMIT_UNKNOWN, OW_RECOVERY_REQUIRED. On uncertain commit, all database reads and mutations are blocked until close/reopen. Required outputs stay safe on failed mutations. Returned previously copied results remain valid. Revision is published only after durable acknowledgement; no-op operations emit no WAL frame. Caller synchronization remains mandatory. See PERSISTENCE.md for error handling, format and durability boundaries.
+
+## Phase 4 checkpoint APIs
+
+```c
+OwStatus ow_checkpoint_create(OwDatabase *db);
+OwStatus ow_checkpoint_info(const OwDatabase *db, uint64_t *generation, uint64_t *revision);
+OwStatus ow_checkpoint_retention(OwDatabase *db, unsigned generations);
+```
+
+These require a healthy persistent session; in-memory instances return INVALID. Info returns the checkpoint actually restored/selected by this session, zero/zero when none, and clears both outputs on failure. Retention accepts 1..3 (default 2); it configures subsequent publication and persists with the next checkpoint. Create preserves database Revision, validates native snapshots and publishes independently checksummed metadata. Failed maintenance can leave a newly published checkpoint; RECOVERY_REQUIRED means close/reopen before any further access. See CHECKPOINTS.md for authority, cleanup and fallback rules. No historical query API is introduced.

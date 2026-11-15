@@ -15,3 +15,5 @@ Exact source commit: `3db0122560853a8f3db3ba6888067394dc1a3e62`.
 MIT License, Copyright (c) 2026 RXY712200. The full applicable MIT notice is reproduced in the root LICENSE (same copyright holder and terms as the upstream LICENSE at this source commit).
 
 No ProbSpan source is included.
+
+Phase 4 also adapts the verified temporary-file publication sequence in Obscura64 `replace_once` (same source commit above): CREATE_NEW temporary files, exact write, flush, close/reopen verification and write-through rename. Checkpoint metadata backup/selection ordering and generation management are new OrdWeave code. No upstream repository was modified.

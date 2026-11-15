@@ -3,6 +3,7 @@
  * append/recovery is OrdWeave-specific. */
 #define WIN32_LEAN_AND_MEAN
 #include "wal_internal.h"
+#include "checkpoint_internal.h"
 // clang-format off
 // clang-format off
 #include <windows.h>
@@ -19,6 +20,12 @@ struct OwStore {
   unsigned char id[16], digest[32];
   uint64_t segment, offset;
   int busy, poisoned;
+  int validating;
+  uint64_t scan_revision,checkpoint_revision;
+  unsigned char anchor_found[32];
+  unsigned char metadata[OW_CHECKPOINT_META];
+  unsigned retention;
+  uint64_t selected_generation,selected_revision;
 };
 #ifdef OW_TESTING
 int ow_test_fault;
@@ -391,7 +398,7 @@ static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
   status = digest_check(sh, 128);
   if (status != OW_OK)
     goto done;
-  ow_core_revision(db, &rev);
+  rev=s->scan_revision;
   if (ow_get(sh + 12, 4) != 128 || memcmp(sh + 16, s->id, 16) ||
       ow_get(sh + 32, 8) != seq || rev == UINT64_MAX ||
       ow_get(sh + 40, 8) != rev + 1 || memcmp(sh + 48, s->digest, 32)) {
@@ -463,7 +470,7 @@ static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
       status = OW_CORRUPT;
       goto done;
     }
-    ow_core_revision(db, &before);
+    before=s->scan_revision;
     expected = ow_get(f + 16, 8);
     if (before == UINT64_MAX || expected != before + 1) {
       status = OW_CORRUPT;
@@ -471,19 +478,26 @@ static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
     }
     status = ow_decode(f + 96, n - OW_FRAME_OVERHEAD,
                        (OwOpcode)ow_get(f + 14, 2), &cmd, &field, &value);
-    if (status == OW_OK)
+    if (status == OW_OK && !s->validating && expected>s->checkpoint_revision) {
       status = ow_apply(db, &cmd);
+#ifdef OW_TESTING
+      if(status==OW_OK) ++ow_test_checkpoint_tail;
+#endif
+    }
     free(field);
     if (status != OW_OK) {
       if (status != OW_NOMEM && status != OW_IO)
         status = OW_CORRUPT;
       goto done;
     }
-    ow_core_revision(db, &rev);
+    rev=expected;
+    if(!s->validating && expected>s->checkpoint_revision) ow_core_revision(db,&rev);
     if (rev != expected) {
       status = OW_CORRUPT;
       goto done;
     }
+    s->scan_revision=expected;
+    if(expected==s->checkpoint_revision) memcpy(s->anchor_found,hash,32);
     memcpy(s->digest, hash, 32);
     offset += n;
     free(f);
@@ -496,7 +510,7 @@ tail:
     status = OW_CORRUPT;
     goto done;
   }
-  if (!seek(h, offset) || !SetEndOfFile(h) || !FlushFileBuffers(h)) {
+  if (!s->validating && (!seek(h, offset) || !SetEndOfFile(h) || !FlushFileBuffers(h))) {
     status = OW_IO;
     goto done;
   }
@@ -609,6 +623,8 @@ static OwStatus clear_pending(OwStore *s, uint64_t count) {
   FindClose(find);
   return error == ERROR_NO_MORE_FILES ? OW_OK : OW_IO;
 }
+#include "checkpoint_windows.inc"
+
 OwStatus ow_store_open(const char *path, int create, OwStore **out,
                        OwDatabase *db) {
   OwStore *s = calloc(1, sizeof(*s));
@@ -621,6 +637,7 @@ OwStatus ow_store_open(const char *path, int create, OwStore **out,
   *out = NULL;
   if (!s)
     return OW_NOMEM;
+  s->retention=2;
   s->root = s->directory = s->lock = s->wal = INVALID_HANDLE_VALUE;
   status = safe_path(path, &s->path);
   if (status != OW_OK)
@@ -784,13 +801,13 @@ OwStatus ow_store_open(const char *path, int create, OwStore **out,
     status = discover(s, &count);
     if (status != OW_OK)
       goto done;
-    for (i = 1;; i++) {
-      status = replay_segment(s, db, i, i == count);
-      if (status != OW_OK)
-        goto done;
-      if (i == count)
-        break;
-    }
+    /* Pass one validates the entire chain without constructing historical state. */
+    s->validating=1;
+    for(i=1;;i++) {status=replay_segment(s,db,i,i==count);if(status!=OW_OK) goto done;if(i==count) break;}
+    status=checkpoint_load(s,db,count);if(status!=OW_OK) goto done;
+    CloseHandle(s->wal);s->wal=INVALID_HANDLE_VALUE;
+    memset(s->digest,0,32);s->scan_revision=0;s->validating=0;
+    for(i=1;;i++) {status=replay_segment(s,db,i,i==count);if(status!=OW_OK) goto done;if(i==count) break;}
     status = clear_pending(s, count);
     if (status != OW_OK)
       goto done;

@@ -27,6 +27,7 @@ typedef struct {
   Record *record;
   Collection *collection;
   const LksOrderHandle *handle;
+  int checkpoint_seen;
 } Occurrence;
 struct OwDatabase {
   LksManagedOrder *records, *collections, *occurrences;
@@ -698,3 +699,9 @@ OwStatus ow_core_validate(const char *name, const OwValue *value) {
     s = value_valid(value);
   return s;
 }
+
+/* Narrow unpublished-state exchange; session ownership stays with its caller. */
+void ow_core_exchange(OwDatabase *a,OwDatabase *b) {
+ OwStore *as=a->store,*bs=b->store;OwDatabase tmp=*a;*a=*b;*b=tmp;a->store=as;b->store=bs;
+}
+#include "checkpoint_core.inc"

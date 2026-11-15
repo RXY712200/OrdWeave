@@ -2,7 +2,7 @@
 
 ## Implemented foundation
 
-OrdWeave implements an opaque in-memory database with typed fields, stable type-specific IDs, collections, and independently ordered occurrences. An internal adapter centralizes ID lookup/uniqueness, insertion/removal, ordered mutations, status translation, and handle expiry. Each of three ID indexes is a public LksManagedOrder. Each collection owns a public LksOrder. Comparator-visible IDs never change. Only the standalone Phase 1 test uses LKS snapshots. Phase 3 adds a Windows append-only operation WAL; no database checkpoints exist.
+OrdWeave implements an opaque in-memory database with typed fields, stable type-specific IDs, collections, and independently ordered occurrences. An internal adapter centralizes ID lookup/uniqueness, insertion/removal, ordered mutations, status translation, and handle expiry. Each of three ID indexes is a public LksManagedOrder. Each collection owns a public LksOrder. Comparator-visible IDs never change. Only the standalone Phase 1 test uses LKS snapshots. Phase 3 adds a Windows append-only operation WAL; Phase 4 adds independent native-LKS checkpoints.
 
 LayerKeySort remains an independent upstream project: https://github.com/RXY712200/LayerKeySort. Its Full v4.1.0 Stable source is pinned as a Git submodule at `70d7f0ef5857b54381b863d292a213909d87459f`. Upstream sources are unmodified, embedded tests/examples/benchmarks/install rules are disabled, and integration uses `LayerKeySort::layerkeysort`.
 
@@ -41,3 +41,9 @@ No multi-operation transactions, historical Revision queries, SQL, secondary fie
 Public API wrappers in persistence.c dispatch to the same core implementation via private names. Ordinary in-memory calls bypass WAL encoding. Persistent calls prepare a deterministic frame, mark the session busy, apply the core operation, append and flush, then acknowledge outputs. An uncertain append quarantines the session until close/reopen; it cannot expose mutated memory through any database query. Recovery calls that same core and checks exact IDs and Revision, preserving one data model and the unchanged LKS adapter.
 
 wal_format.c owns explicit encoding/bounded parsing; wal_windows.c owns path validation, handles, exclusive coordination, segmentation, append/flush and recovery. sha256.c is selectively transplanted from Obscura64. Exact ownership, format, initialization/rotation publication and failure states are specified in PERSISTENCE.md. No files are written by ordinary ow_database_create. Persistent destruction closes OS ownership after freeing core memory and does not create a final shutdown snapshot.
+
+## Phase 4 checkpoint integration
+
+Private core export/import helpers serialize typed Records, ID high-water marks, Collection snapshots and Occurrence relationships. The narrow included checkpoint_core.inc keeps core object layouts private; checkpoint_windows.inc shares the existing Windows session and verified file primitives without a new storage-provider layer. Runtime LKS handles remain private and are rebuilt by traversal of restored native orders.
+
+Recovery structurally validates all WAL history, verifies candidate anchors, restores a fresh unpublished core from a validated checkpoint and applies only subsequent operations. It preserves the existing model and public LKS indexes. Separate generation metadata leaves all v3 files unchanged. Checkpoint retention defaults to two, configurable up to three; deletion follows verified current/backup agreement. See CHECKPOINTS.md for exact grammar, failure states and known extra WAL scanning cost. No historical WAL is deleted.
