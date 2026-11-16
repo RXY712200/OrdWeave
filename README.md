@@ -1,8 +1,8 @@
 # OrdWeave
 
-OrdWeave is a C17 embedded database project built around independently maintained LayerKeySort Full. Phase 5 provides a usable in-memory database: typed record fields, collections, repeated occurrences, dynamic ordering, ID lookup, equality queries, and a logical Revision counter. The Phase 1 ordering/snapshot integration test remains intact.
+OrdWeave **1.0.0-rc.1** is a C17 embedded database for Windows x64, built around independently maintained LayerKeySort Full. It supports typed Records, Collections with independently ordered duplicate Occurrences, ID lookup, equality queries, durable single-operation WAL commits, native LKS checkpoints, immutable historical views, explicit anchored cleanup, full backups and persisted-data verification.
 
-The intended first stable release targets Windows x64, single-writer operation, persistent records and ordering, WAL recovery, and up to three retained checkpoint generations. Single-operation durable WAL commits and restart recovery are implemented on Windows x64. Native LKS checkpoints and checkpoint-plus-WAL-tail recovery are implemented; historical queries, anchored cleanup and independent full backups are now implemented. A small internal LKS adapter now supports runtime ordering and ID indexes. Linux and macOS have not been validated.
+This is an unreleased candidate for v1.0.0 Stable. Linux/macOS and concurrent writers are unsupported. See [candidate validation and limits](docs/RELEASE_CANDIDATE.md) and [changelog](CHANGELOG.md).
 
 ## Build
 
@@ -63,3 +63,7 @@ On OW_COMMIT_UNKNOWN, stop using that session, close it and reopen to establish 
 ## Historical views, cleanup, backup and verification
 
 Phase 5 adds opaque read-only `ow_history_*` views, Manual/Forever/Last N policies, explicit safe WAL-prefix cleanup, full `ow_backup_create`, and persisted-data `ow_verify_database`. Manual is the default; setting a policy does not delete files. Cleanup publishes a verified native-checkpoint recovery root before deleting eligible complete segments. Last Days is deferred because v3 commits have no timestamps. See [history/root format and failure rules](docs/HISTORY.md).
+
+## Link from a C17 application
+
+Set BUILD_TESTING=OFF when embedding, use `add_subdirectory(path/to/OrdWeave ordweave)`, and link `OrdWeave::ordweave`. Include only `ordweave.h`. Use a matching Windows x64 compiler/CRT configuration; no cross-toolchain binary ABI is promised. The public example below and tests/consumer demonstrate both database lifecycles. No Stable tag or Release has been published.

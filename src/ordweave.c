@@ -34,7 +34,7 @@ struct OwDatabase {
   uint64_t rid, cid, oid, revision;
   OwStore *store;
 };
-const char *ordweave_version(void) { return "0.1.0-dev"; }
+const char *ordweave_version(void) { return "1.0.0-rc.1"; }
 static int utf8(const unsigned char *s, size_t n) {
   size_t i = 0;
   while (i < n) {
@@ -705,3 +705,61 @@ void ow_core_exchange(OwDatabase *a,OwDatabase *b) {
  OwStore *as=a->store,*bs=b->store;OwDatabase tmp=*a;*a=*b;*b=tmp;a->store=as;b->store=bs;
 }
 #include "checkpoint_core.inc"
+
+/* Logical comparison has no checkpoint-buffer/total database-size limit and
+ * never compares runtime handles across independently reconstructed cores. */
+int ow_core_same_state(const OwDatabase *a, const OwDatabase *b) {
+  const LksOrderHandle *x, *y;
+  if (!a || !b || a->rid != b->rid || a->cid != b->cid || a->oid != b->oid ||
+      a->revision != b->revision)
+    return 0;
+  x = lks_managed_order_first(a->records);
+  y = lks_managed_order_first(b->records);
+  for (; x && y; x = lks_order_next(x), y = lks_order_next(y)) {
+    Record *r = lks_order_item(x), *s = lks_order_item(y);
+    Field *f;
+    size_t n = 0, m = 0;
+    if (r->key.id != s->key.id || r->refs != s->refs || r->budget != s->budget)
+      return 0;
+    for (f = r->fields; f; f = f->next) {
+      Field *g = *find_field(s, f->name);
+      if (!g || !equal(&f->value, &g->value))
+        return 0;
+      ++n;
+    }
+    for (f = s->fields; f; f = f->next)
+      ++m;
+    if (n != m)
+      return 0;
+  }
+  if (x || y)
+    return 0;
+  x = lks_managed_order_first(a->collections);
+  y = lks_managed_order_first(b->collections);
+  for (; x && y; x = lks_order_next(x), y = lks_order_next(y)) {
+    Collection *c = lks_order_item(x), *d = lks_order_item(y);
+    const LksOrderHandle *u, *v;
+    if (c->key.id != d->key.id)
+      return 0;
+    u = lks_order_first(c->order);
+    v = lks_order_first(d->order);
+    for (; u && v; u = lks_order_next(u), v = lks_order_next(v))
+      if (((Occurrence *)lks_order_item(u))->key.id !=
+          ((Occurrence *)lks_order_item(v))->key.id)
+        return 0;
+    if (u || v)
+      return 0;
+  }
+  if (x || y)
+    return 0;
+  x = lks_managed_order_first(a->occurrences);
+  y = lks_managed_order_first(b->occurrences);
+  for (; x && y; x = lks_order_next(x), y = lks_order_next(y)) {
+    Occurrence *o = lks_order_item(x), *p = lks_order_item(y);
+    if (o->key.id != p->key.id ||
+        o->collection->key.id != p->collection->key.id ||
+        o->record->key.id != p->record->key.id)
+      return 0;
+  }
+  return !x && !y;
+}

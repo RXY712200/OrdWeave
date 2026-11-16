@@ -1,6 +1,12 @@
 /* Versioned retained-history roots, immutable views, verified full-copy
  * backups. Uses the existing core, checkpoint codec and WAL parser; no second
  * model. */
+#ifdef OW_TESTING
+int ow_test_crash;
+#define OW_AUDIT_POINT(n) do {if(ow_test_crash==(n)) TerminateProcess(GetCurrentProcess(),0);}while(0)
+#else
+#define OW_AUDIT_POINT(n) ((void)0)
+#endif
 struct OwHistory {
   OwDatabase *db;
 };
@@ -148,11 +154,67 @@ static void history_scan_close(OwStore *s) {
     s->wal = INVALID_HANDLE_VALUE;
   }
 }
+static OwStatus history_same_state(OwDatabase *a, OwDatabase *b,
+                                   const unsigned char id[16]);
+/* Byte integrity is not semantic validity. Audit every retained operation from
+ * the authoritative baseline independently of checkpoint acceleration. */
+static OwStatus history_semantic_state(OwStore *source, uint64_t target,
+                                       OwDatabase **out) {
+  OwStore scan = *source;
+  OwDatabase *db = NULL;
+  uint64_t count, i, latest = source->scan_revision;
+  OwStatus status;
+  *out = NULL;
+  scan.wal = INVALID_HANDLE_VALUE;
+  scan.readonly_scan = 1;
+  scan.semantic_scan = 1;
+  scan.allow_incomplete_tail = !source->readonly_scan;
+  scan.validating = 0;
+  scan.limit_replay = 0;
+  scan.checkpoint_revision = source->earliest;
+  status = discover(&scan, &count);
+  if (status != OW_OK)
+    return status;
+  for (unsigned pass = 0; pass < (target < latest ? 2u : 1u); pass++) {
+    status = ow_core_database_create(&db);
+    if (status != OW_OK)
+      goto done;
+    /* source still carries the structurally verified publication anchor. */
+    scan.scan_revision = source->scan_revision;
+    memcpy(scan.root_anchor_found, source->root_anchor_found, 32);
+    status = history_baseline(&scan, db);
+    if (status != OW_OK)
+      goto done;
+    scan.limit_replay = pass != 0;
+    scan.through = target;
+    scan.checkpoint_revision = source->earliest;
+    history_scan_reset(&scan);
+    for (i = scan.first_segment;; i++) {
+      status = replay_segment(&scan, db, i, i == count);
+      if (status != OW_OK)
+        goto done;
+      if (i == count)
+        break;
+    }
+    history_scan_close(&scan);
+    if (target < latest && !pass) {
+      ow_core_database_destroy(db);
+      db = NULL;
+    }
+  }
+  *out = db;
+  db = NULL;
+  status = OW_OK;
+done:
+  history_scan_close(&scan);
+  ow_core_database_destroy(db);
+  return status;
+}
 static OwStatus history_reconstruct_impl(OwStore *live, uint64_t target,
                                          OwDatabase **out, OwStore *state,
                                          int proposed) {
   OwStore scan = *live;
-  OwDatabase *db = NULL;
+  OwDatabase *db = NULL, *audited = NULL;
   uint64_t count, i, latest = 0;
   OwStatus status;
   *out = NULL;
@@ -215,6 +277,7 @@ static OwStatus history_reconstruct_impl(OwStore *live, uint64_t target,
     status = OW_HISTORY_UNAVAILABLE;
     goto done;
   }
+  status=history_semantic_state(&scan,target,&audited);if(status!=OW_OK) goto done;
   status = history_baseline(&scan, db);
   if (status != OW_OK)
     goto done;
@@ -239,6 +302,7 @@ static OwStatus history_reconstruct_impl(OwStore *live, uint64_t target,
       goto done;
     }
   }
+  status=history_same_state(db,audited,scan.id);if(status!=OW_OK) goto done;
   if (state) {
     *state = scan;
     state->wal = INVALID_HANDLE_VALUE;
@@ -248,6 +312,7 @@ static OwStatus history_reconstruct_impl(OwStore *live, uint64_t target,
   status = OW_OK;
 done:
   history_scan_close(&scan);
+  ow_core_database_destroy(audited);
   ow_core_database_destroy(db);
   return status;
 }
@@ -319,6 +384,7 @@ OwStatus ow_history_query_equal(const OwHistory *v, const char *name,
 static OwStatus history_publish(OwStore *s, const wchar_t *name,
                                 const unsigned char *bytes, size_t n,
                                 int fault) {
+  (void)fault;
   wchar_t temp[128];
   unsigned char random[8];
   HANDLE h;
@@ -560,16 +626,8 @@ OwStatus ow_verify_database(OwDatabase *db, OwHistoryRange *out) {
 }
 static OwStatus history_same_state(OwDatabase *a, OwDatabase *b,
                                    const unsigned char id[16]) {
-  unsigned char *x = NULL, *y = NULL, zero[32] = {0};
-  size_t nx = 0, ny = 0;
-  OwStatus status = ow_core_export(a, id, 1, zero, &x, &nx);
-  if (status == OW_OK)
-    status = ow_core_export(b, id, 1, zero, &y, &ny);
-  if (status == OW_OK && (nx != ny || memcmp(x, y, nx)))
-    status = OW_CORRUPT;
-  free(x);
-  free(y);
-  return status;
+  (void)id;
+  return ow_core_same_state(a, b) ? OW_OK : OW_CORRUPT;
 }
 static OwStatus history_selection(OwStore *s, const unsigned char *checkpoint,
                                   size_t size) {
@@ -627,6 +685,7 @@ static OwStatus history_delete_prefix(OwStore *s, uint64_t oldfirst) {
       return io_status();
     }
     free(p);
+    if(i==oldfirst) OW_AUDIT_POINT(73);
   }
   return OW_OK;
 }
@@ -753,9 +812,11 @@ OwStatus ow_history_cleanup(OwDatabase *db, OwHistoryRange *out) {
   status = history_selection(s, bytes, size);
   if (status != OW_OK)
     goto done;
+  OW_AUDIT_POINT(70);
   status = history_publish(s, L"\\recovery.current", root, 256, 40);
   if (status != OW_OK)
     goto done;
+  OW_AUDIT_POINT(71);
   if (OW_FAULT(44)) {
     s->poisoned = 1;
     status = OW_RECOVERY_REQUIRED;
@@ -782,9 +843,11 @@ OwStatus ow_history_cleanup(OwDatabase *db, OwHistoryRange *out) {
     status = OW_RECOVERY_REQUIRED;
     goto done;
   }
+  OW_AUDIT_POINT(72);
   status = history_delete_prefix(s, oldfirst);
   if (status != OW_OK)
     goto done;
+  OW_AUDIT_POINT(74);
   status = cp_cleanup(s, oldmeta);
   if (status == OW_OK)
     status = cp_sweep(s);
@@ -859,9 +922,15 @@ static OwStatus history_copy_directory(OwStore *source, OwStore *dest,
       status = OW_CORRUPT;
       break;
     }
-    if (n >= 8 && !wcscmp(f.cFileName + n - 8, L".pending"))
-      continue;
-    swprintf(suffix, 160, L"%ls\\%ls", directory, f.cFileName);
+    /* Never format unchecked directory names into a bounded path buffer. */
+    int wal=!wcscmp(directory,L"\\wal");size_t j;uint64_t sequence=0;
+    if(n!=28 && n!=(wal?24u:23u)) {status=OW_CORRUPT;break;}
+    for(j=0;j<20;j++) {unsigned digit=(unsigned)(f.cFileName[j]-L'0');if(digit>9 || sequence>(UINT64_MAX-digit)/10) break;sequence=sequence*10+digit;}
+    if(j!=20 || !sequence) {status=OW_CORRUPT;break;}
+    if(n==28) {if(wcscmp(f.cFileName+20,L".pending")) {status=OW_CORRUPT;break;}continue;}
+    if(wcscmp(f.cFileName+20,wal?L".wal":L".cp")) {status=OW_CORRUPT;break;}
+    int written=swprintf(suffix,160,L"%ls\\%ls",directory,f.cFileName);
+    if(written<0 || written>=160) {status=OW_CAPACITY;break;}
     status = history_copy(source, dest, suffix);
     if (status != OW_OK)
       break;
@@ -1025,7 +1094,7 @@ OwStatus ow_backup_create(OwDatabase *db, const char *destination) {
             *b = child(&dest, L"\\backup.complete");
     if (!a || !b)
       status = OW_NOMEM;
-    else if (!MoveFileExW(a, b, MOVEFILE_WRITE_THROUGH))
+    else if (OW_FAULT(53) || !MoveFileExW(a, b, MOVEFILE_WRITE_THROUGH))
       status = OW_IO;
     free(a);
     free(b);

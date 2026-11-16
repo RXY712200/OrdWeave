@@ -3,6 +3,7 @@
 #include "ordweave.h"
 #include "wal_internal.h"
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
@@ -14,10 +15,13 @@
     }                                                                          \
   } while (0)
 #define OK(x) T((x) == OW_OK)
+static int checked_format(char *out,size_t size,const char *format,...) {
+ va_list args;va_start(args,format);int n=vsnprintf(out,size,format,args);va_end(args);T(n>=0 && (size_t)n<size);return n;
+}
 static char base[MAX_PATH];
 static unsigned serial;
 static void fresh(char path[MAX_PATH]) {
-  snprintf(path, MAX_PATH, "%s\\case-%u", base, serial++);
+  checked_format(path, MAX_PATH, "%s\\case-%u", base, serial++);
 }
 static uint64_t revision(OwDatabase *d) {
   uint64_t r = 0;
@@ -38,13 +42,13 @@ static void cleanup(const char *root) {
   char pattern[MAX_PATH], path[MAX_PATH];
   WIN32_FIND_DATAA data;
   HANDLE h;
-  snprintf(pattern, sizeof(pattern), "%s\\*", root);
+  checked_format(pattern, sizeof(pattern), "%s\\*", root);
   h = FindFirstFileA(pattern, &data);
   T(h != INVALID_HANDLE_VALUE);
   do {
     if (!strcmp(data.cFileName, ".") || !strcmp(data.cFileName, ".."))
       continue;
-    snprintf(path, sizeof(path), "%s\\%s", root, data.cFileName);
+    checked_format(path, sizeof(path), "%s\\%s", root, data.cFileName);
     T(!(data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT));
     if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
       cleanup(path);
@@ -67,7 +71,7 @@ static unsigned generations(const char *path) {
   WIN32_FIND_DATAA f;
   HANDLE h;
   unsigned n = 0;
-  snprintf(pattern, sizeof(pattern), "%s\\checkpoints\\*.cp", path);
+  checked_format(pattern, sizeof(pattern), "%s\\checkpoints\\*.cp", path);
   h = FindFirstFileA(pattern, &f);
   if (h == INVALID_HANDLE_VALUE)
     return 0;
@@ -112,7 +116,7 @@ int main(int argc, char **argv) {
   {
     char cwd[MAX_PATH];
     T(GetCurrentDirectoryA(MAX_PATH, cwd));
-    snprintf(base, sizeof(base), "%s\\checkpoint-%lu", cwd,
+    checked_format(base, sizeof(base), "%s\\checkpoint-%lu", cwd,
              GetCurrentProcessId());
     T(CreateDirectoryA(base, NULL));
   }
@@ -135,7 +139,7 @@ int main(int argc, char **argv) {
   OK(ow_occurrence_insert(d, other, r, OW_BACK, (OwOccurrenceId){0}, &x));
   for (i = OW_NULL; i <= OW_BINARY; i++) {
     char name[12];
-    snprintf(name, sizeof(name), "field%u", i);
+    checked_format(name, sizeof(name), "field%u", i);
     memset(&v, 0, sizeof(v));
     v.type = (OwType)i;
     if (i == OW_BOOL)
@@ -174,7 +178,7 @@ int main(int argc, char **argv) {
   }
   for (i = OW_NULL; i <= OW_BINARY; i++) {
     char name[12];
-    snprintf(name, sizeof(name), "field%u", i);
+    checked_format(name, sizeof(name), "field%u", i);
     OK(ow_field_get(d, r, name, &out));
     T(out.type == (OwType)i);
     if (i == OW_BOOL)

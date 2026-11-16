@@ -120,3 +120,7 @@ return status;
 ## Phase 5 retention baseline
 
 A versioned recovery root can retain a mandatory native baseline after WAL-prefix deletion. It counts toward the maximum three internal generations. Current checkpoint selections are reconciled before publication, and generation deletion protects the root baseline. Once anchored, only verifiable checkpoints at or after the retained baseline may initialize state; historical selection also requires a checkpoint no newer than its requested Revision. Loss of the mandatory root baseline cannot fall back to deleted genesis history. See HISTORY.md for slot accounting, explicit cleanup and root authority.
+
+## Phase 6 semantic validation hardening
+
+Checksum/syntax validation alone is insufficient. Before exposing recovered or historical state, the implementation now independently replays every retained mutation from genesis or the validated root baseline, rejecting failed operations, no-op frames and ID/revision inconsistencies even before a later checkpoint. The native-checkpoint-plus-tail result is compared against allocation-free logical comparison with direct replay, including fields, high-water counters and order. Historical targets are likewise checked against direct target replay after validating the complete retained chain. This deliberately adds reconstruction work; no overall startup-speed improvement is promised. Disk versions and native LKS serialization are unchanged. See RELEASE_CANDIDATE.md for the reproduced regression and accepted performance cost.

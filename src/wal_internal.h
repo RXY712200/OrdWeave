@@ -47,6 +47,7 @@ void ow_store_leave(OwStore *store);
 #ifdef OW_TESTING
 /* Test-only boundaries, per test executable; absent from production. */
 extern int ow_test_fault;
+extern int ow_test_crash;
 extern uint64_t ow_test_segment_target;
 #define OW_FAULT(n) (ow_test_fault == (n))
 #else

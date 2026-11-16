@@ -93,3 +93,7 @@ Performance debt: full-WAL startup replay, per-commit SHA provider setup, existi
 ## Phase 5 anchored extension
 
 WAL/manifest bytes remain v3. Without recovery roots, genesis recovery is unchanged. With validated format-1 recovery roots, the first retained segment and predecessor digest come explicitly from the root and mandatory baseline checkpoint; deleted prefixes are unavailable history, not an implicit new genesis. Ordinary open never compacts. Read-only history/verification suppresses tail truncation. Backup completion markers prevent opening incomplete exported copies. See HISTORY.md.
+
+## Phase 6 semantic validation hardening
+
+Checksum/syntax validation alone is insufficient. Before exposing recovered or historical state, the implementation now independently replays every retained mutation from genesis or the validated root baseline, rejecting failed operations, no-op frames and ID/revision inconsistencies even before a later checkpoint. The native-checkpoint-plus-tail result is compared against allocation-free logical comparison with direct replay, including fields, high-water counters and order. Historical targets are likewise checked against direct target replay after validating the complete retained chain. This deliberately adds reconstruction work; no overall startup-speed improvement is promised. Disk versions and native LKS serialization are unchanged. See RELEASE_CANDIDATE.md for the reproduced regression and accepted performance cost.

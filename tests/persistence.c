@@ -2,6 +2,7 @@
 #include "ordweave.h"
 #include "wal_internal.h"
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
@@ -13,10 +14,13 @@
     }                                                                          \
   } while (0)
 #define OK(x) T((x) == OW_OK)
+static int checked_format(char *out,size_t size,const char *format,...) {
+ va_list args;va_start(args,format);int n=vsnprintf(out,size,format,args);va_end(args);T(n>=0 && (size_t)n<size);return n;
+}
 static char base[MAX_PATH];
 static unsigned serial;
 static void fresh(char path[MAX_PATH]) {
-  snprintf(path, MAX_PATH, "%s\\case-%u", base, serial++);
+  checked_format(path, MAX_PATH, "%s\\case-%u", base, serial++);
 }
 static uint64_t revision(OwDatabase *d) {
   uint64_t r = 0;
@@ -24,7 +28,7 @@ static uint64_t revision(OwDatabase *d) {
   return r;
 }
 static void file_path(char *out, const char *root, const char *suffix) {
-  snprintf(out, MAX_PATH, "%s\\%s", root, suffix);
+  checked_format(out, MAX_PATH, "%s\\%s", root, suffix);
 }
 static unsigned char *load(const char *path, size_t *size) {
   FILE *f = fopen(path, "rb");
@@ -54,7 +58,7 @@ static void child(const char *mode, const char *path, DWORD expected) {
   PROCESS_INFORMATION pi;
   DWORD code;
   T(GetModuleFileNameA(NULL, exe, MAX_PATH));
-  snprintf(command, sizeof(command), "\"%s\" %s \"%s\"", exe, mode, path);
+  checked_format(command, sizeof(command), "\"%s\" %s \"%s\"", exe, mode, path);
   si.cb = sizeof(si);
   T(CreateProcessA(NULL, command, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL,
                    NULL, &si, &pi));
@@ -78,13 +82,13 @@ static void cleanup(const char *root) {
   char pattern[MAX_PATH], path[MAX_PATH];
   WIN32_FIND_DATAA data;
   HANDLE h;
-  snprintf(pattern, sizeof(pattern), "%s\\*", root);
+  checked_format(pattern, sizeof(pattern), "%s\\*", root);
   h = FindFirstFileA(pattern, &data);
   T(h != INVALID_HANDLE_VALUE);
   do {
     if (!strcmp(data.cFileName, ".") || !strcmp(data.cFileName, ".."))
       continue;
-    snprintf(path, sizeof(path), "%s\\%s", root, data.cFileName);
+    checked_format(path, sizeof(path), "%s\\%s", root, data.cFileName);
     T(!(data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT));
     if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
       cleanup(path);
@@ -103,7 +107,7 @@ int main(int argc, char **argv) {
   OwValue v = {0}, out;
   uint64_t rev;
   unsigned char id[16], again[16];
-  size_t i, n;
+  size_t i;
   if (argc == 3) {
     OwStatus status;
     if (!strcmp(argv[1], "fixture")) {
@@ -142,7 +146,7 @@ int main(int argc, char **argv) {
   {
     char cwd[MAX_PATH];
     T(GetCurrentDirectoryA(MAX_PATH, cwd));
-    snprintf(base, MAX_PATH, "%s\\persistent-%lu", cwd, GetCurrentProcessId());
+    checked_format(base, MAX_PATH, "%s\\persistent-%lu", cwd, GetCurrentProcessId());
     T(CreateDirectoryA(base, NULL));
   }
   fresh(path);
@@ -162,7 +166,7 @@ int main(int argc, char **argv) {
   OK(ow_collection_create(d, &c2));
   for (i = OW_NULL; i <= OW_BINARY; i++) {
     char name[20];
-    snprintf(name, sizeof(name), "type%zu", i);
+    checked_format(name, sizeof(name), "type%zu", i);
     memset(&v, 0, sizeof(v));
     v.type = (OwType)i;
     if (i == OW_BOOL)
@@ -228,7 +232,7 @@ int main(int argc, char **argv) {
   T(revision(d) == rev);
   for (i = OW_NULL; i <= OW_BINARY; i++) {
     char name[20];
-    snprintf(name, sizeof(name), "type%zu", i);
+    checked_format(name, sizeof(name), "type%zu", i);
     OK(ow_field_get(d, r, name, &out));
     T(out.type == (OwType)i);
     if (i == OW_INT)

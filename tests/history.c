@@ -3,6 +3,7 @@
 #include "ordweave.h"
 #include "wal_internal.h"
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
@@ -14,10 +15,13 @@
     }                                                                          \
   } while (0)
 #define OK(x) T((x) == OW_OK)
+static int checked_format(char *out,size_t size,const char *format,...) {
+ va_list args;va_start(args,format);int n=vsnprintf(out,size,format,args);va_end(args);T(n>=0 && (size_t)n<size);return n;
+}
 static char base[MAX_PATH];
 static unsigned serial;
 static void fresh(char path[MAX_PATH]) {
-  snprintf(path, MAX_PATH, "%s\\case-%u", base, serial++);
+  checked_format(path, MAX_PATH, "%s\\case-%u", base, serial++);
 }
 static uint64_t revision(OwDatabase *d) {
   uint64_t r = 0;
@@ -28,13 +32,13 @@ static void cleanup(const char *root) {
   char pattern[MAX_PATH], path[MAX_PATH];
   WIN32_FIND_DATAA data;
   HANDLE h;
-  snprintf(pattern, sizeof(pattern), "%s\\*", root);
+  checked_format(pattern, sizeof(pattern), "%s\\*", root);
   h = FindFirstFileA(pattern, &data);
   T(h != INVALID_HANDLE_VALUE);
   do {
     if (!strcmp(data.cFileName, ".") || !strcmp(data.cFileName, ".."))
       continue;
-    snprintf(path, sizeof(path), "%s\\%s", root, data.cFileName);
+    checked_format(path, sizeof(path), "%s\\%s", root, data.cFileName);
     T(!(data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT));
     if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
       cleanup(path);
@@ -57,7 +61,7 @@ static unsigned generations(const char *path) {
   WIN32_FIND_DATAA f;
   HANDLE h;
   unsigned n = 0;
-  snprintf(pattern, sizeof(pattern), "%s\\checkpoints\\*.cp", path);
+  checked_format(pattern, sizeof(pattern), "%s\\checkpoints\\*.cp", path);
   h = FindFirstFileA(pattern, &f);
   if (h == INVALID_HANDLE_VALUE)
     return 0;
@@ -72,7 +76,7 @@ static unsigned segments(const char *root) {
   WIN32_FIND_DATAA data;
   HANDLE h;
   unsigned n = 0;
-  snprintf(pattern, sizeof(pattern), "%s\\wal\\*.wal", root);
+  checked_format(pattern, sizeof(pattern), "%s\\wal\\*.wal", root);
   h = FindFirstFileA(pattern, &data);
   if (h == INVALID_HANDLE_VALUE)
     return 0;
@@ -106,7 +110,7 @@ static void crash_root(const char *path) {
   PROCESS_INFORMATION pi;
   DWORD result;
   T(GetModuleFileNameA(NULL, exe, MAX_PATH));
-  snprintf(command, sizeof(command), "\"%s\" crash-root \"%s\"", exe, path);
+  checked_format(command, sizeof(command), "\"%s\" crash-root \"%s\"", exe, path);
   si.cb = sizeof(si);
   T(CreateProcessA(NULL, command, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL,
                    NULL, &si, &pi));
@@ -161,7 +165,7 @@ int main(int argc, char **argv) {
   {
     char cwd[MAX_PATH];
     T(GetCurrentDirectoryA(MAX_PATH, cwd));
-    snprintf(base, sizeof(base), "%s\\history-%lu", cwd, GetCurrentProcessId());
+    checked_format(base, sizeof(base), "%s\\history-%lu", cwd, GetCurrentProcessId());
     T(CreateDirectoryA(base, NULL));
   }
   ow_test_segment_target = 1024;
@@ -207,7 +211,7 @@ int main(int argc, char **argv) {
   T(ow_backup_create(db, dest) == OW_CONFLICT);
   {
     char nested[MAX_PATH];
-    snprintf(nested, sizeof(nested), "%s\\nested", path);
+    checked_format(nested, sizeof(nested), "%s\\nested", path);
     T(ow_backup_create(db, nested) == OW_INVALID);
   }
   OK(ow_history_policy(db, OW_RETAIN_LAST_N, 5));
@@ -242,7 +246,7 @@ int main(int argc, char **argv) {
   OK(ow_database_close(db));
   {
     char offline[MAX_PATH];
-    snprintf(offline, sizeof(offline), "%s.offline", path);
+    checked_format(offline, sizeof(offline), "%s.offline", path);
     T(MoveFileExA(path, offline, MOVEFILE_WRITE_THROUGH));
   }
   OK(ow_database_open(dest, &backup));

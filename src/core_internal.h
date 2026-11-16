@@ -32,6 +32,7 @@ OwStatus ow_core_occurrence_compare(OwDatabase *db, OwOccurrenceId left,
 OwStatus ow_core_query_equal(OwDatabase *db, const char *name,
                              const OwValue *value, OwRecordId **out,
                              size_t *count);
+int ow_core_same_state(const OwDatabase *a,const OwDatabase *b);
 OwStore *ow_core_store(const OwDatabase *db);
 void ow_core_attach(OwDatabase *db, OwStore *store);
 OwStatus ow_core_validate(const char *name, const OwValue *value);
