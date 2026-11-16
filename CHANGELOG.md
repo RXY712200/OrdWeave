@@ -1,5 +1,11 @@
 # Changelog
 
+## Project-local contributor documentation consolidation
+
+- Remove the duplicated owner-specific collaboration policy from the current public tree; preserve its historical commits and prior documentation entries.
+- Keep independently usable project instructions, technical handoff, engineering guidance, release evidence and all actual debt records.
+- Include root AGENTS.md in existing documentation link validation. No production, API, storage-format, dependency, functional-test, build-target or release-object changes.
+
 ## Workflow governance documentation on main
 
 - Add the complete Chinese project workflow and root coding-agent instructions; map all 17 chapters of the supplied general collaboration policy.

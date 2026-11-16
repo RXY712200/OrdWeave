@@ -103,7 +103,8 @@ def check() -> None:
         rows = lambda text: [line for line in text.splitlines() if line.startswith("|")]
         assert rows(original_text) == rows((ROOT / "docs" / name).read_text(encoding="utf-8")), name
     print("RC baseline/tag/dependency/protected source paths and exact wire layout tables unchanged")
-    documents = [ROOT / "README.md", ROOT / "README.zh-CN.md", ROOT / "CHANGELOG.md",
+    documents = [ROOT / "AGENTS.md", ROOT / "README.md", ROOT / "README.zh-CN.md",
+                 ROOT / "CHANGELOG.md",
                  ROOT / "THIRD_PARTY_NOTICES.md", *sorted((ROOT / "docs").rglob("*.md"))]
     links = 0
     for doc in documents:

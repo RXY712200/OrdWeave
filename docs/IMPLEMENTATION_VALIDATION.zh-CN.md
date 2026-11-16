@@ -11,7 +11,7 @@
 |源码检查|识别实际调用顺序、所有权、分支和不变量|未执行路径一定正确、无内存安全问题|
 |测试存在|仓库包含可复现断言、输入和预期|测试已运行，或断言足够强|
 |固定提交的历史CI|指定提交在该机器/配置上运行成功|任意后续提交、任意设备都成功|
-|本任务新运行|完成报告中命令、配置和提交实际结果|独立验收完成；Codex不能自发给整体PASS|
+|本任务新运行|完成报告中命令、配置和提交实际结果|独立审查完成或全部输入正确|
 |真实硬件掉电|需专门设备、文件系统、固件和断电实验|TerminateProcess、故障注入和FlushFileBuffers源码都不能代替它|
 
 RC发布基线的 [Windows CI 43809986388](https://github.com/RXY712200/OrdWeave/actions/runs/43809986388) 对应上述SHA，MSVC x64 Debug、Release各12个CTest。修正实现的 [Phase 6 CI 43808017874](https://github.com/RXY712200/OrdWeave/actions/runs/43808017874) 对应 `15d14dc85187a1ee18b252c281511e1059e49b55`。查看run的headSha、jobs、CTest日志确认对应关系，不以绿色图标替代具体断言。文档更新后的新CI应按新的main SHA查询；本页不预填一个尚未发生的运行编号。
@@ -91,9 +91,9 @@ python tools/validate_docs.py --examples --generator Ninja --config Debug
 
 脚本核对公开声明与44个条目、6个生产TU与3个inc/5个私有头的文档覆盖、当前文档基线、UTF-8、仓库内部Markdown文件/锚点和保护路径无差异。`--examples` 在 `build/` 临时目录单独配置 [examples/CMakeLists.txt](examples/CMakeLists.txt)，只链接公有target，运行quickstart、lifecycle及两个README共有的完整C示例；后者目录父路径由测试准备。它不修改原12个测试或生产CMake。不把字符串检查当成所有语义描述准确性的证明；仍需源码复核。
 
-## 8. 完成报告与后续验收
+## 8. 定位准确提交的验证结果
 
-报告应提供初始/最终remote SHA、实际命令与工具链、12项CTest结果、新examples结果、最终Windows run链接、未做的层次及RC tag/Release未变的核验。新提交SHA只能由提交后得到，避免自引用在文档中写死“本提交”。提交后通过以下只读命令定位：
+复现和比较结果时记录准确源码SHA、命令、工具链、平台/配置、实际12项CTest与例子执行结果，以及CI run的headSha。历史日志不能当成当前commit的新执行；未跑的检查与已跑结果分开。可用以下只读命令定位当前远端和实际日志：
 
 ```powershell
 git ls-remote origin refs/heads/main
@@ -101,4 +101,4 @@ gh run list --workflow windows.yml --branch main --limit 5 --json databaseId,hea
 gh run view RUN_ID --log
 ```
 
-用户负责最终授权，ChatGPT独立复查源码和证据并决定接受；Codex实施与报告。六个开发阶段完成、RC已发布，与本次文档是否达到独立验收标准是不同事实。参见 [HANDOFF](HANDOFF.md)。
+CI成功只说明该commit在该配置执行了相应断言，不构成全部正确性证明。源码基线、已完成阶段和维护状态见 [HANDOFF](HANDOFF.md)；发布基线与兼容性证据见 [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md)。

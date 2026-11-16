@@ -64,10 +64,8 @@ Synchronous maintenance, repeated full semantic history reconstruction, complete
 
 The metadata-only release commit was validated by [Windows Debug/Release CI 43809986388](https://github.com/RXY712200/OrdWeave/actions/runs/43809986388) before the published RC.1 Prerelease. New documentation on main is not included in that immutable tag. This document does not authorize Stable publication.
 
-## Current release governance
+## Current release and maintenance constraints
 
-The full authoritative policy is [WORKFLOW.md](WORKFLOW.md); coding-agent instructions are summarized in [AGENTS.md](../AGENTS.md). Preview is authorized exploration, RC is stabilization, and Stable requires independent review plus explicit user publication authorization. The six implementation phases remain complete.
+The published candidate remains `v1.0.0-rc.1`, a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Preserve its existing annotated tag and published Release. All six implementation phases are complete; no Stable release or new candidate is authorized by this document.
 
-Additional commits do not automatically require RC.2. Documentation, comments, formatting and modest compatible fixes usually need no intermediate candidate. A small but critical semantic change can still justify RC.2 when it invalidates prior verification assumptions; significant reimplementation, architecture/function/contract/format changes or a fundamentally inadequate candidate require deliberate readiness reassessment. A technical recommendation and user authorization are required before another candidate is published.
-
-After post-RC documentation or minor fixes, Stable should target the newer fully reviewed final commit, with coherent final version metadata. It may use the RC commit only when no changes are needed and metadata already fits the actual release. Never move the historical RC.1 tag. Completing documents or observing green CI does not authorize publication. This section updates policy, not the immutable published RC.1 Release or the historical test evidence above.
+Later documentation maintenance changes main without changing the immutable RC source. The actual API, format versions, dependency pin, provenance, supported platform and evidence above remain the project's compatibility baseline. New production/API/format/dependency changes and publication require a specific project task. Contributor build and verification instructions are in [AGENTS.md](../AGENTS.md), [DEVELOPMENT.zh-CN.md](DEVELOPMENT.zh-CN.md) and [IMPLEMENTATION_VALIDATION.zh-CN.md](IMPLEMENTATION_VALIDATION.zh-CN.md).
