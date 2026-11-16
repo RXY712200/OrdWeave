@@ -2,19 +2,21 @@
 
 OrdWeave **1.0.0-rc.1** is a C17 embedded database for Windows x64, built around independently maintained LayerKeySort Full. It supports typed Records, Collections with independently ordered duplicate Occurrences, ID lookup, equality queries, durable single-operation WAL commits, native LKS checkpoints, immutable historical views, explicit anchored cleanup, full backups and persisted-data verification.
 
-This is an unreleased candidate for v1.0.0 Stable. Linux/macOS and concurrent writers are unsupported. See [candidate validation and limits](docs/RELEASE_CANDIDATE.md) and [changelog](CHANGELOG.md).
+All six development phases passed independent review. This candidate is prepared for public GitHub Prerelease publication; v1.0.0 Stable has not been approved. Linux/macOS and concurrent writers are unsupported. See [candidate validation and limits](docs/RELEASE_CANDIDATE.md) and [changelog](CHANGELOG.md).
 
 ## Build
 
 Requires Git, CMake 3.21+, and a C17 compiler. For Visual Studio on Windows:
 
 ```powershell
-git clone --recurse-submodules https://github.com/RXY712200/OrdWeave.git
+git clone --recurse-submodules --branch v1.0.0-rc.1 https://github.com/RXY712200/OrdWeave.git
 cd OrdWeave
 cmake -S . -B build -A x64
 cmake --build build --config Release
 ctest --test-dir build -C Release --output-on-failure
 ```
+
+GitHub-generated source ZIP/tar archives do not include the LayerKeySort submodule contents and are not self-contained distributions. Use the recursive clone above.
 
 For an existing clone, run `git submodule update --init --recursive`. With GCC and Ninja, configure using `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release` instead.
 

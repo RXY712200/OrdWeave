@@ -1,6 +1,6 @@
 # 1.0.0-rc.1 review package
 
-This is the final implementation candidate for v1.0.0, not a tag, release or independent acceptance verdict. Final Stable publication requires explicit user authorization after independent review.
+All six development phases, including Phase 6, passed independent review. This implementation is prepared for public v1.0.0-rc.1 GitHub Prerelease publication. Final Stable publication requires separate explicit user authorization.
 
 ## Supported build and use
 
@@ -53,7 +53,8 @@ GCC 16.2.0 production-source analysis: compile each of ordweave.c, lks_adapter.c
 - PASS: public C17 consumer configures and links the public library target, with no private LKS header.
 - PASS: existing fixed format and compatibility fixture tests remain present.
 - PASS: API status/layout and source license/provenance review completed without dependency changes.
-- FAIL (authorization gate, not a code defect): independent reviewer acceptance and user Stable-publication approval have not occurred. No tag or GitHub Release is created.
+- PASS: all six development phases passed independent review; RC.1 Prerelease publication is explicitly authorized.
+- NOT AUTHORIZED: v1.0.0 Stable publication. Comprehensive source-grounded documentation remains a separate RC-stabilization task before Stable approval.
 
 Build/CTest/CI PASS entries refer only to observed runs recorded in the completion report, not a self-issued overall PASS.
 
@@ -61,4 +62,4 @@ Build/CTest/CI PASS entries refer only to observed runs recorded in the completi
 
 Synchronous maintenance, repeated full semantic history reconstruction, complete checkpoint buffers, rebuilt occurrence indexes and full-copy backups remain deliberate costs. Semantic auditing increases open/history CPU and peak memory; checkpoint restoration still uses native LKS orders but no whole-operation speedup is promised. Linux/macOS, Last Days, SQL, networking, multi-writer access, multi-operation transactions and hardware power-loss certification are unsupported. Filesystem/device durability contracts remain prerequisites. Test fault hooks are absent from production behavior. The inherited checkout action's Node deprecation annotation remains nonblocking; no unrelated action upgrade is made.
 
-Recommendation is READY FOR INDEPENDENT REVIEW when the final local and Windows CI runs succeed. This document does not authorize Stable publication.
+RC.1 may be published as a Prerelease only after local tests and Windows Debug/Release CI succeed on the final metadata-only candidate commit. This document does not authorize Stable publication.
