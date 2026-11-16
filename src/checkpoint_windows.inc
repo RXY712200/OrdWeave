@@ -175,18 +175,19 @@ static OwStatus cp_anchor(OwStore *s, OwDatabase *db, uint64_t segments,
                           uint64_t revision, const unsigned char digest[32]) {
   uint64_t i;
   OwStatus status = OW_OK;
-  if (revision > s->scan_revision)
+  if (revision<s->earliest || revision > s->scan_revision)
     return OW_CORRUPT;
   if (s->wal != INVALID_HANDLE_VALUE) {
     CloseHandle(s->wal);
     s->wal = INVALID_HANDLE_VALUE;
   }
   s->checkpoint_revision = revision;
-  memset(s->digest, 0, 32);
+  history_scan_reset(s);
   memset(s->anchor_found, 0, 32);
-  s->scan_revision = 0;
+  if(revision==s->earliest) memcpy(s->anchor_found,s->digest,32);
+  s->scan_revision = s->earliest;
   s->validating = 1;
-  for (i = 1;; i++) {
+  for (i = s->first_segment;; i++) {
     status = replay_segment(s, db, i, i == segments);
     if (status != OW_OK)
       return status;
@@ -233,7 +234,7 @@ static OwStatus checkpoint_load(OwStore *s, OwDatabase *db, uint64_t segments) {
   else if (b == OW_OK)
     meta = backup;
   if (!meta) {
-    s->checkpoint_revision = 0;
+    s->checkpoint_revision = s->earliest;
     return OW_OK;
   }
   memcpy(s->metadata, meta, OW_CHECKPOINT_META);
@@ -249,6 +250,7 @@ static OwStatus checkpoint_load(OwStore *s, OwDatabase *db, uint64_t segments) {
       continue;
     for (j = 0; j < (unsigned)ow_get(m + 32, 4); j++) {
       const unsigned char *e = m + 48 + 112 * j;
+      if(ow_get(e+8,8)<s->earliest) continue;
       status = cp_anchor(s, db, segments, ow_get(e + 8, 8), e + 48);
       if (status != OW_OK)
         return status;
@@ -260,6 +262,7 @@ static OwStatus checkpoint_load(OwStore *s, OwDatabase *db, uint64_t segments) {
     unsigned char *bytes = NULL;
     size_t n = 0;
     OwDatabase *tmp = NULL;
+    if(ow_get(e+8,8)<s->earliest || (s->limit_replay && ow_get(e+8,8)>s->through)) continue;
     cp_filename(ow_get(e, 8), name, 0);
     status = cp_load_bytes(s, name, OW_CHECKPOINT_LIMIT, &bytes, &n);
     if (status == OW_NOT_FOUND || status == OW_CORRUPT)
@@ -292,7 +295,7 @@ static OwStatus checkpoint_load(OwStore *s, OwDatabase *db, uint64_t segments) {
     if (status != OW_CORRUPT)
       return status;
   }
-  s->checkpoint_revision = 0;
+  s->checkpoint_revision = s->earliest;
   return OW_OK; /* Full WAL already structurally validated; replay establishes
                    semantics. */
 }
@@ -380,10 +383,11 @@ static OwStatus cp_cleanup(OwStore *s, const unsigned char *old) {
     for (j = 0; j < count; j++)
       if (ow_get(e, 8) == ow_get(s->metadata + 48 + 112 * j, 8))
         referenced = 1;
-    if (referenced)
+    if (referenced || ow_get(e,8)==ow_get(s->recovery_root+48,8))
       continue;
     if (OW_FAULT(27))
       return OW_IO;
+    if(ow_get(e+8,8)<s->earliest || (s->limit_replay && ow_get(e+8,8)>s->through)) continue;
     cp_filename(ow_get(e, 8), name, 0);
     p = child(s, name);
     if (!p)
@@ -435,7 +439,7 @@ static OwStatus cp_sweep(OwStore *s) {
         break;
       gen = gen * 10 + digit;
     }
-    if (i != 20 || !gen || gen >= ow_get(current + 48, 8))
+    if (i != 20 || !gen || gen==ow_get(s->recovery_root+48,8) || gen >= ow_get(current + 48, 8))
       continue;
     for (i = 0; i < (size_t)ow_get(current + 32, 4); i++)
       if (gen == ow_get(current + 48 + 112 * i, 8))
@@ -517,6 +521,7 @@ OwStatus ow_checkpoint_create(OwDatabase *db) {
   status = ow_store_guard(s);
   if (status != OW_OK)
     return status;
+  if(s->earliest && s->retention<2) return OW_RETENTION_UNSUPPORTED;
   ow_store_enter(s);
   status = cp_directory(s);
   if (status != OW_OK)
@@ -543,12 +548,13 @@ OwStatus ow_checkpoint_create(OwDatabase *db) {
   ow_put(meta + 56, rev, 8);
   memcpy(meta + 64, bytes + size - 32, 32);
   memcpy(meta + 96, s->digest, 32);
-  for (i = 0; i < (unsigned)ow_get(old + 32, 4) && count < s->retention; i++) {
+  for (i = 0; i < (unsigned)ow_get(old + 32, 4) && count < s->retention-(s->earliest?1u:0u); i++) {
     const unsigned char *e = old + 48 + 112 * i;
     unsigned char *data = NULL;
     size_t n = 0;
     OwDatabase *tmp = NULL;
     wchar_t name[80];
+    if(ow_get(e+8,8)<s->earliest || (s->limit_replay && ow_get(e+8,8)>s->through)) continue;
     cp_filename(ow_get(e, 8), name, 0);
     status = cp_load_bytes(s, name, OW_CHECKPOINT_LIMIT, &data, &n);
     if (status == OW_NOT_FOUND || status == OW_CORRUPT)

@@ -1,8 +1,8 @@
 # OrdWeave
 
-OrdWeave is a C17 embedded database project built around independently maintained LayerKeySort Full. Phase 4 provides a usable in-memory database: typed record fields, collections, repeated occurrences, dynamic ordering, ID lookup, equality queries, and a logical Revision counter. The Phase 1 ordering/snapshot integration test remains intact.
+OrdWeave is a C17 embedded database project built around independently maintained LayerKeySort Full. Phase 5 provides a usable in-memory database: typed record fields, collections, repeated occurrences, dynamic ordering, ID lookup, equality queries, and a logical Revision counter. The Phase 1 ordering/snapshot integration test remains intact.
 
-The intended first stable release targets Windows x64, single-writer operation, persistent records and ordering, WAL recovery, and up to three retained checkpoint generations. Single-operation durable WAL commits and restart recovery are implemented on Windows x64. Native LKS checkpoints and checkpoint-plus-WAL-tail recovery are implemented; historical queries and backup recovery remain planned. A small internal LKS adapter now supports runtime ordering and ID indexes. Linux and macOS have not been validated.
+The intended first stable release targets Windows x64, single-writer operation, persistent records and ordering, WAL recovery, and up to three retained checkpoint generations. Single-operation durable WAL commits and restart recovery are implemented on Windows x64. Native LKS checkpoints and checkpoint-plus-WAL-tail recovery are implemented; historical queries, anchored cleanup and independent full backups are now implemented. A small internal LKS adapter now supports runtime ordering and ID indexes. Linux and macOS have not been validated.
 
 ## Build
 
@@ -48,7 +48,7 @@ int main(void) {
 }
 ```
 
-Limitations: no multi-operation transactions, historical Revision queries, SQL, secondary field indexes, complex cross-collection atomic transfers, or concurrency guarantees. Occurrence insertion/removal currently rebuilds the global occurrence index for failure atomicity; see architecture notes.
+Limitations: no multi-operation transactions, SQL, secondary field indexes, complex cross-collection atomic transfers, or concurrency guarantees. Occurrence insertion/removal currently rebuilds the global occurrence index for failure atomicity; see architecture notes.
 
 ## Persistent lifecycle (Windows x64)
 
@@ -58,4 +58,8 @@ On OW_COMMIT_UNKNOWN, stop using that session, close it and reopen to establish 
 
 ## Checkpoints
 
-`ow_checkpoint_create(db)` publishes a validated checkpoint without changing Revision. `ow_checkpoint_info` reports its generation and Revision. `ow_checkpoint_retention(db, count)` accepts 1..3; default 2. Existing v3 databases need no migration and may create their first checkpoint directly. Startup still validates the whole WAL and restores native LKS orders before applying the tail. See [checkpoint format, failure handling and example](docs/CHECKPOINTS.md). No historical WAL cleanup or backup feature is implemented.
+`ow_checkpoint_create(db)` publishes a validated checkpoint without changing Revision. `ow_checkpoint_info` reports its generation and Revision. `ow_checkpoint_retention(db, count)` accepts 1..3; default 2. Existing v3 databases need no migration and may create their first checkpoint directly. Startup still validates the whole WAL and restores native LKS orders before applying the tail. See [checkpoint format, failure handling and example](docs/CHECKPOINTS.md). Historical WAL cleanup and full backups are implemented separately in Phase 5.
+
+## Historical views, cleanup, backup and verification
+
+Phase 5 adds opaque read-only `ow_history_*` views, Manual/Forever/Last N policies, explicit safe WAL-prefix cleanup, full `ow_backup_create`, and persisted-data `ow_verify_database`. Manual is the default; setting a policy does not delete files. Cleanup publishes a verified native-checkpoint recovery root before deleting eligible complete segments. Last Days is deferred because v3 commits have no timestamps. See [history/root format and failure rules](docs/HISTORY.md).

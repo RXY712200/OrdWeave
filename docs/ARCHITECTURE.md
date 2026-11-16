@@ -34,7 +34,7 @@ Central public limits are 1 MiB per field payload and 8 MiB per Record budget. N
 
 Tests cover typed data, copying, constraints, references, queries, no-ops, deterministic array-model operations, allocation failures at OrdWeave-owned boundaries, and counter exhaustion. Fault injection is confined to a separately compiled white-box test translation unit; no global production fault hook exists. Upstream allocation failures are handled via public strong-atomicity contracts but are not exhaustively injected.
 
-No multi-operation transactions, historical Revision queries, SQL, secondary field indexes, cross-collection atomic transfer, or unsupported concurrency promises are implemented. The caller must serialize all database access; objects and returned IDs must not be used with a different database.
+No multi-operation transactions, SQL, secondary field indexes, cross-collection atomic transfer, or unsupported concurrency promises are implemented. The caller must serialize all database access; objects and returned IDs must not be used with a different database.
 
 ## Phase 3 persistence boundary
 
@@ -46,4 +46,8 @@ wal_format.c owns explicit encoding/bounded parsing; wal_windows.c owns path val
 
 Private core export/import helpers serialize typed Records, ID high-water marks, Collection snapshots and Occurrence relationships. The narrow included checkpoint_core.inc keeps core object layouts private; checkpoint_windows.inc shares the existing Windows session and verified file primitives without a new storage-provider layer. Runtime LKS handles remain private and are rebuilt by traversal of restored native orders.
 
-Recovery structurally validates all WAL history, verifies candidate anchors, restores a fresh unpublished core from a validated checkpoint and applies only subsequent operations. It preserves the existing model and public LKS indexes. Separate generation metadata leaves all v3 files unchanged. Checkpoint retention defaults to two, configurable up to three; deletion follows verified current/backup agreement. See CHECKPOINTS.md for exact grammar, failure states and known extra WAL scanning cost. No historical WAL is deleted.
+Recovery structurally validates all WAL history, verifies candidate anchors, restores a fresh unpublished core from a validated checkpoint and applies only subsequent operations. It preserves the existing model and public LKS indexes. Separate generation metadata leaves all v3 files unchanged. Checkpoint retention defaults to two, configurable up to three; deletion follows verified current/backup agreement. See CHECKPOINTS.md for exact grammar, failure states and known extra WAL scanning cost. Checkpoint maintenance alone deletes no historical WAL; Phase 5 introduces separate explicit anchored cleanup.
+
+## Phase 5 history and anchored recovery
+
+The narrow history_windows.inc module shares existing Windows file/session primitives, WAL parsing, native checkpoints and core restoration. Historical views own unpublished reconstructed cores behind an opaque read-only facade. Recovery roots explicitly replace genesis ancestry only after a baseline and suffix independently reproduce current state. Prefix deletion occurs only after matching durable current/backup roots; object high-water counters come from the native checkpoint and unchanged replay. Backup copies are validated standalone directories, not runtime snapshots borrowing source pointers. Verification reconstructs actual persisted material and never repairs it. See HISTORY.md for exact formats and crash decisions.

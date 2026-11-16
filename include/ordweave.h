@@ -29,7 +29,7 @@ typedef enum {
   OW_UNSUPPORTED,
   OW_BUSY,
   OW_COMMIT_UNKNOWN,
-  OW_RECOVERY_REQUIRED
+  OW_RECOVERY_REQUIRED, OW_HISTORY_UNAVAILABLE, OW_RETENTION_UNSUPPORTED
 } OwStatus;
 typedef enum {
   OW_NULL,
@@ -64,6 +64,24 @@ void ow_database_destroy(OwDatabase *db);
 OwStatus ow_database_create_persistent(const char *path, OwDatabase **out);
 OwStatus ow_database_open(const char *path, OwDatabase **out);
 OwStatus ow_database_close(OwDatabase *db);
+typedef struct OwHistory OwHistory;
+typedef enum { OW_RETAIN_MANUAL, OW_RETAIN_FOREVER, OW_RETAIN_LAST_N } OwRetentionPolicy;
+typedef struct { uint64_t current_revision, earliest_revision; OwRetentionPolicy policy; uint64_t last_n; int reclaimable; } OwHistoryRange;
+OwStatus ow_history_open(OwDatabase *db, uint64_t revision, OwHistory **out);
+void ow_history_close(OwHistory *view);
+OwStatus ow_history_revision(const OwHistory *view, uint64_t *out);
+OwStatus ow_history_record_exists(const OwHistory *view, OwRecordId id, int *out);
+OwStatus ow_history_field_get(const OwHistory *view, OwRecordId id, const char *name, OwValue *out);
+OwStatus ow_history_collection_count(const OwHistory *view, OwCollectionId id, size_t *out);
+OwStatus ow_history_collection_members(const OwHistory *view, OwCollectionId id, OwOccurrenceId **out, size_t *count);
+OwStatus ow_history_occurrence_get(const OwHistory *view, OwOccurrenceId id, OwCollectionId *collection, OwRecordId *record);
+OwStatus ow_history_occurrence_compare(const OwHistory *view, OwOccurrenceId a, OwOccurrenceId b, int *out);
+OwStatus ow_history_query_equal(const OwHistory *view, const char *name, const OwValue *value, OwRecordId **out, size_t *count);
+OwStatus ow_history_policy(OwDatabase *db, OwRetentionPolicy policy, uint64_t last_n);
+OwStatus ow_history_range(OwDatabase *db, OwHistoryRange *out);
+OwStatus ow_history_cleanup(OwDatabase *db, OwHistoryRange *out);
+OwStatus ow_backup_create(OwDatabase *db, const char *destination);
+OwStatus ow_verify_database(OwDatabase *db, OwHistoryRange *out);
 OwStatus ow_checkpoint_create(OwDatabase *db);
 OwStatus ow_checkpoint_info(const OwDatabase *db, uint64_t *generation, uint64_t *revision);
 OwStatus ow_checkpoint_retention(OwDatabase *db, unsigned generations);

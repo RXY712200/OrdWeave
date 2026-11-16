@@ -69,7 +69,7 @@ The session must be healthy and serialized. Checkpointing marks it busy and capt
 
 Build a new selection containing the new validated generation and up to retention minus one independently revalidated old generations. Default retention is 2; allowed range is 1..3. The configuration setter affects subsequent checkpoints and is persisted in their selection metadata. It does not itself create a checkpoint or change database Revision. A database with no checkpoint reports generation/Revision zero.
 
-Preserve the old selection in the backup through verified temporary-file replacement. Publish and verify new current metadata. Publish and verify the same new metadata as backup. Only then reclaim older generations no longer referenced. Thus current and backup never intentionally reference deleted files. Crashes can leave old backup/current disagreeing; deletion is deferred until both agree. Interrupted cleanup is safe; a later successful checkpoint sweeps independently validated older unreferenced files. Corrupt or unsupported orphan files are preserved, not guessed safe to delete. No WAL file is deleted. The cleanup helper is a narrow extension point for later history policies, not Phase 5 log compaction.
+Preserve the old selection in the backup through verified temporary-file replacement. Publish and verify new current metadata. Publish and verify the same new metadata as backup. Only then reclaim older generations no longer referenced. Thus current and backup never intentionally reference deleted files. Crashes can leave old backup/current disagreeing; deletion is deferred until both agree. Interrupted cleanup is safe; a later successful checkpoint sweeps independently validated older unreferenced files. Corrupt or unsupported orphan files are preserved, not guessed safe to delete. Checkpoint generation maintenance itself deletes no WAL; Phase 5 anchored history cleanup is a separate explicit operation. The cleanup helper is a narrow extension point for later history policies, not Phase 5 log compaction.
 
 Verified temporary-file publication adapts Obscura64 replace_once at commit 3db0122560853a8f3db3ba6888067394dc1a3e62 (MIT attribution retained). Random CREATE_NEW metadata temp files, write/flush/reopen verification and write-through rename are used; backup ordering and generation selection are OrdWeave-specific.
 
@@ -89,7 +89,7 @@ This accelerates object reconstruction, not WAL I/O: the implementation still sc
 
 The original five tests remain. Checkpoint tests assert one native restoration and exactly one applied tail commit, all types and embedded NUL, empty/multiple Collections, repeated membership, ID high-water preservation, retention changes, allocation boundaries, metadata publication failures and interrupted cleanup. An independent Python oracle compares complete checkpoint/native bytes, supplies checksummed malformed graphs/blobs and validates safe full-WAL fallback versus checkpoint use. A fixed empty checkpoint vector is checked in separately. Test-only fault hooks never run in production.
 
-Tests cover process-level fault assumptions, not hardware power loss. Durability still depends on Windows/filesystem/device flush and rename contracts. Partial named temporary files and invalid orphan generations may require later operator cleanup. No historical Revision queries, WAL cleanup, backup export/recovery, SQL, networking, multi-operation transactions or Phase 5 facilities are added.
+Tests cover process-level fault assumptions, not hardware power loss. Durability still depends on Windows/filesystem/device flush and rename contracts. Partial named temporary files and invalid orphan generations may require later operator cleanup. The Phase 4 checkpoint API itself adds no SQL, networking or multi-operation transactions. Phase 5 history, anchored cleanup and backups are documented in HISTORY.md.
 
 ## Usage
 
@@ -116,3 +116,7 @@ if (status == OW_OK) { /* verify result.as.integer == 42 */ ow_value_release(&re
 ow_database_close(db);
 return status;
 ```
+
+## Phase 5 retention baseline
+
+A versioned recovery root can retain a mandatory native baseline after WAL-prefix deletion. It counts toward the maximum three internal generations. Current checkpoint selections are reconciled before publication, and generation deletion protects the root baseline. Once anchored, only verifiable checkpoints at or after the retained baseline may initialize state; historical selection also requires a checkpoint no newer than its requested Revision. Loss of the mandatory root baseline cannot fall back to deleted genesis history. See HISTORY.md for slot accounting, explicit cleanup and root authority.

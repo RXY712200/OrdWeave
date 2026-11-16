@@ -25,6 +25,12 @@ struct OwStore {
   unsigned char anchor_found[32];
   unsigned char metadata[OW_CHECKPOINT_META];
   unsigned retention;
+  unsigned char recovery_root[256];
+  uint64_t first_segment,earliest,through;
+  OwRetentionPolicy history_policy;
+  uint64_t history_n;
+  int readonly_scan,limit_replay;
+  unsigned char root_anchor_found[32];
   uint64_t selected_generation,selected_revision;
 };
 #ifdef OW_TESTING
@@ -141,7 +147,7 @@ static HANDLE open_file(OwStore *s, const wchar_t *suffix, DWORD access,
     SetLastError(ERROR_NOT_ENOUGH_MEMORY);
     return INVALID_HANDLE_VALUE;
   }
-  h = CreateFileW(p, access, FILE_SHARE_READ, NULL, disposition,
+  h = CreateFileW(p, access, FILE_SHARE_READ | (access==GENERIC_READ?FILE_SHARE_WRITE:0), NULL, disposition,
                   FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OPEN_REPARSE_POINT, NULL);
   free(p);
   if (h != INVALID_HANDLE_VALUE &&
@@ -374,7 +380,7 @@ static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
   OwStatus status;
   HANDLE h;
   segment_name(seq, name, 0);
-  h = open_file(s, name, GENERIC_READ | GENERIC_WRITE, OPEN_EXISTING);
+  h = open_file(s, name, (s->readonly_scan?GENERIC_READ:GENERIC_READ | GENERIC_WRITE), OPEN_EXISTING);
   if (h == INVALID_HANDLE_VALUE)
     return io_status();
   status = OW_IO;
@@ -479,7 +485,7 @@ static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
     status = ow_decode(f + 96, n - OW_FRAME_OVERHEAD,
                        (OwOpcode)ow_get(f + 14, 2), &cmd, &field, &value);
     if (status == OW_OK && !s->validating && expected>s->checkpoint_revision) {
-      status = ow_apply(db, &cmd);
+      if(!s->limit_replay || expected<=s->through) status = ow_apply(db, &cmd);
 #ifdef OW_TESTING
       if(status==OW_OK) ++ow_test_checkpoint_tail;
 #endif
@@ -491,12 +497,13 @@ static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
       goto done;
     }
     rev=expected;
-    if(!s->validating && expected>s->checkpoint_revision) ow_core_revision(db,&rev);
+    if(!s->validating && expected>s->checkpoint_revision && (!s->limit_replay || expected<=s->through)) ow_core_revision(db,&rev);
     if (rev != expected) {
       status = OW_CORRUPT;
       goto done;
     }
     s->scan_revision=expected;
+    if(expected==ow_get(s->recovery_root+152,8)) memcpy(s->root_anchor_found,hash,32);
     if(expected==s->checkpoint_revision) memcpy(s->anchor_found,hash,32);
     memcpy(s->digest, hash, 32);
     offset += n;
@@ -506,11 +513,12 @@ static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
   status = OW_OK;
   goto completed;
 tail:
+  if(s->readonly_scan) {status=OW_RECOVERY_REQUIRED;goto done;}
   if (!last) {
     status = OW_CORRUPT;
     goto done;
   }
-  if (!s->validating && (!seek(h, offset) || !SetEndOfFile(h) || !FlushFileBuffers(h))) {
+  if (!s->validating && !s->readonly_scan && (!seek(h, offset) || !SetEndOfFile(h) || !FlushFileBuffers(h))) {
     status = OW_IO;
     goto done;
   }
@@ -572,8 +580,8 @@ static OwStatus discover(OwStore *s, uint64_t *count) {
     }
     if (len == 28)
       continue; /* Reconciled only after authoritative chain validates. */
-    if (seq > max)
-      max = seq;
+    if(seq<s->first_segment) continue;
+    if (seq > max) max = seq;
     ++total;
   } while (FindNextFileW(find, &data));
   if (status == OW_OK && GetLastError() != ERROR_NO_MORE_FILES)
@@ -581,9 +589,9 @@ static OwStatus discover(OwStore *s, uint64_t *count) {
   FindClose(find);
   if (status != OW_OK)
     return status;
-  if (!total || max != total)
-    return OW_CORRUPT;
-  *count = total;
+  if (!total || max-s->first_segment+1 != total)
+    return s->recovery_root[0]?OW_RECOVERY_REQUIRED:OW_CORRUPT;
+  *count = max;
   return OW_OK;
 }
 static OwStatus clear_pending(OwStore *s, uint64_t count) {
@@ -623,10 +631,15 @@ static OwStatus clear_pending(OwStore *s, uint64_t count) {
   FindClose(find);
   return error == ERROR_NO_MORE_FILES ? OW_OK : OW_IO;
 }
+static OwStatus ow_store_open_internal(const char *path,int create,OwStore **out,OwDatabase *db,int allow_incomplete);
+static OwStatus history_root_load(OwStore *s);
+static OwStatus history_baseline(OwStore *s,OwDatabase *db);
+static void history_scan_reset(OwStore *s);
 #include "checkpoint_windows.inc"
+#include "history_windows.inc"
 
-OwStatus ow_store_open(const char *path, int create, OwStore **out,
-                       OwDatabase *db) {
+static OwStatus ow_store_open_internal(const char *path, int create, OwStore **out,
+                       OwDatabase *db,int allow_incomplete) {
   OwStore *s = calloc(1, sizeof(*s));
   OwStatus status;
   wchar_t *p;
@@ -637,7 +650,7 @@ OwStatus ow_store_open(const char *path, int create, OwStore **out,
   *out = NULL;
   if (!s)
     return OW_NOMEM;
-  s->retention=2;
+  s->retention=2;s->first_segment=1;
   s->root = s->directory = s->lock = s->wal = INVALID_HANDLE_VALUE;
   status = safe_path(path, &s->path);
   if (status != OW_OK)
@@ -708,6 +721,7 @@ OwStatus ow_store_open(const char *path, int create, OwStore **out,
       goto done;
     }
   }
+  if(!create && !allow_incomplete) {wchar_t *marker=child(s,L"\\backup.incomplete");if(!marker) {status=OW_NOMEM;goto done;}DWORD a=GetFileAttributesW(marker);free(marker);if(a!=INVALID_FILE_ATTRIBUTES) {status=OW_RECOVERY_REQUIRED;goto done;}}
   if (create) {
     if (!BCRYPT_SUCCESS(BCryptGenRandom(NULL, s->id, 16,
                                         BCRYPT_USE_SYSTEM_PREFERRED_RNG))) {
@@ -798,16 +812,18 @@ OwStatus ow_store_open(const char *path, int create, OwStore **out,
       }
     }
     memcpy(s->id, manifest + 16, 16);
+    status=history_root_load(s);if(status!=OW_OK) goto done;
     status = discover(s, &count);
     if (status != OW_OK)
       goto done;
     /* Pass one validates the entire chain without constructing historical state. */
-    s->validating=1;
-    for(i=1;;i++) {status=replay_segment(s,db,i,i==count);if(status!=OW_OK) goto done;if(i==count) break;}
+    s->validating=1;history_scan_reset(s);
+    for(i=s->first_segment;;i++) {status=replay_segment(s,db,i,i==count);if(status!=OW_OK) goto done;if(i==count) break;}
+    status=history_baseline(s,db);if(status!=OW_OK) goto done;
     status=checkpoint_load(s,db,count);if(status!=OW_OK) goto done;
     CloseHandle(s->wal);s->wal=INVALID_HANDLE_VALUE;
-    memset(s->digest,0,32);s->scan_revision=0;s->validating=0;
-    for(i=1;;i++) {status=replay_segment(s,db,i,i==count);if(status!=OW_OK) goto done;if(i==count) break;}
+    history_scan_reset(s);s->validating=0;
+    for(i=s->first_segment;;i++) {status=replay_segment(s,db,i,i==count);if(status!=OW_OK) goto done;if(i==count) break;}
     status = clear_pending(s, count);
     if (status != OW_OK)
       goto done;
@@ -824,3 +840,5 @@ done:
   ow_store_close(s);
   return status;
 }
+
+OwStatus ow_store_open(const char *path,int create,OwStore **out,OwDatabase *db) {return ow_store_open_internal(path,create,out,db,0);}
