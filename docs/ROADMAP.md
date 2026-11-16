@@ -1,6 +1,6 @@
 # Fixed six-phase roadmap
 
-All six implementation phases below are completed and passed independent review. [RC.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub Prerelease; Stable publication requires separate explicit authorization after RC stabilization. The new source-grounded documentation is a post-release update to main, not a seventh implementation phase or a change to the RC tag. See [handoff](HANDOFF.md) and [debt register](TECHNICAL_DEBT.md).
+All six implementation phases below are completed and passed independent review. [RC.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub Prerelease; Stable publication requires separate explicit authorization after RC stabilization. The new source-grounded documentation is a post-release update to main, not a seventh implementation phase or a change to the RC tag. See [the authoritative workflow](WORKFLOW.md), then [handoff](HANDOFF.md) and [debt register](TECHNICAL_DEBT.md). Workflow documentation is maintenance, not a new phase; candidate and Stable publication remain separately authorized.
 
 1. **Project foundation and LayerKeySort integration.**
 

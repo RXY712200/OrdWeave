@@ -66,7 +66,7 @@ Persistent paths must be new absolute UTF-8 Windows drive paths with existing pa
 | Understand execution | [Implementation walkthrough](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md), [architecture summary](docs/ARCHITECTURE.md) |
 | Modify or debug | [Private internals](docs/IMPLEMENTATION_INTERNALS.zh-CN.md), [development guide](docs/DEVELOPMENT.zh-CN.md) |
 | Reproduce evidence | [Validation map](docs/IMPLEMENTATION_VALIDATION.zh-CN.md), [RC review](docs/RELEASE_CANDIDATE.md) |
-| Continue as a maintainer or AI | [HANDOFF.md](docs/HANDOFF.md) |
+| Project workflow or AI continuation | Read [WORKFLOW.md](docs/WORKFLOW.md) first, then [HANDOFF.md](docs/HANDOFF.md); coding agents use [AGENTS.md](AGENTS.md) |
 | Review costs and deferred work | [Technical debt register](docs/TECHNICAL_DEBT.md), [six completed phases](docs/ROADMAP.md) |
 | Inspect exact disk bytes | [WAL](docs/PERSISTENCE.md), [checkpoints](docs/CHECKPOINTS.md), [history/root/backup](docs/HISTORY.md) |
 

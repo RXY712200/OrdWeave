@@ -1,5 +1,11 @@
 # Changelog
 
+## Workflow governance documentation on main
+
+- Add the complete Chinese project workflow and root coding-agent instructions; map all 17 chapters of the supplied general collaboration policy.
+- Make workflow-first AI onboarding, action-specific authorization, independent acceptance, technical debt impact reporting and substantive RC.2/Stable decisions explicit across related guides.
+- Documentation only; no production, public API, format, dependency, historical tag or published Release changes. This update is after the earlier documentation package and is not included in RC.1.
+
 ## Documentation stabilization on main after RC.1 publication
 
 - Add bilingual project gateways, comprehensive Chinese usage/API/execution/internals/validation/development guides, maintainer/AI handoff and a structured technical debt register.

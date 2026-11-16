@@ -1,8 +1,8 @@
 # OrdWeave 开发与维护规则
 
-[交接入口](HANDOFF.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
+[完整项目流程（先读）](WORKFLOW.md) · [交接入口](HANDOFF.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
 
-本指南描述 `3f99029da73e3b4f0a75a538dd241cf94cda23d7`（RC.1）的组织及今后的维护约束。它不授权功能开发、广泛重构或发布Stable。本次仅文档稳定化。
+本指南负责技术维护方法，决策、任务、独立验收和发布权限由 [WORKFLOW](WORKFLOW.md) 统一规定；代理摘要见 [AGENTS](../AGENTS.md)。本指南描述 `3f99029da73e3b4f0a75a538dd241cf94cda23d7`（RC.1）的组织及今后的维护约束。它不授权功能开发、广泛重构或发布Stable。本次仅文档稳定化。
 
 ## 1. 先定位正确层次
 
@@ -40,7 +40,7 @@ rg -n 'ow_encode|ow_store_commit|replay_segment|history_semantic_state' src
 4. 逐个检查command、encode/decode/apply、commit补ID、replay预期ID/Revision、checkpoint图与历史重建；新增内存行为不能漏记WAL。
 5. 检查immutable IDs、native LKS namespace/association和高水位；增加真实行为测试、独立格式/语义异常输入和失败路径断言。
 6. 运行适配范围的测试，再跑原12项及Windows两配置。记录实际失败/限制，独立评审后才能称接受。
-7. 更新API、使用、执行链、格式规范、验证地图和确实受影响的债项。不要机械修改所有文档或每次都改技术债登记。
+7. 更新API、使用、执行链、格式规范、验证地图和确实受影响的债项。不要机械修改所有文档或每次都改技术债登记。每份英文完成报告都必须包含 `Technical Debt Impact`：列实际受影响TD/EG ID和变化，或明确 `No change.`。
 
 ## 4. 兼容性是显式边界
 
@@ -74,4 +74,4 @@ runtime Handle不持久化，不把指针或Handle伪装成数据库ID。restore
 
 ## 8. 发布和协作
 
-用户决定目标、优先级和最终授权；ChatGPT独立设计/审代码/决定接受；Codex执行、验证、按授权commit/push及报告，不能自己宣告整体PASS。已有RC标记和Release保持不变；main的文档演进不意味着标签包含新文档。任何新tag/Release或Stable发布需要明确授权。进入新任务先读 [HANDOFF](HANDOFF.md) 并查当前remote HEAD，旧聊天和六阶段计划不代替当前源码。
+完整职责、固定规划、权限矩阵、PASS/FAIL和Preview/RC/Stable规则见 [WORKFLOW](WORKFLOW.md)，不要从技术维护要求推导发布权限。新对话先完整读WORKFLOW，再读 [HANDOFF](HANDOFF.md) 并核对remote HEAD。文档、注释及适度兼容修复通常无需RC.2；小但使候选验证假设失效的语义变化仍须审查是否重新开放候选。Stable指向最终完整审查的commit，metadata必须相符；不得移动RC.1。用户最终授权、ChatGPT独立接受、Codex执行报告的分工不变。

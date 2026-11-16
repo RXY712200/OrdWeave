@@ -1,12 +1,14 @@
 # Technical debt and engineering issue register
 
-[Maintainer handoff](HANDOFF.md) · [Development rules](DEVELOPMENT.zh-CN.md) · [Internals](IMPLEMENTATION_INTERNALS.zh-CN.md) · [Validation evidence](IMPLEMENTATION_VALIDATION.zh-CN.md)
+[Authoritative workflow](WORKFLOW.md) · [Maintainer handoff](HANDOFF.md) · [Development rules](DEVELOPMENT.zh-CN.md) · [Internals](IMPLEMENTATION_INTERNALS.zh-CN.md) · [Validation evidence](IMPLEMENTATION_VALIDATION.zh-CN.md)
 
 本登记在RC文档稳定化时首次建立，按 `3f99029da73e3b4f0a75a538dd241cf94cda23d7` 的源码核验，不声称这些ID或历史取舍此前已被跟踪。性能/资源成本、已解决正确性问题和验证缺口分别列出。SQL、多写者、Linux/macOS、Last Days等产品范围之外能力不自动记债。本页不授权优化或发布。
 
 ## Record and status rules
 
 每项保留：稳定ID、描述、类别、模块/函数、当前实现、成本/风险、接受/延后依据、重审触发条件、状态、源码/测试证据；解决时增加准确commit和验证。ID不重用，解决后不删除历史。`Open`=确认存在但未定行动；`Deferred`=明确在当前任务范围之外，等待触发条件；`In Progress`=已有获授权实现正在做；`Resolved`=改动和验证已有证据；`Won't Fix`=明确决定保留且附理由，可因新证据重开。当前没有In Progress项。Codex仅在实际引入、实质改变、解决或明确接受债务时更新本页，不为无关commit机械改动。
+
+每个实质开发任务还须检查证据/优先级变化和误分类；需要时修正对应条目并保留历史理由。**每份Codex英文报告必须包含 `Technical Debt Impact`**，列实际受影响TD/EG ID、变化与验证，或明确 `No change.`；无实质债项变化不为报告机械改登记。完整分类、责任与状态转移规则见 [WORKFLOW](WORKFLOW.md)。本次仅补充登记流程，不改变下面任何债项的状态、证据或优先级。
 
 ## Active implementation debt
 

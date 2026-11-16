@@ -1,12 +1,12 @@
 # OrdWeave — maintainer and AI handoff
 
-Read this first when continuing from another conversation. This is an entry map, not a substitute for inspecting the source and diff of a new task.
+First read [WORKFLOW.md](WORKFLOW.md) **in full**, then read this handoff. The workflow is the complete operating/review/release policy; this file is the current-state entry map. Neither replaces inspecting the source and diff of a new task. Coding agents also follow the root [AGENTS.md](../AGENTS.md) execution summary.
 
 ## Identity and current state
 
 OrdWeave is a Windows x64 C17 embedded static database built on the public APIs of LayerKeySort Full. Records own typed fields; Collections own ordered, independently identified Occurrences; multiple Occurrences may reference the same Record. It offers in-memory and durable single-operation databases, native checkpoints, immutable historical views, explicit anchored retention cleanup, full backups and persisted-data verification.
 
-All **six** implementation phases completed independent review. [v1.0.0-rc.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is a published GitHub **Prerelease**. No Stable release is approved. Its annotated tag object is `165b1a72f2c689c78d271d4ab61651e6eefc217e`, peeling to implementation baseline `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Documentation stabilization advances main after that release; these new guides are not in the immutable RC tag. Do not assume main still equals the baseline: inspect it.
+All **six** implementation phases completed independent review. [v1.0.0-rc.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is a published GitHub **Prerelease**. No Stable release is approved. Its annotated tag object is `165b1a72f2c689c78d271d4ab61651e6eefc217e`, peeling to implementation baseline `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Documentation stabilization advances main after that release; these new guides are not in the immutable RC tag. The preceding documentation package was committed at `96785fd6977754d7511a1954040115f91b4b4851` with [Windows CI 43815101144](https://github.com/RXY712200/OrdWeave/actions/runs/43815101144), 12/12 tests in each MSVC configuration. The workflow completion task begins after that commit; main may advance again. Do not assume main still equals either fixed baseline: inspect it.
 
 ```powershell
 git ls-remote origin refs/heads/main refs/tags/v1.0.0-rc.1 'refs/tags/v1.0.0-rc.1^{}'
@@ -18,13 +18,13 @@ gh run list --workflow windows.yml --branch main --limit 5 --json headSha,status
 
 ## Read in this order
 
-1. [Chinese README](../README.zh-CN.md) / [English README](../README.md): product, build and navigation.
-2. [USAGE.zh-CN.md](USAGE.zh-CN.md): complete public examples and operational error handling.
-3. [IMPLEMENTATION_WALKTHROUGH.zh-CN.md](IMPLEMENTATION_WALKTHROUGH.zh-CN.md): execution model and end-to-end scenarios.
-4. [IMPLEMENTATION_API_REFERENCE.zh-CN.md](IMPLEMENTATION_API_REFERENCE.zh-CN.md): all 44 public functions; [include/ordweave.h](../include/ordweave.h) is signature authority.
-5. [IMPLEMENTATION_INTERNALS.zh-CN.md](IMPLEMENTATION_INTERNALS.zh-CN.md): every production TU, implementation include and private header.
-6. [IMPLEMENTATION_VALIDATION.zh-CN.md](IMPLEMENTATION_VALIDATION.zh-CN.md), then actual tests and CI logs.
-7. [DEVELOPMENT.zh-CN.md](DEVELOPMENT.zh-CN.md), [TECHNICAL_DEBT.md](TECHNICAL_DEBT.md), and the affected source before changing anything.
+1. [WORKFLOW.md](WORKFLOW.md), fully: responsibilities, authorization, fixed plans, complete English tasks, independent acceptance, debt and release rules.
+2. This [HANDOFF.md](HANDOFF.md): product state, fixed baselines and the authorized next task; check current remote HEAD.
+3. [Chinese README](../README.zh-CN.md) / [English README](../README.md), then [USAGE.zh-CN.md](USAGE.zh-CN.md) for public examples.
+4. [IMPLEMENTATION_WALKTHROUGH.zh-CN.md](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) and [IMPLEMENTATION_API_REFERENCE.zh-CN.md](IMPLEMENTATION_API_REFERENCE.zh-CN.md); [include/ordweave.h](../include/ordweave.h) is signature authority for all 44 functions.
+5. [IMPLEMENTATION_INTERNALS.zh-CN.md](IMPLEMENTATION_INTERNALS.zh-CN.md), relevant exact formats below, [DEVELOPMENT.zh-CN.md](DEVELOPMENT.zh-CN.md) and [TECHNICAL_DEBT.md](TECHNICAL_DEBT.md).
+6. [IMPLEMENTATION_VALIDATION.zh-CN.md](IMPLEMENTATION_VALIDATION.zh-CN.md), actual affected source/tests/diffs and exact-commit CI. Reconcile present behavior against evidence and permission against current authorized policy.
+7. Resume only the authorized task; preserve genuine changes and remaining decisions for the next handoff. Do not restart completed phases or invent a new roadmap.
 
 Exact persistent grammars: [PERSISTENCE.md](PERSISTENCE.md) (manifest/segment/frames), [CHECKPOINTS.md](CHECKPOINTS.md) (checkpoint/selection/native order), [HISTORY.md](HISTORY.md) (policy/root/backup). English [API](API.md), [architecture](ARCHITECTURE.md) and [release evidence](RELEASE_CANDIDATE.md) remain useful summaries.
 
@@ -60,4 +60,4 @@ Active debt: global Occurrence index rebuilds, repeated semantic replay, full ch
 
 The user owns product goals, priorities and final authorization. ChatGPT independently designs, reviews actual code and decides acceptance. Codex implements, tests, commits/pushes when authorized and reports observed results; it does **not** issue its own overall PASS. Tags and Releases require explicit authorization. Functional fixes must be verified against actual source and tests. Discovering a genuine release-blocking correctness/memory-safety issue during a documentation-only task means documenting the exact evidence and stopping for review.
 
-Preserve released behavior and immutable RC artifacts. Stable publication is a separate decision after independent RC review, not a consequence of finishing a document or observing green CI. [ROADMAP.md](ROADMAP.md) records six completed phases; it does not create a seventh development authorization.
+Follow [WORKFLOW.md](WORKFLOW.md) for the complete cycle and authorization matrix. Every Codex report includes **Technical Debt Impact** with affected IDs or **No change.** Preserve released behavior and immutable RC artifacts. Documentation and modest compatible fixes do not automatically require RC.2; meaningful reopening of candidate assumptions needs a recommendation and user authorization. Stable publication is a distinct authorized action after independent review; a newer fully reviewed final commit can include post-RC documentation or minor fixes without moving RC.1. Version metadata must match the actual release. [ROADMAP.md](ROADMAP.md) records six completed phases; it does not create a seventh development authorization.

@@ -64,7 +64,7 @@ int main(void) {
 |理解整个执行过程|[源码执行导读](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md)，[英文架构概要](docs/ARCHITECTURE.md)|
 |修改或调试内部模块|[内部结构与函数依赖](docs/IMPLEMENTATION_INTERNALS.zh-CN.md)，[开发维护规则](docs/DEVELOPMENT.zh-CN.md)|
 |重现测试与查看证据|[验证地图](docs/IMPLEMENTATION_VALIDATION.zh-CN.md)，[RC评审记录](docs/RELEASE_CANDIDATE.md)|
-|新维护者或AI接手|[HANDOFF.md](docs/HANDOFF.md)|
+|项目流程或AI接手|先完整读[WORKFLOW.md](docs/WORKFLOW.md)，再读[HANDOFF.md](docs/HANDOFF.md)；编码代理另读[AGENTS.md](AGENTS.md)|
 |评估成本和后续工作|[技术债登记](docs/TECHNICAL_DEBT.md)，[六阶段完成记录](docs/ROADMAP.md)，[变更记录](CHANGELOG.md)|
 |核对磁盘字节布局|[WAL/manifest](docs/PERSISTENCE.md)，[checkpoint/selection](docs/CHECKPOINTS.md)，[history/root/policy/backup](docs/HISTORY.md)|
 
