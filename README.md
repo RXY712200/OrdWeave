@@ -1,12 +1,20 @@
 # OrdWeave
 
-OrdWeave **1.0.0-rc.1** is a C17 embedded database for Windows x64, built around independently maintained LayerKeySort Full. It supports typed Records, Collections with independently ordered duplicate Occurrences, ID lookup, equality queries, durable single-operation WAL commits, native LKS checkpoints, immutable historical views, explicit anchored cleanup, full backups and persisted-data verification.
+[简体中文](README.zh-CN.md)
 
-All six development phases passed independent review. This candidate is prepared for public GitHub Prerelease publication; v1.0.0 Stable has not been approved. Linux/macOS and concurrent writers are unsupported. See [candidate validation and limits](docs/RELEASE_CANDIDATE.md) and [changelog](CHANGELOG.md).
+OrdWeave is a **Windows x64 C17 embedded static database** built on independently maintained LayerKeySort Full. It stores typed Records and ordered Collections in which the same Record can occur multiple times, with each Occurrence independently identified and movable. This separates shared data from its placement in lists, layers or arrangements.
+
+[**v1.0.0-rc.1**](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub **Prerelease**. All six implementation phases completed independent review; **Stable is not approved or published**. The RC source baseline is `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. The comprehensive guides on main were added after publication and are not included in the immutable RC tag.
+
+## Model and capabilities
+
+A Record owns named null/bool/int/float/UTF-8/binary fields. A Collection owns order; an Occurrence references one Record and one Collection. Repeating a Record creates distinct Occurrence IDs without copying its fields. Moving an Occurrence changes only its position. Referenced Records and nonempty Collections cannot be deleted.
+
+Use a disk-free in-memory instance or a persistent directory with a lifetime single-writer OS lock. Persistent state-changing operations each receive one Revision and a flushed WAL commit; there are no multi-operation transactions. Native LKS checkpoints, immutable historical views, Manual/Forever/Last N policies, explicit safe WAL-prefix cleanup, full independently reopenable backups and read-only persisted-data verification are implemented. A policy change alone deletes nothing.
 
 ## Build
 
-Requires Git, CMake 3.21+, and a C17 compiler. For Visual Studio on Windows:
+Requires Windows x64, Git with submodules, CMake 3.21+, a C17 compiler, and Python 3 when tests are enabled. For Visual Studio:
 
 ```powershell
 git clone --recurse-submodules --branch v1.0.0-rc.1 https://github.com/RXY712200/OrdWeave.git
@@ -16,56 +24,54 @@ cmake --build build --config Release
 ctest --test-dir build -C Release --output-on-failure
 ```
 
-GitHub-generated source ZIP/tar archives do not include the LayerKeySort submodule contents and are not self-contained distributions. Use the recursive clone above.
+With GCC/MinGW and Ninja use `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release` in a separate build directory. Existing clones need `git submodule update --init --recursive`. GitHub-generated ZIP/tar archives omit submodule contents and are not self-contained distributions. Clone main instead of the tag when you need the post-release documentation.
 
-For an existing clone, run `git submodule update --init --recursive`. With GCC and Ninja, configure using `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release` instead.
+LayerKeySort Full v4.1.0 Stable is pinned at `70d7f0ef5857b54381b863d292a213909d87459f`. Only its public API is used; upstream sources are unmodified.
 
-LayerKeySort Full v4.1.0 Stable is pinned at `70d7f0ef5857b54381b863d292a213909d87459f` under `third_party/LayerKeySort`. Only its public API is used. The smoke test keeps serialized snapshots in memory; it writes no database files.
-
-See [roadmap](docs/ROADMAP.md), [architecture](docs/ARCHITECTURE.md), and [third-party notices](THIRD_PARTY_NOTICES.md). OrdWeave is MIT licensed.
-
-## Public API and ownership
-
-See [API reference](docs/API.md) for exact signatures and error/lifetime rules. All access to a database must be serialized by its caller. Results are independent copies and remain valid after mutation or database destruction.
+## Use from C17
 
 ```c
 #include "ordweave.h"
 int main(void) {
     OwDatabase *db = NULL;
-    OwRecordId record;
-    OwCollectionId collection;
-    OwOccurrenceId occurrence;
+    OwRecordId record = {0};
+    OwCollectionId collection = {0};
+    OwOccurrenceId first = {0}, second = {0};
     OwValue value = {.type = OW_INT, .as.integer = 42};
     if (ow_database_create(&db) != OW_OK) return 1;
-    if (ow_record_create(db, &record) != OW_OK ||
+    int failed = ow_record_create(db, &record) != OW_OK ||
         ow_field_set(db, record, "answer", &value) != OW_OK ||
         ow_collection_create(db, &collection) != OW_OK ||
         ow_occurrence_insert(db, collection, record, OW_BACK,
-                             (OwOccurrenceId){0}, &occurrence) != OW_OK) {
-        ow_database_destroy(db);
-        return 1;
-    }
+                             (OwOccurrenceId){0}, &first) != OW_OK ||
+        ow_occurrence_insert(db, collection, record, OW_FRONT,
+                             (OwOccurrenceId){0}, &second) != OW_OK;
     ow_database_destroy(db);
-    return 0;
+    return failed;
 }
 ```
 
-Limitations: no multi-operation transactions, SQL, secondary field indexes, complex cross-collection atomic transfers, or concurrency guarantees. Occurrence insertion/removal currently rebuilds the global occurrence index for failure atomicity; see architecture notes.
+This creates two independent Occurrences of one Record. See [quickstart.c](docs/examples/quickstart.c) for checked ordering and returned-value cleanup, and [lifecycle.c](docs/examples/lifecycle.c) for complete persistent/checkpoint/history/backup use.
 
-## Persistent lifecycle (Windows x64)
+In a CMake application set `BUILD_TESTING=OFF`, `add_subdirectory(path/to/OrdWeave ordweave)`, then `target_link_libraries(myapp PRIVATE OrdWeave::ordweave)`. Include only `ordweave.h`; use matching compiler/CRT/packing settings. [Usage](docs/USAGE.zh-CN.md) supplies a complete external CMake project. No installed SDK or cross-toolchain binary ABI is promised.
 
-Use an explicitly new absolute UTF-8 path, for example `D:/data/my-new-ordweave-db` (its parent must exist). Replace `ow_database_create` in the example with `ow_database_create_persistent(path, &db)`. Mutate through the same API, then call `ow_database_close(db)`. Reopen using `ow_database_open(path, &db)`; query and modify normally. Close never supplies missing durability: each acknowledged state-changing operation was already appended and flushed.
+Persistent paths must be new absolute UTF-8 Windows drive paths with existing parents for create; reopen an existing database with `ow_database_open`. `ow_database_close` consumes a healthy handle. Results are independent copies released with `ow_value_release` / `ow_array_release`. Serialize all access in the caller. On `OW_COMMIT_UNKNOWN`, stop, close and reopen to establish the committed result before deciding whether to retry; output ID zero does not prove nothing committed. See [error contracts](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md).
 
-On OW_COMMIT_UNKNOWN, stop using that session, close it and reopen to establish the committed result before deciding whether to retry. See [exact persistence format and recovery rules](docs/PERSISTENCE.md). Python 3 is required for the independent format CTest oracle when BUILD_TESTING is enabled.
+## Documentation
 
-## Checkpoints
+| Need | Read |
+|---|---|
+| Start using the database | [Practical usage](docs/USAGE.zh-CN.md), [complete examples](docs/examples/) |
+| Find a public contract | [All 44 functions](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md), [English API](docs/API.md), [public header](include/ordweave.h) |
+| Understand execution | [Implementation walkthrough](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md), [architecture summary](docs/ARCHITECTURE.md) |
+| Modify or debug | [Private internals](docs/IMPLEMENTATION_INTERNALS.zh-CN.md), [development guide](docs/DEVELOPMENT.zh-CN.md) |
+| Reproduce evidence | [Validation map](docs/IMPLEMENTATION_VALIDATION.zh-CN.md), [RC review](docs/RELEASE_CANDIDATE.md) |
+| Continue as a maintainer or AI | [HANDOFF.md](docs/HANDOFF.md) |
+| Review costs and deferred work | [Technical debt register](docs/TECHNICAL_DEBT.md), [six completed phases](docs/ROADMAP.md) |
+| Inspect exact disk bytes | [WAL](docs/PERSISTENCE.md), [checkpoints](docs/CHECKPOINTS.md), [history/root/backup](docs/HISTORY.md) |
 
-`ow_checkpoint_create(db)` publishes a validated checkpoint without changing Revision. `ow_checkpoint_info` reports its generation and Revision. `ow_checkpoint_retention(db, count)` accepts 1..3; default 2. Existing v3 databases need no migration and may create their first checkpoint directly. Startup still validates the whole WAL and restores native LKS orders before applying the tail. See [checkpoint format, failure handling and example](docs/CHECKPOINTS.md). Historical WAL cleanup and full backups are implemented separately in Phase 5.
+## Limits and licensing
 
-## Historical views, cleanup, backup and verification
+No SQL, field secondary indexes, network service, multi-writer/concurrent-access guarantees, cross-collection atomic transfer, Linux/macOS, Last Days or incremental backup. Checkpoints can reduce the ordinary result's replay tail, but startup still audits the retained WAL semantically; no whole-open speedup is promised. Index rebuilds, repeated scans, full buffers/copies and provider setup are tracked with evidence in the [debt register](docs/TECHNICAL_DEBT.md). Process-crash tests do not certify physical power-loss durability.
 
-Phase 5 adds opaque read-only `ow_history_*` views, Manual/Forever/Last N policies, explicit safe WAL-prefix cleanup, full `ow_backup_create`, and persisted-data `ow_verify_database`. Manual is the default; setting a policy does not delete files. Cleanup publishes a verified native-checkpoint recovery root before deleting eligible complete segments. Last Days is deferred because v3 commits have no timestamps. See [history/root format and failure rules](docs/HISTORY.md).
-
-## Link from a C17 application
-
-Set BUILD_TESTING=OFF when embedding, use `add_subdirectory(path/to/OrdWeave ordweave)`, and link `OrdWeave::ordweave`. Include only `ordweave.h`. Use a matching Windows x64 compiler/CRT configuration; no cross-toolchain binary ABI is promised. The public example below and tests/consumer demonstrate both database lifecycles. No Stable tag or Release has been published.
+OrdWeave is [MIT licensed](LICENSE). LayerKeySort and adapted Obscura64 provenance and notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No ProbSpan code is included.

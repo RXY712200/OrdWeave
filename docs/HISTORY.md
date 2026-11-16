@@ -1,6 +1,10 @@
-# Phase 5 retained history, recovery roots, backup and verification
+# Retained history, recovery roots, backup and verification
 
-Phase 5 adds an explicit anchored-recovery extension. Manifest/WAL versions remain 3; checkpoint/selection formats remain 1. Legacy databases with no recovery root still require segment 1 and the complete chain. Ordinary open never compacts or deletes historical WAL. SHA-256 checks identity/continuity/integrity; it is not cryptographic authentication against someone able to rewrite all files.
+RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+
+[中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
+
+The current database includes an explicit anchored-recovery extension. Manifest/WAL versions remain 3; checkpoint/selection formats remain 1. Legacy databases with no recovery root still require segment 1 and the complete chain. Ordinary open never compacts or deletes historical WAL. SHA-256 checks identity/continuity/integrity; it is not cryptographic authentication against someone able to rewrite all files.
 
 ## Historical views and guaranteed range
 
@@ -14,7 +18,7 @@ Manual is the default. Manual and Forever do not advance the boundary or automat
 
 Policy format `history.policy` is 96 bytes: magic OWPOL001 at 0 (8); version 1 at 8 (4); length 96 at 12 (4); Database ID at 16 (16); policy at 32 (4, Manual=0/Forever=1/LastN=2); zero at 36 (4); N at 40 (8); zeros at 48 (16); SHA-256 of bytes 0..63 at 64 (32). All integers in this document are unsigned big-endian. Unsupported versions, noncanonical policy/N combinations, reserved bytes and bad checksums fail.
 
-## Recovery root format 1 �� exactly 256 bytes
+## Recovery root format 1 — exactly 256 bytes
 
 Files are `recovery.current` and `recovery.current.bak`. Root identity and referenced material are checked, never chosen by mtime or majority voting.
 
@@ -83,4 +87,4 @@ Performance debt includes repeated full suffix scans, complete historical recons
 
 ## Phase 6 semantic validation hardening
 
-Checksum/syntax validation alone is insufficient. Before exposing recovered or historical state, the implementation now independently replays every retained mutation from genesis or the validated root baseline, rejecting failed operations, no-op frames and ID/revision inconsistencies even before a later checkpoint. The native-checkpoint-plus-tail result is compared against allocation-free logical comparison with direct replay, including fields, high-water counters and order. Historical targets are likewise checked against direct target replay after validating the complete retained chain. This deliberately adds reconstruction work; no overall startup-speed improvement is promised. Disk versions and native LKS serialization are unchanged. See RELEASE_CANDIDATE.md for the reproduced regression and accepted performance cost.
+Historical targets are compared with direct target replay after auditing the complete retained chain, including later operations. An explicit root baseline is the only authority replacing deleted genesis history. See [the architecture audit](ARCHITECTURE.md#phase-6-semantic-validation-hardening), [history internals](IMPLEMENTATION_INTERNALS.zh-CN.md) and TD-101 in [the register](TECHNICAL_DEBT.md).

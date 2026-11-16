@@ -1,14 +1,18 @@
-# Phase 4 checkpoints �� format 1
+# Checkpoints and selection metadata — format 1
 
-Manifest, WAL segment and transaction frame formats remain exactly version 3. Checkpointless databases retain the full-WAL recovery path. No migration or WAL rewriting/deletion occurs. Checksums detect accidental damage; they do not authenticate adversarial rewriting.
+RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+
+[中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
+
+Manifest, WAL segment and transaction frame formats remain exactly version 3. Checkpointless databases retain the full-WAL recovery path. Checkpoint creation needs no migration or WAL rewriting/deletion; explicit history cleanup is documented separately in [HISTORY.md](HISTORY.md). Checksums detect accidental damage; they do not authenticate adversarial rewriting.
 
 ## Files and limits
 
-The existing root adds `checkpoints/`, immutable `checkpoints/00000000000000000001.cp` generations, `checkpoint.current`, and `checkpoint.current.bak`. Unpublished checkpoint files use the same generation with `.pending`. Metadata temporary names have a random 64-bit suffix and CREATE_NEW semantics; stale unpublished files do not block future operations and are never selected. Allocation of generation numbers scans all checkpoint final/pending filenames plus the current selection high water; it never uses filename recency as recovery authority. Overflow fails with CAPACITY. Suspect filenames and reparse directories are rejected. Known temporary/orphan files can remain after a process interruption; automated historical cleanup is outside this phase.
+The existing root adds `checkpoints/`, immutable `checkpoints/00000000000000000001.cp` generations, `checkpoint.current`, and `checkpoint.current.bak`. Unpublished checkpoint files use the same generation with `.pending`. Metadata temporary names have a random 64-bit suffix and CREATE_NEW semantics; stale unpublished files do not block future operations and are never selected. Allocation of generation numbers scans all checkpoint final/pending filenames plus the current selection high water; it never uses filename recency as recovery authority. Overflow fails with CAPACITY. Suspect filenames and reparse directories are rejected. Known temporary/orphan files can remain after a process interruption; conservative sweeping only removes independently validated unreferenced old generations; see the debt register for residual files.
 
 A complete checkpoint is bounded to 256 MiB, including its checksum. Every field/name and logical Record budget retains the existing core limits. Counts and lengths are bounded against remaining bytes before allocations. Full checkpoint buffers and native snapshot objects can require substantial temporary memory; OOM cleans unpublished reconstruction. The importer is private and only receives fresh unpublished databases.
 
-## Checkpoint header �� 144 bytes
+## Checkpoint header — 144 bytes
 
 All integers are unsigned big-endian, bytes are octets, and no C structures/pointers/handles are dumped.
 
@@ -47,7 +51,7 @@ The native format is upstream's frozen grammar: magic LKS4SNP1 (8), flags zero (
 
 Import builds complete Records, Collections and Occurrences before invoking lks_snapshot_deserialize and lks_snapshot_restore_order. The resolver maps IDs to stable database-owned Occurrences, checks Collection ownership and rejects duplicate resolution. Namespace, row counts and association lengths must match. Restored orders replace unpublished construction orders; traversal installs new runtime handles. Every live Occurrence must be seen once. Failure destroys all unpublished objects/containers without dereferencing expired handles.
 
-## Selection metadata �� exactly 416 bytes
+## Selection metadata — exactly 416 bytes
 
 | Offset | Width | Meaning |
 |---|---|---|
@@ -69,7 +73,7 @@ The session must be healthy and serialized. Checkpointing marks it busy and capt
 
 Build a new selection containing the new validated generation and up to retention minus one independently revalidated old generations. Default retention is 2; allowed range is 1..3. The configuration setter affects subsequent checkpoints and is persisted in their selection metadata. It does not itself create a checkpoint or change database Revision. A database with no checkpoint reports generation/Revision zero.
 
-Preserve the old selection in the backup through verified temporary-file replacement. Publish and verify new current metadata. Publish and verify the same new metadata as backup. Only then reclaim older generations no longer referenced. Thus current and backup never intentionally reference deleted files. Crashes can leave old backup/current disagreeing; deletion is deferred until both agree. Interrupted cleanup is safe; a later successful checkpoint sweeps independently validated older unreferenced files. Corrupt or unsupported orphan files are preserved, not guessed safe to delete. Checkpoint generation maintenance itself deletes no WAL; Phase 5 anchored history cleanup is a separate explicit operation. The cleanup helper is a narrow extension point for later history policies, not Phase 5 log compaction.
+Preserve the old selection in the backup through verified temporary-file replacement. Publish and verify new current metadata. Publish and verify the same new metadata as backup. Only then reclaim older generations no longer referenced. Thus current and backup never intentionally reference deleted files. Crashes can leave old backup/current disagreeing; deletion is deferred until both agree. Interrupted cleanup is safe; a later successful checkpoint sweeps independently validated older unreferenced files. Corrupt or unsupported orphan files are preserved, not guessed safe to delete. Checkpoint generation maintenance itself deletes no WAL; anchored history cleanup is a separate explicit operation with its own recovery-root protocol.
 
 Verified temporary-file publication adapts Obscura64 replace_once at commit 3db0122560853a8f3db3ba6888067394dc1a3e62 (MIT attribution retained). Random CREATE_NEW metadata temp files, write/flush/reopen verification and write-through rename are used; backup ordering and generation selection are OrdWeave-specific.
 
@@ -77,19 +81,19 @@ Before selection publication, failures return their specific error and leave the
 
 ## Startup and fallback
 
-Acquire the existing writer lock and validate the v3 manifest. Scan the entire authoritative WAL chain for header/frame integrity, sequencing, canonical payload syntax and digest continuity without applying historical mutations. No checkpoint permits missing/corrupt WAL history. Validate both metadata candidates and verify every retained metadata anchor against the complete WAL chain. Anchor conflicts or valid-checksummed contradictory same-generation identities fail CORRUPT. A higher-generation candidate is accepted only with verified WAL ancestry, never by majority or modification time. Same-generation retention-only differences prefer current if its active entry is identical.
+Acquire the existing writer lock and validate the v3 manifest. Scan the entire authoritative WAL chain for header/frame integrity, sequencing, canonical payload syntax and digest continuity without applying historical mutations. No checkpoint permits missing/corrupt authoritative retained WAL. A valid recovery root may authorize a deleted prefix, but its mandatory baseline cannot fall back to deleted genesis history. Validate both metadata candidates and verify every retained metadata anchor against the complete WAL chain. Anchor conflicts or valid-checksummed contradictory same-generation identities fail CORRUPT. A higher-generation candidate is accepted only with verified WAL ancestry, never by majority or modification time. Same-generation retention-only differences prefer current if its active entry is identical.
 
-Missing/corrupt metadata can use the other candidate. If neither is valid, replay the whole valid WAL. Unsupported metadata versions and hard I/O/resource errors fail rather than being hidden by fallback. Referenced checkpoint files with missing/corrupt bytes, wrong identity/anchor, or inconsistent object graphs can use another retained checkpoint; if none is usable, full-WAL reconstruction validates logical semantics. Unsupported checkpoint versions and hard I/O/OOM failures remain distinguishable and abort opening. Files are not overwritten because validation failed.
+Missing/corrupt metadata can use the other candidate. If neither is valid, reconstruct from the complete valid retained chain and its required root baseline, or from genesis when no root exists. Unsupported metadata versions and hard I/O/resource errors fail rather than being hidden by fallback. Referenced checkpoint files with missing/corrupt bytes, wrong identity/anchor, or inconsistent object graphs can use another retained checkpoint; if none is usable, retained-chain reconstruction from the required baseline validates logical semantics. Unsupported checkpoint versions and hard I/O/OOM failures remain distinguishable and abort opening. Files are not overwritten because validation failed.
 
 For a usable checkpoint, construct a fresh unpublished database, restore its native orders, then scan the WAL and apply only frames strictly after the checkpoint Revision. Check ID allocation and exact Revision during tail application. Publish only when the complete tail validates; no rollback to an older committed state is allowed. The existing conservative final-incomplete-frame reconciliation remains in force before append. A corrupt complete tail fails even with a valid checkpoint.
 
-This accelerates object reconstruction, not WAL I/O: the implementation still scans all historical bytes and currently rescans per candidate anchor. That is deliberate performance debt while all WAL remains authoritative. SHA is integrity, not protection against an attacker rewriting the entire checkpoint and log consistently.
+The ordinary checkpoint-based construction applies only the tail, but independent semantic auditing still replays all retained operations and anchor checks rescan the chain. There is no whole-open acceleration guarantee; this repeated work is TD-002. SHA is integrity, not protection against an attacker rewriting the entire checkpoint and log consistently.
 
 ## Evidence and limitations
 
-The original five tests remain. Checkpoint tests assert one native restoration and exactly one applied tail commit, all types and embedded NUL, empty/multiple Collections, repeated membership, ID high-water preservation, retention changes, allocation boundaries, metadata publication failures and interrupted cleanup. An independent Python oracle compares complete checkpoint/native bytes, supplies checksummed malformed graphs/blobs and validates safe full-WAL fallback versus checkpoint use. A fixed empty checkpoint vector is checked in separately. Test-only fault hooks never run in production.
+The complete suite currently has 12 CTests. Checkpoint tests assert one native restoration and exactly one ordinary applied tail commit (the separate semantic scan is excluded from that statistic), all types and embedded NUL, empty/multiple Collections, repeated membership, ID high-water preservation, retention changes, allocation boundaries, metadata publication failures and interrupted cleanup. An independent Python oracle compares complete checkpoint/native bytes, supplies checksummed malformed graphs/blobs and validates safe full-WAL fallback versus checkpoint use. A fixed empty checkpoint vector is checked in separately. Test-only fault hooks never run in production.
 
-Tests cover process-level fault assumptions, not hardware power loss. Durability still depends on Windows/filesystem/device flush and rename contracts. Partial named temporary files and invalid orphan generations may require later operator cleanup. The Phase 4 checkpoint API itself adds no SQL, networking or multi-operation transactions. Phase 5 history, anchored cleanup and backups are documented in HISTORY.md.
+Tests cover process-level fault assumptions, not hardware power loss. Durability still depends on Windows/filesystem/device flush and rename contracts. Partial named temporary files and invalid orphan generations may require later operator cleanup. The checkpoint API adds no SQL, networking or multi-operation transactions. History, anchored cleanup and backups are documented in [HISTORY.md](HISTORY.md).
 
 ## Usage
 
@@ -117,10 +121,10 @@ ow_database_close(db);
 return status;
 ```
 
-## Phase 5 retention baseline
+## Retention baseline
 
 A versioned recovery root can retain a mandatory native baseline after WAL-prefix deletion. It counts toward the maximum three internal generations. Current checkpoint selections are reconciled before publication, and generation deletion protects the root baseline. Once anchored, only verifiable checkpoints at or after the retained baseline may initialize state; historical selection also requires a checkpoint no newer than its requested Revision. Loss of the mandatory root baseline cannot fall back to deleted genesis history. See HISTORY.md for slot accounting, explicit cleanup and root authority.
 
-## Phase 6 semantic validation hardening
+## Semantic audit requirement (hardened in Phase 6)
 
-Checksum/syntax validation alone is insufficient. Before exposing recovered or historical state, the implementation now independently replays every retained mutation from genesis or the validated root baseline, rejecting failed operations, no-op frames and ID/revision inconsistencies even before a later checkpoint. The native-checkpoint-plus-tail result is compared against allocation-free logical comparison with direct replay, including fields, high-water counters and order. Historical targets are likewise checked against direct target replay after validating the complete retained chain. This deliberately adds reconstruction work; no overall startup-speed improvement is promised. Disk versions and native LKS serialization are unchanged. See RELEASE_CANDIDATE.md for the reproduced regression and accepted performance cost.
+A checkpoint only initializes the ordinary result-construction path. Independent semantic replay and logical comparison prevent it from hiding earlier invalid operations. See [the architecture audit](ARCHITECTURE.md#phase-6-semantic-validation-hardening), [checkpoint internals](IMPLEMENTATION_INTERNALS.zh-CN.md) and TD-002/TD-101 in [the register](TECHNICAL_DEBT.md).

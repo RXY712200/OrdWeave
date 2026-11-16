@@ -1,6 +1,6 @@
 # 1.0.0-rc.1 review package
 
-All six development phases, including Phase 6, passed independent review. This implementation is prepared for public v1.0.0-rc.1 GitHub Prerelease publication. Final Stable publication requires separate explicit user authorization.
+All six development phases, including Phase 6, passed independent review. [v1.0.0-rc.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Final Stable publication requires separate explicit user authorization.
 
 ## Supported build and use
 
@@ -44,22 +44,22 @@ GCC 16.2.0 production-source analysis: compile each of ordweave.c, lks_adapter.c
 
 ## Evidence checklist (not an independent phase verdict)
 
-- PASS: independently checksummed semantic-corruption regressions reject invalid prefix operations.
-- PASS: all selected historical Revisions before/at/between/after checkpoints match explicit expected fields, IDs and order.
-- PASS: oldest/latest retained states and rejection immediately before the boundary are exercised.
-- PASS: real process termination before roots, between roots, before deletion, during partial deletion, and after deletion preserves confirmed commits and supports maintenance retry.
-- PASS: later ordinary checkpoints preserve anchored recovery and total generation accounting.
-- PASS: legacy/checkpointed/anchored backups reopen independently; completion failures remain incomplete.
-- PASS: public C17 consumer configures and links the public library target, with no private LKS header.
-- PASS: existing fixed format and compatibility fixture tests remain present.
-- PASS: API status/layout and source license/provenance review completed without dependency changes.
-- PASS: all six development phases passed independent review; RC.1 Prerelease publication is explicitly authorized.
-- NOT AUTHORIZED: v1.0.0 Stable publication. Comprehensive source-grounded documentation remains a separate RC-stabilization task before Stable approval.
+- Observed in the recorded implementation review/tests: independently checksummed semantic-corruption regressions reject invalid prefix operations.
+- Observed in the recorded implementation review/tests: all selected historical Revisions before/at/between/after checkpoints match explicit expected fields, IDs and order.
+- Observed in the recorded implementation review/tests: oldest/latest retained states and rejection immediately before the boundary are exercised.
+- Observed in the recorded implementation review/tests: real process termination before roots, between roots, before deletion, during partial deletion, and after deletion preserves confirmed commits and supports maintenance retry.
+- Observed in the recorded implementation review/tests: later ordinary checkpoints preserve anchored recovery and total generation accounting.
+- Observed in the recorded implementation review/tests: legacy/checkpointed/anchored backups reopen independently; completion failures remain incomplete.
+- Observed in the recorded implementation review/tests: public C17 consumer configures and links the public library target, with no private LKS header.
+- Observed in the recorded implementation review/tests: existing fixed format and compatibility fixture tests remain present.
+- Observed in the recorded implementation review/tests: API status/layout and source license/provenance review completed without dependency changes.
+- Observed in the recorded implementation review/tests: all six development phases passed independent review; RC.1 Prerelease publication is explicitly authorized.
+- NOT AUTHORIZED: v1.0.0 Stable publication. Post-release documentation stabilization is on main and requires independent review; it does not alter the immutable RC tag.
 
-Build/CTest/CI PASS entries refer only to observed runs recorded in the completion report, not a self-issued overall PASS.
+The entries above record Phase 6/release evidence, not an independent verdict on this later documentation task. See [validation evidence map](IMPLEMENTATION_VALIDATION.zh-CN.md) for the tests and fixed CI runs.
 
 ## Nonblocking debt and limits
 
 Synchronous maintenance, repeated full semantic history reconstruction, complete checkpoint buffers, rebuilt occurrence indexes and full-copy backups remain deliberate costs. Semantic auditing increases open/history CPU and peak memory; checkpoint restoration still uses native LKS orders but no whole-operation speedup is promised. Linux/macOS, Last Days, SQL, networking, multi-writer access, multi-operation transactions and hardware power-loss certification are unsupported. Filesystem/device durability contracts remain prerequisites. Test fault hooks are absent from production behavior. The inherited checkout action's Node deprecation annotation remains nonblocking; no unrelated action upgrade is made.
 
-RC.1 may be published as a Prerelease only after local tests and Windows Debug/Release CI succeed on the final metadata-only candidate commit. This document does not authorize Stable publication.
+The metadata-only release commit was validated by [Windows Debug/Release CI 43809986388](https://github.com/RXY712200/OrdWeave/actions/runs/43809986388) before the published RC.1 Prerelease. New documentation on main is not included in that immutable tag. This document does not authorize Stable publication.

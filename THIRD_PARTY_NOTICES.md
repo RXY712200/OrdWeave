@@ -4,7 +4,7 @@ LayerKeySort Full v4.1.0 Stable, https://github.com/RXY712200/LayerKeySort
 
 Source commit: `70d7f0ef5857b54381b863d292a213909d87459f`.
 
-Copyright (c) 2026 RXY712200. Licensed under the MIT License; the complete upstream notice is preserved in [third_party/LayerKeySort/LICENSE](third_party/LayerKeySort/LICENSE). The submodule sources are unmodified and the real static implementation is linked into the smoke executable.
+Copyright (c) 2026 RXY712200. Licensed under the MIT License; the complete upstream notice is preserved in [third_party/LayerKeySort/LICENSE](third_party/LayerKeySort/LICENSE). The submodule sources are unmodified and the real static implementation is linked into OrdWeave and exercised directly by the smoke executable.
 
 Obscura64 source: https://github.com/RXY712200/Obscura64
 
@@ -16,4 +16,8 @@ MIT License, Copyright (c) 2026 RXY712200. The full applicable MIT notice is rep
 
 No ProbSpan source is included.
 
-Phase 4 also adapts the verified temporary-file publication sequence in Obscura64 `replace_once` (same source commit above): CREATE_NEW temporary files, exact write, flush, close/reopen verification and write-through rename. Checkpoint metadata backup/selection ordering and generation management are new OrdWeave code. No upstream repository was modified.
+Checkpoint publication also adapts the verified temporary-file publication sequence in Obscura64 `replace_once` (same source commit above): CREATE_NEW temporary files, exact write, flush, close/reopen verification and write-through rename. Checkpoint metadata backup/selection ordering and generation management are new OrdWeave code. No upstream repository was modified.
+
+## Documentation reference (no dependency change)
+
+The Chinese LayerKeySort walkthrough, API, internals, validation guides and README were read at documentation commit `13998b0682e56f34b401773f754e6d2c88c51206` as a presentation benchmark. OrdWeave explanations are grounded in its own RC.1 source; that reference does not change the runtime submodule pin above. See [the implementation walkthrough](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md) and [maintainer handoff](docs/HANDOFF.md).

@@ -1,5 +1,9 @@
 # Persistence format 3
 
+RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+
+[中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
+
 Windows x64 only. All integer fields are unsigned big-endian; bytes are eight bits. No C structures are dumped. SHA-256 detects accidental damage and chain inconsistency, not malicious rewriting. Binary64 is required by the core static assertion. Compatibility is explicit: unsupported versions are rejected; no migration is provided.
 
 ## Directory and coordination
@@ -39,7 +43,7 @@ The ID never changes on reopen. It is unrelated to runtime object IDs. Reserved 
 | 80 | 16 | Required zeros |
 | 96 | 32 | SHA-256 of bytes 0..95 |
 
-Segment names contain exactly 20 decimal digits and `.wal`. Discovery requires contiguous sequences starting at one, no unknown files/subdirectories, and matching header sequence/identity/revision/digest. Empty intermediate segments are invalid; an empty final segment is allowed.
+Segment names contain exactly 20 decimal digits and `.wal`. Without a recovery root, discovery requires contiguous sequences starting at one; a validated root instead supplies the first retained sequence and predecessor digest (see [HISTORY.md](HISTORY.md)). Discovery also requires no unknown files/subdirectories, and matching header sequence/identity/revision/digest. Empty intermediate segments are invalid; an empty final segment is allowed.
 
 Before appending a frame that would exceed the 64 MiB target, write the next header to the exact next `.pending` name, flush, close, rename without replacement using WRITE_THROUGH, then open the new final file. A frame never spans segments. After chain validation, recovery discards only a pending file whose sequence is exactly one beyond the final authoritative segment. Conflicting pending names fail. A published empty final segment is a valid interrupted rotation. No manifest rewrite occurs per commit.
 
@@ -66,7 +70,7 @@ All payloads start with an 8-byte nonzero object ID. Opcodes: 1 Record create, 2
 
 Fields append a 4-byte name byte length and nonempty UTF-8 name bytes (no NUL). Set additionally appends one type byte, 4-byte value length and complete value. Types: 0 null (length 0), 1 boolean (length 1, byte 0 or 1), 2 signed integer (length 8, two's complement), 3 finite binary64 (length 8, IEEE bits, positive zero only), 4 UTF-8 string, 5 arbitrary binary. Strings are length-delimited and can contain NUL. All UTF-8 is strictly validated. Negative zero on input is normalized to positive zero; negative-zero encodings, infinities and NaNs are rejected during replay. Value payloads and names are bounded to 1 MiB and the existing logical Record budget remains 8 MiB.
 
-Insert appends Collection ID (8), Record ID (8), placement (1), anchor ID (8), for 33 payload bytes total. Move appends placement (1), anchor (8), for 17 total. Placement 0 front, 1 back requires zero anchor; 2 before, 3 after requires a live same-Collection anchor. All fields are mandatory; extra/trailing payload bytes and unknown opcodes are rejected. Replay must create exactly the encoded IDs and change Revision exactly once. No-op frames and logically inconsistent references are corruption. Deleted IDs remain consumed because the entire creation/deletion sequence is replayed.
+Insert appends Collection ID (8), Record ID (8), placement (1), anchor ID (8), for 33 payload bytes total. Move appends placement (1), anchor (8), for 17 total. Placement 0 front, 1 back requires zero anchor; 2 before, 3 after requires a live same-Collection anchor. All fields are mandatory; extra/trailing payload bytes and unknown opcodes are rejected. Replay must create exactly the encoded IDs and change Revision exactly once. No-op frames and logically inconsistent references are corruption. Deleted IDs remain consumed through checkpoint high-water counters and subsequent replay, or the complete creation/deletion sequence during genesis replay.
 
 ## Commit state machine and errors
 
@@ -78,22 +82,22 @@ I/O errors, corruption, unsupported format, busy ownership, commit uncertainty a
 
 ## Recovery
 
-Acquire writer ownership, validate manifest, discover the full chain, validate each segment and frame, and replay through the existing core/LKS implementation without recursive WAL writes. Publish only after complete validation. Revision, expected IDs, referential integrity and no-op rules are enforced by replay.
+Acquire writer ownership, validate manifest, discover the complete authoritative retained chain (from segment 1, or the validated recovery root), validate each segment and frame, and replay through the existing core/LKS implementation without recursive WAL writes. Publish only after complete validation. Revision, expected IDs, referential integrity and no-op rules are enforced by replay.
 
 A final short frame header is repairable only if its available magic prefix matches. A complete header must pass its own SHA and bounds checks before a missing body is classified as incomplete. Only these final short writes are excluded; truncate to the last complete validated boundary with SetEndOfFile and flush before allowing append. Any complete frame with bad digest/boundary, malformed payload, or broken chain is corruption, even at EOF. An incomplete nonfinal segment is corruption. No frame is skipped, no later segment is selected over an invalid predecessor, and no corrupt database is replaced with an empty database.
 
-FlushFileBuffers and WRITE_THROUGH rely on Windows/filesystem/device durability contracts. Process-kill tests are not power-loss tests and do not prove hardware honors flushes. Phase 4 adds checkpoint initialization and WAL-tail application while still validating the complete authoritative chain; see CHECKPOINTS.md.
+FlushFileBuffers and WRITE_THROUGH rely on Windows/filesystem/device durability contracts. Process-kill tests are not power-loss tests and do not prove hardware honors flushes. Checkpoint recovery adds native initialization and ordinary WAL-tail application while independently auditing retained semantics; see [CHECKPOINTS.md](CHECKPOINTS.md).
 
 ## Tests and remaining debt
 
 `tests/format_vectors.json` contains fixed independent manifest/segment/first-commit hex vectors for ID bytes 00..0f. `format_oracle.py` independently assembles bytes using Python hashlib, checks those fixed vectors, compares a real emitted frame, and supplies malformed/corrupt/noncanonical recovery cases. It does not call the production encoder. `tests/persistence.c` exercises production-sized rotation, reduced-threshold rotation, seven test-only failure boundaries, cross-process locks, abrupt TerminateProcess, post-write/pre-flush and post-flush/pre-report uncertainty, and deterministic array-model replay. Test fault hooks are compiled only into a separate test library; production contains no enabled hooks. Simulated errors are not physical disk failure or power-loss emulation. Successful tests clean their isolated directories; failed tests may retain build-directory evidence.
 
-Performance debt: full-WAL startup replay, per-commit SHA provider setup, existing occurrence-index reconstruction, no compaction. No multi-operation transactions or recovery from a corrupt committed prefix are implemented. Phase 5 adds historical queries, anchored prefix cleanup and full backups as described in HISTORY.md. Phase 4 checkpoint-generation retention is documented separately.
+Performance debt includes repeated retained-WAL replay, per-call SHA provider setup and occurrence-index reconstruction; see [the register](TECHNICAL_DEBT.md). Explicit anchored prefix cleanup and full backups exist as described in [HISTORY.md](HISTORY.md); ordinary open does not compact. Multi-operation transactions and skipping a corrupt committed retained prefix are unsupported.
 
-## Phase 5 anchored extension
+## Anchored extension
 
 WAL/manifest bytes remain v3. Without recovery roots, genesis recovery is unchanged. With validated format-1 recovery roots, the first retained segment and predecessor digest come explicitly from the root and mandatory baseline checkpoint; deleted prefixes are unavailable history, not an implicit new genesis. Ordinary open never compacts. Read-only history/verification suppresses tail truncation. Backup completion markers prevent opening incomplete exported copies. See HISTORY.md.
 
 ## Phase 6 semantic validation hardening
 
-Checksum/syntax validation alone is insufficient. Before exposing recovered or historical state, the implementation now independently replays every retained mutation from genesis or the validated root baseline, rejecting failed operations, no-op frames and ID/revision inconsistencies even before a later checkpoint. The native-checkpoint-plus-tail result is compared against allocation-free logical comparison with direct replay, including fields, high-water counters and order. Historical targets are likewise checked against direct target replay after validating the complete retained chain. This deliberately adds reconstruction work; no overall startup-speed improvement is promised. Disk versions and native LKS serialization are unchanged. See RELEASE_CANDIDATE.md for the reproduced regression and accepted performance cost.
+Every retained WAL operation is independently applied to the core, including operations before the chosen checkpoint; ID gaps, failed operations and no-op frames are corruption even with valid checksums. See [the architecture audit](ARCHITECTURE.md#phase-6-semantic-validation-hardening), [execution walkthrough](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) and resolved TD-101 in [the register](TECHNICAL_DEBT.md).
