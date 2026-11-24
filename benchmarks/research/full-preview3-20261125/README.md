@@ -1,0 +1,5 @@
+# Preview.3 native evidence
+
+Source b12a007c50c2f9efcbee500a14d3cf09dcc74f10, official Full gitlink 70d7f0ef5857b54381b863d292a213909d87459f. Exact candidate fe00536e7bd7f4e5128432ea4a29e54158074903. All 27 verified generated archive traces in memory and persistent modes. Three production dependencies with warmup and three repetitions, plus a separate source-instrumented profile each cell.
+
+Run preview3-native.py with the Full repository, staged Preview.2 original experiment output, and a fresh output directory. The original campaign was interrupted after 587 CSV data rows. preview3-resume.py uses the complete individual JSON records recoverable from the interrupted gzip stream and repeats only missing cells using the same binary files. Do not mix instrumented rows with formal performance. The application is native Windows. The workload is generated, not field telemetry. Read the previous archive at 1e40955a783f91ec835170bea664bfa8e324b465 for complete prerequisites and profiler topology. The 4096 holdout and allocator sweep use extra_ordweave.py. WAL commit includes its nested main flush.
