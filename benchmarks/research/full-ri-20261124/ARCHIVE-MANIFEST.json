@@ -1,0 +1,78 @@
+{
+  "trace-manifest.json": {
+    "bytes": 8247,
+    "sha256": "25d34328e3653aa5874640a62f20cfdac462361f88f871f7873b30cbff22f109"
+  },
+  "traces.zip": {
+    "bytes": 176460,
+    "sha256": "9699bbc36209c6668077fa1079e4865d0fe370db7a26a78633bf2a5f6b1f9849"
+  },
+  "correctness/database-upstream-oom.csv": {
+    "bytes": 1507,
+    "sha256": "827fefadd18eb789c4bc12e205a3851b7ec92ab9306bd01dfb8478475230b61b"
+  },
+  "correctness/database-upstream-oom.stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "correctness/full-gcc-build.log.gz": {
+    "bytes": 1280,
+    "sha256": "e361da0c32d62d09ba3533efaca5bce514a2b59fe0dfd5ea30243e4aec65eef3"
+  },
+  "correctness/full-gcc-configure.log.gz": {
+    "bytes": 307,
+    "sha256": "84d46d6cba69f03dba1cb2ce1756a2e8f2d57dcc91a5aaf5a48d81e162dd9a35"
+  },
+  "correctness/full-gcc-strict-tests.log.gz": {
+    "bytes": 922,
+    "sha256": "d96b91c96676c1662e4dbbffb239f42e18fe8d24008c553f5033af6b86effb53"
+  },
+  "correctness/ordweave-and-research-tests.log.gz": {
+    "bytes": 474,
+    "sha256": "716f054fa3a1c743568739c83ea6d6e5e41d60660de0b010e75f18ce201e57af"
+  },
+  "correctness/source-provenance.json": {
+    "bytes": 1056,
+    "sha256": "7ec9efb2c406936bffa9db5de76029ee26888933ae7b48dcdcbd41795c86e17b"
+  },
+  "tooling/database.c": {
+    "bytes": 4069,
+    "sha256": "7e82719e982d0350f144142c7195b59b250eff43c47a45a1029a8e002473100e"
+  },
+  "tooling/database_oom.c": {
+    "bytes": 2260,
+    "sha256": "f865f0f9a134ef0933193cfe91da6c1fd48d7f89f3e65f44aa8ec9ba71cbd9fa"
+  },
+  "tooling/db_workload.py": {
+    "bytes": 1970,
+    "sha256": "2cd2ce50717d4ea2509d2f3b7060ef94caf3d86e63eced81dde615ffd2753283"
+  },
+  "tooling/PROTOCOL.md": {
+    "bytes": 7440,
+    "sha256": "e01501c6fbbcd821fab698c8861d091eee947d791cc5f4900865b6926cfe578c"
+  },
+  "tooling/REVIEW_ITERATIONS.md": {
+    "bytes": 3966,
+    "sha256": "cbf28a9840e4c179270dcd18dd8109e05f25c14bc7026d126695608207409ff5"
+  },
+  "evidence/Windows/invocations.jsonl": {
+    "bytes": 104976,
+    "sha256": "a0c20e6b18f16b5f8e6fab61b1edad46e6aac34fec38f98e6de1a025ea774ec8"
+  },
+  "evidence/Windows/metadata.json": {
+    "bytes": 734,
+    "sha256": "ab1adb4419be4f92854f32041236ce90f1a895880042c186b78a1a0ecac9e00b"
+  },
+  "evidence/Windows/native-databases.zip": {
+    "bytes": 22276030,
+    "sha256": "c988ecb6a787be85b1e20b67923066f5f4476da6575a5e61a97061a01540cddd"
+  },
+  "evidence/Windows/raw-process-output.zip": {
+    "bytes": 2284812,
+    "sha256": "b4ac71776b60e9d011571a6f7c87f1e6bfdc62280e4556a9e8775f058a395d94"
+  },
+  "evidence/Windows/raw.csv": {
+    "bytes": 49267,
+    "sha256": "022178bb4ba72ba0dc527328dff160d575c3a34bcac6506fc0f26baa748e0e42"
+  }
+}

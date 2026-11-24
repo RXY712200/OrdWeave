@@ -1,0 +1,30 @@
+{
+  "Full": {
+    "head": "c108acd72b37614f4be271c9747484c2dde5eac4",
+    "status": "",
+    "remote": "https://github.com/RXY712200/LayerKeySort.git",
+    "released_pin": "70d7f0ef5857b54381b863d292a213909d87459f"
+  },
+  "OrdWeave": {
+    "head": "b12a007c50c2f9efcbee500a14d3cf09dcc74f10",
+    "status": "",
+    "remote": "https://github.com/RXY712200/OrdWeave.git",
+    "Full_gitlink": "70d7f0ef5857b54381b863d292a213909d87459f third_party/LayerKeySort (v4.1.0)",
+    "release_type": "v1.0.0-rc.1 prerelease; no Stable"
+  },
+  "comparison": {
+    "changed_files": [
+      "README.md",
+      "README.zh-CN.md",
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "docs/FULL_CONSUMER_HANDOFF.md",
+      "docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md",
+      "docs/IMPLEMENTATION_INTERNALS.zh-CN.md",
+      "docs/IMPLEMENTATION_VALIDATION.zh-CN.md",
+      "docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md"
+    ],
+    "total_commits": 22,
+    "interpretation": "documentation only; production implementation unchanged"
+  }
+}

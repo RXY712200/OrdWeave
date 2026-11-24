@@ -1,0 +1,17 @@
+{
+  "platform": "Windows-2025Server-10.0.26100-SP0",
+  "processor": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD",
+  "python": "3.13.17 (tags/v3.13.17:64e080d, Oct 21 2026, 14:08:53) [MSC v.1944 64 bit (AMD64)]",
+  "cpus": 2,
+  "research_sha": "691c0551511063d10bb1b380daa39bb4bc6c764e",
+  "started_utc": "2026-11-24T01:05:40Z",
+  "suite": "database",
+  "guard_bytes": 536870912,
+  "timeout_seconds": 120,
+  "compiler": "gcc (x86_64-posix-seh-rev1, Built by MinGW-Builds project) 15.2.0",
+  "finished_utc": "2026-11-24T01:12:03Z",
+  "binaries": {
+    "D:\\a\\lks0011\\lks0011\\.local\\build\\database_driver.exe": "e6a908ec19ba3166b91524b3935e32a9a3976dc0440f226e574446e737d29df8"
+  },
+  "completed_rows": 324
+}
