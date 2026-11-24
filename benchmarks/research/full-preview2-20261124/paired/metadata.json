@@ -1,0 +1,294 @@
+{
+  "ordweave": "b12a007c50c2f9efcbee500a14d3cf09dcc74f10",
+  "archive": "aa95b240b019c518a98bfb900ec374d24a537165:benchmarks/research/full-ri-20261124/archive/",
+  "full": {
+    "stable41": "70d7f0ef5857b54381b863d292a213909d87459f",
+    "preview12": "61e9290ec5ba47b9092bcb8ae7d61f13104ea839",
+    "profile": "61e9290ec5ba47b9092bcb8ae7d61f13104ea839"
+  },
+  "traces": [
+    {
+      "name": "db-128-17-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 17,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 124,
+      "sha256": "a135aaa2c887042a03f58676bc722886089d52f651f90e2e4333775226f588d9"
+    },
+    {
+      "name": "db-128-17-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 17,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 133,
+      "sha256": "62731dd7f518524c70703cdef75fe638fb3eb7eab4eef082c629988659c193df"
+    },
+    {
+      "name": "db-128-17-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 17,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 351,
+      "sha256": "766845647c007857f6c5e90158e9407948a2035e50155f35061c900536444889"
+    },
+    {
+      "name": "db-128-305419896-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 305419896,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 136,
+      "sha256": "1e42dcfb4f1db7b867730ef071981d988e3dbc13671e14e3e3ca38eda9327b4f"
+    },
+    {
+      "name": "db-128-305419896-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 305419896,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 139,
+      "sha256": "b167a979fcce08bb163b1c05e084aa72978f05104bc4bc502fe17d0d35901ed9"
+    },
+    {
+      "name": "db-128-305419896-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 305419896,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 343,
+      "sha256": "0e7827453da1a4cf23bdad74d0d611a00b66d4f3258f374c215a4ba2983328bc"
+    },
+    {
+      "name": "db-128-2654435769-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 2654435769,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 129,
+      "sha256": "4ed3119d0cb8c7e5a2091980ceb9a7b8a3011c1ecfde6cbfc5ce3c74e0da40a1"
+    },
+    {
+      "name": "db-128-2654435769-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 2654435769,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 118,
+      "sha256": "66607eab9ecd41d07a601e59b8199a2f743d8f9e485ed95941e41067f095bb82"
+    },
+    {
+      "name": "db-128-2654435769-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 128,
+      "seed": 2654435769,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 311,
+      "sha256": "2dc1446ba2d79b071f074b34afa4f7d6f5db516c46528ba7b770bf120ded4fa2"
+    },
+    {
+      "name": "db-512-17-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 17,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 505,
+      "sha256": "5e18936fb3c6c0ad17344ff26f8ccba84b698f3c68479bb54fb63ec98967abf0"
+    },
+    {
+      "name": "db-512-17-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 17,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 528,
+      "sha256": "a5aca82470b08f2cc26cae98234a493b30e96b4bf4e2ff86bf892adc586aa09e"
+    },
+    {
+      "name": "db-512-17-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 17,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 704,
+      "sha256": "7ae87821e2c1698871ee12bde9d3422a232d8f24a21bed63e9e2b8ddf2f58bb4"
+    },
+    {
+      "name": "db-512-305419896-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 305419896,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 517,
+      "sha256": "33c58abbee2b72322ea47a9b17fa56970e8530901a6400d32a277999ed3d7f0b"
+    },
+    {
+      "name": "db-512-305419896-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 305419896,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 538,
+      "sha256": "00694a4a66a0b4a9585dc5af63e80f1c2fa65d63e050343913869e75680a528e"
+    },
+    {
+      "name": "db-512-305419896-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 305419896,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 686,
+      "sha256": "33b103736429a43622ca635c324630de7b547fc48e2083004c4e95b8f157e136"
+    },
+    {
+      "name": "db-512-2654435769-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 2654435769,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 530,
+      "sha256": "848525a028d702058a781d23351658dda194942c47c0ab59daffda9a7ea05f7e"
+    },
+    {
+      "name": "db-512-2654435769-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 2654435769,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 554,
+      "sha256": "64c2b57cc4ae792535e00e625f05c1de0063169f1ddd0646c410bb8e905862aa"
+    },
+    {
+      "name": "db-512-2654435769-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 512,
+      "seed": 2654435769,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 693,
+      "sha256": "92c9a7a0b15b9cf17ae5bc5b7fb6c826d767754ac062c688a1a7b1a9d8bbcf33"
+    },
+    {
+      "name": "db-2048-17-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 17,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 2053,
+      "sha256": "3c345e0bc3fdd0967adc3e64203263e867ae98b4e56496511cd5504572285a89"
+    },
+    {
+      "name": "db-2048-17-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 17,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 2047,
+      "sha256": "c48d4dcfc91b672f5f70a7d17591fe8c2dbc27ea3e64de0ebdd719d550b7394d"
+    },
+    {
+      "name": "db-2048-17-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 17,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 2225,
+      "sha256": "25ec4b5204ae06520abaa215851452e062d0275539c0b1ff6084a0755884b7cf"
+    },
+    {
+      "name": "db-2048-305419896-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 305419896,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 2045,
+      "sha256": "6fd103c6a7c6e101f2423bc1808bf1ecb899b7cab4873902557fed9636b2f106"
+    },
+    {
+      "name": "db-2048-305419896-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 305419896,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 2048,
+      "sha256": "e74da23fc23ff3a8ac1ceacc13128e460abc345cbf2526803135a598344a15c9"
+    },
+    {
+      "name": "db-2048-305419896-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 305419896,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 2252,
+      "sha256": "6f703a1c71512aa56b7178bd50e59a8eeeee18c6ebc66a457cebfb2befc9abc4"
+    },
+    {
+      "name": "db-2048-2654435769-compare-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 2654435769,
+      "scenario": "compare-heavy",
+      "operations": 1000,
+      "final_n": 2044,
+      "sha256": "48324f7d0a85a7d7bc289c4b64f625585f1006b584b2999b2e7f73352fe64f57"
+    },
+    {
+      "name": "db-2048-2654435769-update-heavy.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 2654435769,
+      "scenario": "update-heavy",
+      "operations": 1000,
+      "final_n": 2077,
+      "sha256": "594cd54b304a03c9e8a5b5e5fa2bdde1c642c6aa58ca2d44c4571da422be4ac5"
+    },
+    {
+      "name": "db-2048-2654435769-hotspot.trace",
+      "origin": "generated application driver; not human",
+      "n": 2048,
+      "seed": 2654435769,
+      "scenario": "hotspot",
+      "operations": 1000,
+      "final_n": 2223,
+      "sha256": "7b97fa251897685fafc7aa6c5885627e019d405f1a3644ec1fe9e0a85813c306"
+    }
+  ],
+  "compiler": "gcc (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "binaries": {
+    "stable41": "6dee1bb8c18118772c1f0fa9054b9f435e730a4ec8a4f40ee5035e5ee0b1c4dc",
+    "preview12": "600eee7bbdd0a7142682a023fec16ad151db86bc5e039d592f4d2d58c8407142",
+    "profile": "06bcd3b3d402380497a72b28989310e4ffd442ab8afb2865d1703585275821fd"
+  },
+  "candidate": "fe00536e7bd7f4e5128432ea4a29e54158074903",
+  "final_binaries": {
+    "candidate": "970b9114b833f41629c24abee902e164d577193cc01a7b169d5ebf88f28102c4",
+    "profile-final": "df5a39b770b7c77812e12ad48fcb55581f763318242eeb63d60cc397b6325753",
+    "stable41": "6dee1bb8c18118772c1f0fa9054b9f435e730a4ec8a4f40ee5035e5ee0b1c4dc",
+    "preview12": "600eee7bbdd0a7142682a023fec16ad151db86bc5e039d592f4d2d58c8407142"
+  }
+}

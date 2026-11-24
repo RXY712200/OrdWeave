@@ -1,0 +1,2 @@
+summary.csv -text whitespace=cr-at-eol
+database-oom.csv -text whitespace=cr-at-eol

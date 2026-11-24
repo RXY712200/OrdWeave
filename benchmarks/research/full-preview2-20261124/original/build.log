@@ -1,0 +1,224 @@
+cmake -S D:\LayerKeySort\.local\preview2-ow\capture\stable41 -B D:\LayerKeySort\.local\preview2-ow\capture\stable41\build -G Ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_BUILD_TYPE=Release
+-- The C compiler identification is GNU 16.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: D:/msys64/ucrt64/bin/gcc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found Python3: C:/Users/rxy71/AppData/Local/Programs/Python/Python313/python.exe (found version "3.13.14") found components: Interpreter
+-- Configuring done (1.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: D:/LayerKeySort/.local/preview2-ow/capture/stable41/build
+cmake --build D:\LayerKeySort\.local\preview2-ow\capture\stable41\build --target preview2_driver --parallel 3
+[1/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_base.c.obj
+[2/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_alloc.c.obj
+[3/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path.c.obj
+[4/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_text.c.obj
+[5/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_order_key.c.obj
+[6/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/slot_codec.c.obj
+[7/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_compare.c.obj
+[8/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/managed_order.c.obj
+[9/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot.c.obj
+[10/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_key.c.obj
+[11/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order.c.obj
+[12/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_wire.c.obj
+[13/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_restore.c.obj
+[14/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order_bulk.c.obj
+[15/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/sort.c.obj
+[16/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/immutable_group.c.obj
+[17/26] Building C object CMakeFiles/ordweave.dir/src/lks_adapter.c.obj
+[18/26] Building C object CMakeFiles/ordweave.dir/src/persistence.c.obj
+[19/26] Building C object CMakeFiles/ordweave.dir/src/ordweave.c.obj
+[20/26] Building C object CMakeFiles/ordweave.dir/src/wal_format.c.obj
+[21/26] Linking C static library third_party\LayerKeySort\liblayerkeysort.a
+[22/26] Building C object CMakeFiles/ordweave.dir/src/sha256.c.obj
+[23/26] Building C object CMakeFiles/preview2_driver.dir/driver.c.obj
+[24/26] Building C object CMakeFiles/ordweave.dir/src/wal_windows.c.obj
+[25/26] Linking C static library libordweave.a
+[26/26] Linking C executable preview2_driver.exe
+cmake --build D:\LayerKeySort\.local\preview2-ow\capture\stable41\build --parallel 3
+[1/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/lks_adapter.c.obj
+[2/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/persistence.c.obj
+[3/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/wal_format.c.obj
+[4/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/ordweave.c.obj
+[5/24] Building C object CMakeFiles/ordweave_smoke.dir/tests/smoke.c.obj
+[6/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/sha256.c.obj
+[7/24] Building C object CMakeFiles/ordweave_core.dir/tests/core.c.obj
+[8/24] Building C object CMakeFiles/ordweave_failures.dir/src/lks_adapter.c.obj
+[9/24] Building C object CMakeFiles/ordweave_failures.dir/src/wal_format.c.obj
+[10/24] Building C object CMakeFiles/ordweave_failures.dir/tests/failures.c.obj
+[11/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/wal_windows.c.obj
+[12/24] Linking C static library libordweave_test_storage.a
+[13/24] Building C object CMakeFiles/ordweave_failures.dir/src/sha256.c.obj
+[14/24] Building C object CMakeFiles/ordweave_persistence.dir/tests/persistence.c.obj
+[15/24] Building C object CMakeFiles/ordweave_checkpoint.dir/tests/checkpoint.c.obj
+[16/24] Building C object CMakeFiles/ordweave_history.dir/tests/history.c.obj
+[17/24] Linking C executable ordweave_smoke.exe
+[18/24] Linking C executable ordweave_core.exe
+[19/24] Linking C executable ordweave_failures.exe
+[20/24] Building C object CMakeFiles/ordweave_audit.dir/tests/audit.c.obj
+[21/24] Linking C executable ordweave_persistence.exe
+[22/24] Linking C executable ordweave_checkpoint.exe
+[23/24] Linking C executable ordweave_history.exe
+[24/24] Linking C executable ordweave_audit.exe
+ctest --test-dir D:\LayerKeySort\.local\preview2-ow\capture\stable41\build --output-on-failure
+Test project D:/LayerKeySort/.local/preview2-ow/capture/stable41/build
+      Start  1: ordweave_smoke
+ 1/12 Test  #1: ordweave_smoke ...................   Passed    0.04 sec
+      Start  2: ordweave_core
+ 2/12 Test  #2: ordweave_core ....................   Passed    0.28 sec
+      Start  3: ordweave_failures
+ 3/12 Test  #3: ordweave_failures ................   Passed    0.04 sec
+      Start  4: ordweave_persistence
+ 4/12 Test  #4: ordweave_persistence .............   Passed    1.87 sec
+      Start  5: ordweave_format
+ 5/12 Test  #5: ordweave_format ..................   Passed    1.07 sec
+      Start  6: ordweave_checkpoint
+ 6/12 Test  #6: ordweave_checkpoint ..............   Passed    1.35 sec
+      Start  7: ordweave_checkpoint_format
+ 7/12 Test  #7: ordweave_checkpoint_format .......   Passed    0.85 sec
+      Start  8: ordweave_history
+ 8/12 Test  #8: ordweave_history .................   Passed    2.30 sec
+      Start  9: ordweave_history_format
+ 9/12 Test  #9: ordweave_history_format ..........   Passed    0.88 sec
+      Start 10: ordweave_audit_format
+10/12 Test #10: ordweave_audit_format ............   Passed    0.26 sec
+      Start 11: ordweave_adversarial
+11/12 Test #11: ordweave_adversarial .............   Passed    1.05 sec
+      Start 12: ordweave_external_consumer
+12/12 Test #12: ordweave_external_consumer .......   Passed    2.93 sec
+
+100% tests passed out of 12
+
+Total Test time (real) =  13.01 sec
+cmake -S D:\LayerKeySort\.local\preview2-ow\capture\preview12 -B D:\LayerKeySort\.local\preview2-ow\capture\preview12\build -G Ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_BUILD_TYPE=Release
+-- The C compiler identification is GNU 16.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: D:/msys64/ucrt64/bin/gcc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found Python3: C:/Users/rxy71/AppData/Local/Programs/Python/Python313/python.exe (found version "3.13.14") found components: Interpreter
+-- Configuring done (1.5s)
+-- Generating done (0.1s)
+-- Build files have been written to: D:/LayerKeySort/.local/preview2-ow/capture/preview12/build
+cmake --build D:\LayerKeySort\.local\preview2-ow\capture\preview12\build --target preview2_driver --parallel 3
+[1/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_base.c.obj
+[2/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_alloc.c.obj
+[3/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path.c.obj
+[4/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_text.c.obj
+[5/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_order_key.c.obj
+[6/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/slot_codec.c.obj
+[7/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_compare.c.obj
+[8/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/managed_order.c.obj
+[9/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_key.c.obj
+[10/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot.c.obj
+[11/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order.c.obj
+[12/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_restore.c.obj
+[13/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_wire.c.obj
+[14/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order_bulk.c.obj
+[15/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/sort.c.obj
+[16/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/immutable_group.c.obj
+[17/26] Building C object CMakeFiles/ordweave.dir/src/lks_adapter.c.obj
+[18/26] Building C object CMakeFiles/ordweave.dir/src/persistence.c.obj
+[19/26] Building C object CMakeFiles/ordweave.dir/src/wal_format.c.obj
+[20/26] Building C object CMakeFiles/ordweave.dir/src/ordweave.c.obj
+[21/26] Linking C static library third_party\LayerKeySort\liblayerkeysort.a
+[22/26] Building C object CMakeFiles/ordweave.dir/src/sha256.c.obj
+[23/26] Building C object CMakeFiles/preview2_driver.dir/driver.c.obj
+[24/26] Building C object CMakeFiles/ordweave.dir/src/wal_windows.c.obj
+[25/26] Linking C static library libordweave.a
+[26/26] Linking C executable preview2_driver.exe
+cmake --build D:\LayerKeySort\.local\preview2-ow\capture\preview12\build --parallel 3
+[1/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/lks_adapter.c.obj
+[2/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/persistence.c.obj
+[3/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/wal_format.c.obj
+[4/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/ordweave.c.obj
+[5/24] Building C object CMakeFiles/ordweave_smoke.dir/tests/smoke.c.obj
+[6/24] Building C object CMakeFiles/ordweave_core.dir/tests/core.c.obj
+[7/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/sha256.c.obj
+[8/24] Building C object CMakeFiles/ordweave_failures.dir/src/lks_adapter.c.obj
+[9/24] Building C object CMakeFiles/ordweave_failures.dir/src/wal_format.c.obj
+[10/24] Building C object CMakeFiles/ordweave_failures.dir/tests/failures.c.obj
+[11/24] Building C object CMakeFiles/ordweave_test_storage.dir/src/wal_windows.c.obj
+[12/24] Linking C static library libordweave_test_storage.a
+[13/24] Building C object CMakeFiles/ordweave_failures.dir/src/sha256.c.obj
+[14/24] Building C object CMakeFiles/ordweave_persistence.dir/tests/persistence.c.obj
+[15/24] Building C object CMakeFiles/ordweave_checkpoint.dir/tests/checkpoint.c.obj
+[16/24] Building C object CMakeFiles/ordweave_history.dir/tests/history.c.obj
+[17/24] Linking C executable ordweave_smoke.exe
+[18/24] Linking C executable ordweave_core.exe
+[19/24] Linking C executable ordweave_failures.exe
+[20/24] Linking C executable ordweave_persistence.exe
+[21/24] Building C object CMakeFiles/ordweave_audit.dir/tests/audit.c.obj
+[22/24] Linking C executable ordweave_checkpoint.exe
+[23/24] Linking C executable ordweave_history.exe
+[24/24] Linking C executable ordweave_audit.exe
+ctest --test-dir D:\LayerKeySort\.local\preview2-ow\capture\preview12\build --output-on-failure
+Test project D:/LayerKeySort/.local/preview2-ow/capture/preview12/build
+      Start  1: ordweave_smoke
+ 1/12 Test  #1: ordweave_smoke ...................   Passed    0.05 sec
+      Start  2: ordweave_core
+ 2/12 Test  #2: ordweave_core ....................   Passed    0.26 sec
+      Start  3: ordweave_failures
+ 3/12 Test  #3: ordweave_failures ................   Passed    0.05 sec
+      Start  4: ordweave_persistence
+ 4/12 Test  #4: ordweave_persistence .............   Passed    2.01 sec
+      Start  5: ordweave_format
+ 5/12 Test  #5: ordweave_format ..................   Passed    0.99 sec
+      Start  6: ordweave_checkpoint
+ 6/12 Test  #6: ordweave_checkpoint ..............   Passed    1.47 sec
+      Start  7: ordweave_checkpoint_format
+ 7/12 Test  #7: ordweave_checkpoint_format .......   Passed    0.85 sec
+      Start  8: ordweave_history
+ 8/12 Test  #8: ordweave_history .................   Passed    2.33 sec
+      Start  9: ordweave_history_format
+ 9/12 Test  #9: ordweave_history_format ..........   Passed    0.86 sec
+      Start 10: ordweave_audit_format
+10/12 Test #10: ordweave_audit_format ............   Passed    0.28 sec
+      Start 11: ordweave_adversarial
+11/12 Test #11: ordweave_adversarial .............   Passed    1.17 sec
+      Start 12: ordweave_external_consumer
+12/12 Test #12: ordweave_external_consumer .......   Passed    2.89 sec
+
+100% tests passed out of 12
+
+Total Test time (real) =  13.33 sec
+cmake -S D:\LayerKeySort\.local\preview2-ow\capture\profile -B D:\LayerKeySort\.local\preview2-ow\capture\profile\build -G Ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_BUILD_TYPE=Release
+-- The C compiler identification is GNU 16.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: D:/msys64/ucrt64/bin/gcc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found Python3: C:/Users/rxy71/AppData/Local/Programs/Python/Python313/python.exe (found version "3.13.14") found components: Interpreter
+-- Configuring done (1.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: D:/LayerKeySort/.local/preview2-ow/capture/profile/build
+cmake --build D:\LayerKeySort\.local\preview2-ow\capture\profile\build --target preview2_driver --parallel 3
+[1/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_base.c.obj
+[2/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_alloc.c.obj
+[3/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path.c.obj
+[4/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/slot_codec.c.obj
+[5/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_text.c.obj
+[6/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_order_key.c.obj
+[7/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_compare.c.obj
+[8/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/managed_order.c.obj
+[9/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot.c.obj
+[10/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_key.c.obj
+[11/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order.c.obj
+[12/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_wire.c.obj
+[13/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_restore.c.obj
+[14/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order_bulk.c.obj
+[15/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/sort.c.obj
+[16/26] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/immutable_group.c.obj
+[17/26] Building C object CMakeFiles/ordweave.dir/src/lks_adapter.c.obj
+[18/26] Building C object CMakeFiles/ordweave.dir/src/persistence.c.obj
+[19/26] Building C object CMakeFiles/ordweave.dir/src/wal_format.c.obj
+[20/26] Building C object CMakeFiles/ordweave.dir/src/sha256.c.obj
+[21/26] Building C object CMakeFiles/ordweave.dir/src/ordweave.c.obj
+[22/26] Linking C static library third_party\LayerKeySort\liblayerkeysort.a
+[23/26] Building C object CMakeFiles/ordweave.dir/src/wal_windows.c.obj
+[24/26] Linking C static library libordweave.a
+[25/26] Building C object CMakeFiles/preview2_driver.dir/driver.c.obj
+[26/26] Linking C executable preview2_driver.exe
