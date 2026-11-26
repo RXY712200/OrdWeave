@@ -38,4 +38,4 @@ Select checks appropriate to the changed behavior. Keep source inspection, local
 
 ## Release and maintenance safeguards
 
-The six implementation phases are complete. Published `v1.0.0-rc.1` is a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; preserve its tag and Release. Stable has not been published. Documentation maintenance does not authorize production/API/format/dependency changes, upstream edits, new tags or Releases. Actual release evidence and compatibility constraints remain in [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md).
+The six implementation phases are complete. Published `v1.0.0-rc.1` is a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; preserve its tag and Release. `v1.0.0` is the authorized first Stable release target; consult its [Release](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) for publication status. Further development or releases require a separate task. Documentation maintenance does not authorize production/API/format/dependency changes, upstream edits, new tags or Releases. Actual release evidence and compatibility constraints remain in [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md).

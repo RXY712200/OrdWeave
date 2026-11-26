@@ -90,7 +90,18 @@ def check() -> None:
     assert command("git", "rev-parse", "v1.0.0-rc.1", capture=True) == TAG_OBJECT
     protected = ["src", "include", "tests", "CMakeLists.txt", "third_party", ".github", ".gitmodules"]
     diff = command("git", "diff", "--name-only", BASELINE, "--", *protected, capture=True)
-    assert not diff, f"implementation changed since RC baseline: {diff}"
+    # Stable permits only these exact full-file transformations of the immutable RC.
+    version_paths = {"src/ordweave.c", "tests/smoke.c", "tests/consumer/main.c"}
+    changed = set(diff.splitlines())
+    assert changed == version_paths, f"unexpected implementation delta: {changed}"
+    for path in sorted(version_paths):
+        original = subprocess.check_output(["git", "show", f"{BASELINE}:{path}"], cwd=ROOT)
+        before = b'"1.0.0-rc.1"'
+        assert original.count(before) == 1, path
+        # Normalize checkout line endings only; every other byte must match.
+        current = (ROOT / path).read_bytes().replace(b"\r\n", b"\n")
+        expected_bytes = original.replace(b"\r\n", b"\n").replace(before, b'"1.0.0"')
+        assert current == expected_bytes, f"non-version change since RC baseline: {path}"
     assert command("git", "-C", "third_party/LayerKeySort", "rev-parse", "HEAD", capture=True) == "70d7f0ef5857b54381b863d292a213909d87459f"
     for name in GUIDES:
         assert BASELINE in (ROOT / "docs" / name).read_text(encoding="utf-8"), name
@@ -102,7 +113,7 @@ def check() -> None:
             original_text = original.decode("cp1252")  # Legacy separator encoding, not format bytes.
         rows = lambda text: [line for line in text.splitlines() if line.startswith("|")]
         assert rows(original_text) == rows((ROOT / "docs" / name).read_text(encoding="utf-8")), name
-    print("RC baseline/tag/dependency/protected source paths and exact wire layout tables unchanged")
+    print("RC baseline/tag/dependency/wire tables preserved; protected paths allow only 3 exact Stable version literals")
     documents = [ROOT / "AGENTS.md", ROOT / "README.md", ROOT / "README.zh-CN.md",
                  ROOT / "CHANGELOG.md",
                  ROOT / "THIRD_PARTY_NOTICES.md", *sorted((ROOT / "docs").rglob("*.md"))]

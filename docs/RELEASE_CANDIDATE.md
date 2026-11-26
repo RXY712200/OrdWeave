@@ -1,12 +1,12 @@
 # 1.0.0-rc.1 review package
 
-All six development phases, including Phase 6, passed independent review. [v1.0.0-rc.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Final Stable publication requires separate explicit user authorization.
+All six development phases, including Phase 6, passed independent review. [v1.0.0-rc.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. The separately authorized first Stable target is [v1.0.0](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0); consult that Release for publication status. This package preserves historical RC evidence.
 
 ## Supported build and use
 
 Windows x64, C17, CMake 3.21+, matching compiler/CRT settings, and the pinned LayerKeySort Full source are required. GCC/MinGW and Windows MSVC are exercised. Clone recursively as shown in README. A source consumer can set BUILD_TESTING=OFF, add_subdirectory(OrdWeave), and link OrdWeave::ordweave. The external consumer test does exactly this with only ordweave.h and tests both in-memory and persistent lifecycles. There is no prebuilt cross-toolchain binary ABI guarantee or installation package. Python 3 is needed only for tests.
 
-Public types include opaque database/history pointers, uint64_t-wrapper IDs, enum statuses/types/placements, OwValue and OwHistoryRange. Existing function signatures, member layouts and status numeric values are unchanged. Compiler options affecting enum sizes, packing or CRT allocation must match. Release strings now report 1.0.0-rc.1; CMake project version is 1.0.0. Ordinary create remains disk-free; persistent calls durably acknowledge each state-changing mutation. Inputs are borrowed for the call and stored as copies; results require the matching OrdWeave release functions. The caller serializes access. See API.md for exact ownership, no-op, uncertainty and maintenance rules.
+Public types include opaque database/history pointers, uint64_t-wrapper IDs, enum statuses/types/placements, OwValue and OwHistoryRange. Existing function signatures, member layouts and status numeric values are unchanged. Compiler options affecting enum sizes, packing or CRT allocation must match. Historical RC release strings report 1.0.0-rc.1; the Stable target reports 1.0.0; CMake project version is 1.0.0. Ordinary create remains disk-free; persistent calls durably acknowledge each state-changing mutation. Inputs are borrowed for the call and stored as copies; results require the matching OrdWeave release functions. The caller serializes access. See API.md for exact ownership, no-op, uncertainty and maintenance rules.
 
 ## Source call-chain audit
 
@@ -54,7 +54,7 @@ GCC 16.2.0 production-source analysis: compile each of ordweave.c, lks_adapter.c
 - Observed in the recorded implementation review/tests: existing fixed format and compatibility fixture tests remain present.
 - Observed in the recorded implementation review/tests: API status/layout and source license/provenance review completed without dependency changes.
 - Observed in the recorded implementation review/tests: all six development phases passed independent review; RC.1 Prerelease publication is explicitly authorized.
-- NOT AUTHORIZED: v1.0.0 Stable publication. Post-release documentation stabilization is on main and requires independent review; it does not alter the immutable RC tag.
+- At RC publication, Stable was not authorized. The later minimal v1.0.0 task separately authorizes Stable publication after its local and exact-head CI gates; it does not alter the immutable RC tag.
 
 The entries above record Phase 6/release evidence, not an independent verdict on this later documentation task. See [validation evidence map](IMPLEMENTATION_VALIDATION.zh-CN.md) for the tests and fixed CI runs.
 
@@ -66,6 +66,6 @@ The metadata-only release commit was validated by [Windows Debug/Release CI 4380
 
 ## Current release and maintenance constraints
 
-The published candidate remains `v1.0.0-rc.1`, a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Preserve its existing annotated tag and published Release. All six implementation phases are complete; no Stable release or new candidate is authorized by this document.
+The published candidate remains `v1.0.0-rc.1`, a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Preserve its existing annotated tag and published Release. All six implementation phases are complete. The separate v1.0.0 task authorizes the minimal Stable release; this historical document grants no further release or development authority.
 
 Later documentation maintenance changes main without changing the immutable RC source. The actual API, format versions, dependency pin, provenance, supported platform and evidence above remain the project's compatibility baseline. New production/API/format/dependency changes and publication require a specific project task. Contributor build and verification instructions are in [AGENTS.md](../AGENTS.md), [DEVELOPMENT.zh-CN.md](DEVELOPMENT.zh-CN.md) and [IMPLEMENTATION_VALIDATION.zh-CN.md](IMPLEMENTATION_VALIDATION.zh-CN.md).

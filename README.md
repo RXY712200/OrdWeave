@@ -4,7 +4,7 @@
 
 OrdWeave is a **Windows x64 C17 embedded static database** built on independently maintained LayerKeySort Full. It stores typed Records and ordered Collections in which the same Record can occur multiple times, with each Occurrence independently identified and movable. This separates shared data from its placement in lists, layers or arrangements.
 
-[**v1.0.0-rc.1**](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub **Prerelease**. All six implementation phases completed independent review; **Stable is not approved or published**. The RC source baseline is `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. The comprehensive guides on main were added after publication and are not included in the immutable RC tag.
+[**v1.0.0**](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) is the authorized first **Stable** release target; that link records publication status. All six implementation phases completed independent review; the minimal final release delta and publication remain subject to independent review. Historical RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; its Prerelease and tag remain unchanged. Detailed guides retain their source-bound explanations of that baseline; Stable changes only release-version literals and necessary release metadata.
 
 ## Model and capabilities
 
@@ -17,7 +17,7 @@ Use a disk-free in-memory instance or a persistent directory with a lifetime sin
 Requires Windows x64, Git with submodules, CMake 3.21+, a C17 compiler, and Python 3 when tests are enabled. For Visual Studio:
 
 ```powershell
-git clone --recurse-submodules --branch v1.0.0-rc.1 https://github.com/RXY712200/OrdWeave.git
+git clone --recurse-submodules --branch v1.0.0 https://github.com/RXY712200/OrdWeave.git
 cd OrdWeave
 cmake -S . -B build -A x64
 cmake --build build --config Release

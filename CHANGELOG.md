@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0 - 2026-11-26 (Stable target)
+
+- Prepare the authorized first Stable release; actual publication is recorded at [v1.0.0](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0). Final release delta and publication remain subject to independent review.
+- Report runtime version 1.0.0 and synchronize only the two existing literal version expectations; preserve algorithms, API, disk formats and the LayerKeySort Full v4.1.0 pin.
+- Update current release navigation and retain RC.1 history and source-bound detailed guides. Permit only the exact three version-literal substitutions in the RC-baseline documentation guard. No new functionality or dependency adoption.
+
 ## Project-local contributor documentation consolidation
 
 - Remove the duplicated owner-specific collaboration policy from the current public tree; preserve its historical commits and prior documentation entries.

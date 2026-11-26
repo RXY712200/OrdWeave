@@ -9,7 +9,7 @@ int main(void) {
  OwDatabase *db=NULL;OwRecordId r;OwValue value={.type=OW_INT,.as.integer=42},out={0};char cwd[MAX_PATH],path[MAX_PATH];
  if(!GetCurrentDirectoryA(MAX_PATH,cwd)) return 1;
  if(snprintf(path,sizeof(path),"%s\\consumer-%lu",cwd,GetCurrentProcessId())>=(int)sizeof(path)) return 1;
- if(strcmp(ordweave_version(),"1.0.0-rc.1")) return 2;
+ if(strcmp(ordweave_version(),"1.0.0")) return 2;
  if(ow_database_create(&db)!=OW_OK || ow_record_create(db,&r)!=OW_OK) return 3;
  ow_database_destroy(db);
  if(ow_database_create_persistent(path,&db)!=OW_OK || ow_record_create(db,&r)!=OW_OK || ow_field_set(db,r,"answer",&value)!=OW_OK || ow_database_close(db)!=OW_OK) return 4;
