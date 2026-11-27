@@ -197,3 +197,7 @@ move预判a==o、端点及lks_order_next/previous邻接后再检查Revision容�
 |产品范围外|SQL、多写者、Last Days、Linux/macOS支持|不是自动必还的债务|
 
 本次仅文档化现有机制。对动机中未由提交/注释明确陈述的解释，应理解为根据准备/发布结构得出的工程解读，不冒充作者过去作过的设计决议。继续定位每条行为的断言见[验证指南](IMPLEMENTATION_VALIDATION.zh-CN.md)，后续修改规约见[开发指南](DEVELOPMENT.zh-CN.md)。
+
+## Preview.2 owned index include
+
+[src/occurrence_index.inc](../src/occurrence_index.inc) is included only by ordweave.c. It replaces the global Occurrence ManagedOrder with a compressed nibble-radix ID index. Record/Collection ManagedOrders and LKS explicit Collection ordering remain. See [Preview.2 decisions](PREVIEW_2.md) for preparation/publication and sparse resource proofs. Historical RC descriptions above remain source-bound.

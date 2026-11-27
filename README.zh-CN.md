@@ -4,7 +4,7 @@
 
 OrdWeave 是面向 **Windows x64 的 C17 嵌入式静态数据库**，使用独立维护的 LayerKeySort Full 管理顺序和ID索引。它把“共享的数据”和“某次出现的位置”分开，适合需要重复成员、独立移动和历史恢复的有序清单、图层成员或编排数据。
 
-当前分支为 **1.1.0-preview.1 开发版**，尚未发布。[v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) 保持在 `32f853defc0a2e9f0ca809fb3535a90c977c7665`，使用Full4.1。本分支集成Full4.2及经回归验证的cleanup入口guard修复；见 [Preview.1决策](docs/PREVIEW_1.md)。历史RC.1和Stable标签、Release均不改变，详细旧指南保留准确RC源码基线。
+当前分支为 **1.1.0-preview.2 开发版**，尚未发布。[v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) 保持在 `32f853defc0a2e9f0ca809fb3535a90c977c7665`，使用Full4.1。本分支集成Full4.2及经回归验证的cleanup入口guard修复；见 [Preview.1决策](docs/PREVIEW_1.md)。历史RC.1和Stable标签、Release均不改变，详细旧指南保留准确RC源码基线。
 
 ## 数据模型与能力
 
@@ -17,7 +17,7 @@ Record拥有具名字段：null、bool、int64、有限double、UTF-8字符串�
 需要Windows x64、Git递归子模块、CMake 3.21+、C17编译器；启用测试还需Python 3。Visual Studio：
 
 ```powershell
-git clone --recurse-submodules --branch dev/v1.1.0-preview.1 https://github.com/RXY712200/OrdWeave.git
+git clone --recurse-submodules --branch dev/v1.1.0-preview.2 https://github.com/RXY712200/OrdWeave.git
 cd OrdWeave
 cmake -S . -B build -A x64
 cmake --build build --config Release
@@ -73,3 +73,5 @@ int main(void) {
 不支持SQL、二级字段索引、网络服务、多写者/并发调用保证、跨Collection原子转移、Linux/macOS、Last Days或增量备份。checkpoint恢复减少普通构造路径的tail，但整体open还会独立语义审计保留WAL，不承诺整体启动加速。索引重建、多轮重放、完整缓冲/复制、SHA provider初始化等真实成本见技术债登记。进程终止测试不等于物理掉电认证。
 
 OrdWeave使用 [MIT License](LICENSE)；LayerKeySort和Obscura64适配来源与SHA见 [第三方声明](THIRD_PARTY_NOTICES.md)。没有引入ProbSpan代码。
+
+Current authorized work is Preview.2 Steps5–8: the compressed permanent-ID index and core validation. See [Preview.2 decisions](docs/PREVIEW_2.md). Earlier Preview.1 task prose is historical; no Preview.3 or release is authorized.

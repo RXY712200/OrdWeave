@@ -40,3 +40,9 @@
 - Reject busy/quarantined history cleanup before reconstruction or root repair; add focused regression coverage.
 - Keep immutable RC/Stable validation and explicitly check the bounded Preview integration delta.
 - Record capability/architecture review and isolated A/B/compatibility evidence on a separate evidence branch. No Preview release has been published.
+
+## 1.1.0-preview.2 — unreleased development
+
+- Replace global Occurrence index reconstruction with bounded compressed nibble-radix preparation/publication; preserve LKS Collection order and all public/storage contracts.
+- Adapt deterministic checkpoint/state/teardown consumers and add boundary, capacity and allocation-failure tests.
+- Retain Record/Collection/field/query design based on the core review; preserve TD-103 and Open EG-003.
