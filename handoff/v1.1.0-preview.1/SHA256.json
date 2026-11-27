@@ -1,4 +1,8 @@
 {
+  ".gitattributes": {
+    "bytes": 8,
+    "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+  },
   "B-checkpoint.log": {
     "bytes": 231,
     "sha256": "4c4cf27e80951212fcfc26e149758f629a23cffecb6d05c0db848e796d397f18"
@@ -92,8 +96,8 @@
     "sha256": "07930fb5d69fcb8ff56b4f8ae2fc8eef10cdb5ced1694840e54346d8206d66be"
   },
   "REPORT.md": {
-    "bytes": 20870,
-    "sha256": "929e8bac2bb53775f182edd8abda775251c19e0b434d24a9990feb9650235e8e"
+    "bytes": 21189,
+    "sha256": "ad68e79e93f347db34ec0e9ebd4d5877408529bc71205587dd861658858a91c6"
   },
   "run_ab.py": {
     "bytes": 2126,
