@@ -56,7 +56,7 @@ int main(void)
     unsigned char *bytes = NULL;
     size_t i, size = 0;
     int cmp = 0, result = EXIT_FAILURE;
-    CHECK(strcmp(ordweave_version(), "1.0.0") == 0);
+    CHECK(strcmp(ordweave_version(), "1.1.0-preview.1") == 0);
     order = lks_order_create();
     CHECK(order);
     for (i = 0; i < 3; ++i)

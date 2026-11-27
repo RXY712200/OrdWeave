@@ -25,3 +25,7 @@ All six implementation phases below are completed and passed independent review.
 6. **Comprehensive testing, compatibility review, documentation, and stable release preparation.**
 
    Acceptance: Complete correctness and failure testing, Windows x64 compatibility review, accurate documentation, and stable release readiness review.
+
+## Subsequent development
+
+Published v1.0.0 remains the immutable production baseline. Current unreleased Preview.1 integrates Full4.2 and a narrow cleanup guard correction; [the review](PREVIEW_1.md) records decisions and proposed later criteria. It does not reopen the six completed phases above or renumber the separately fixed six-stage/twenty-step follow-up plan. No later step is implemented or authorized by these recommendations.

@@ -14,7 +14,7 @@ jobs:
         shell: pwsh
         run: |
           $sha = git -C third_party/LayerKeySort rev-parse HEAD
-          if ($sha -ne '70d7f0ef5857b54381b863d292a213909d87459f') { throw "Unexpected LKS commit: $sha" }
+          if ($sha -ne 'f751e1ee2afd682874281d6dc495969f9eca49eb') { throw "Unexpected LKS commit: $sha" }
       - run: cmake -S . -B build -A x64
       - run: cmake --build build --config ${{ matrix.configuration }}
       - run: ctest --test-dir build -C ${{ matrix.configuration }} --output-on-failure
