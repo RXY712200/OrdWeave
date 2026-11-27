@@ -4,7 +4,7 @@
 
 OrdWeave is a **Windows x64 C17 embedded static database** built on independently maintained LayerKeySort Full. It stores typed Records and ordered Collections in which the same Record can occur multiple times, with each Occurrence independently identified and movable. This separates shared data from its placement in lists, layers or arrangements.
 
-Current branch: **1.1.0-preview.1 development**, not a published release. The published [v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) remains at `32f853defc0a2e9f0ca809fb3535a90c977c7665` with Full4.1. This development branch integrates Full4.2 and a narrowly tested cleanup guard correction; see [Preview.1 decisions](docs/PREVIEW_1.md). Existing RC.1 and Stable tags/Releases are unchanged. Historical guides retain their exact RC source baseline.
+Current branch: **1.1.0-preview.2 development**, not a published release. The published [v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) remains at `32f853defc0a2e9f0ca809fb3535a90c977c7665` with Full4.1. This development branch integrates Full4.2 and a narrowly tested cleanup guard correction; see [Preview.1 decisions](docs/PREVIEW_1.md). Existing RC.1 and Stable tags/Releases are unchanged. Historical guides retain their exact RC source baseline.
 
 ## Model and capabilities
 
@@ -17,7 +17,7 @@ Use a disk-free in-memory instance or a persistent directory with a lifetime sin
 Requires Windows x64, Git with submodules, CMake 3.21+, a C17 compiler, and Python 3 when tests are enabled. For Visual Studio:
 
 ```powershell
-git clone --recurse-submodules --branch dev/v1.1.0-preview.1 https://github.com/RXY712200/OrdWeave.git
+git clone --recurse-submodules --branch dev/v1.1.0-preview.2 https://github.com/RXY712200/OrdWeave.git
 cd OrdWeave
 cmake -S . -B build -A x64
 cmake --build build --config Release
@@ -75,3 +75,5 @@ Persistent paths must be new absolute UTF-8 Windows drive paths with existing pa
 No SQL, field secondary indexes, network service, multi-writer/concurrent-access guarantees, cross-collection atomic transfer, Linux/macOS, Last Days or incremental backup. Checkpoints can reduce the ordinary result's replay tail, but startup still audits the retained WAL semantically; no whole-open speedup is promised. Index rebuilds, repeated scans, full buffers/copies and provider setup are tracked with evidence in the [debt register](docs/TECHNICAL_DEBT.md). Process-crash tests do not certify physical power-loss durability.
 
 OrdWeave is [MIT licensed](LICENSE). LayerKeySort and adapted Obscura64 provenance and notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No ProbSpan code is included.
+
+Current authorized work is Preview.2 Steps5–8: the compressed permanent-ID index and core validation. See [Preview.2 decisions](docs/PREVIEW_2.md). Earlier Preview.1 task prose is historical; no Preview.3 or release is authorized.

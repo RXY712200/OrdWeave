@@ -92,7 +92,7 @@ OwStatus ow_core_export(OwDatabase *d, const unsigned char id[16], uint64_t gen,
   memcpy(header + 80, anchor, 32);
   ow_put(header + 112, lks_managed_order_size(d->records), 8);
   ow_put(header + 120, lks_managed_order_size(d->collections), 8);
-  ow_put(header + 128, lks_managed_order_size(d->occurrences), 8);
+  ow_put(header + 128, d->occurrences->count, 8);
   cp_write(&w, header, 144);
   for (h = lks_managed_order_first(d->records); h; h = lks_order_next(h)) {
     Record *r = lks_order_item(h);
@@ -175,9 +175,10 @@ OwStatus ow_core_export(OwDatabase *d, const unsigned char id[16], uint64_t gen,
       w.status = status;
     free(blob);
   }
-  for (h = lks_managed_order_first(d->occurrences); w.status == OW_OK && h;
-       h = lks_order_next(h)) {
-    Occurrence *o = lks_order_item(h);
+  OwOccIterator occurrence_it;OwIndexed *entry;
+  for (entry=occ_first(d->occurrences,&occurrence_it);w.status==OW_OK && entry;
+       entry=occ_next(&occurrence_it)) {
+    Occurrence *o = (Occurrence *)entry;
     cp_number(&w, o->key.id, 8);
     cp_number(&w, o->collection->key.id, 8);
     cp_number(&w, o->record->key.id, 8);
@@ -236,7 +237,7 @@ static LksStatus cp_resolve(const void *data, size_t size, uint64_t ordinal,
   *out = NULL;
   if (size != 8)
     return LKS_STATUS_INVALID_ARGUMENT;
-  o = ow_index_find(r->db->occurrences, ow_get(data, 8));
+  o = occ_find(r->db->occurrences, ow_get(data, 8));
   if (!o || o->collection != r->collection || o->checkpoint_seen)
     return LKS_STATUS_INVALID_ARGUMENT;
   o->checkpoint_seen = 1;
@@ -418,9 +419,9 @@ OwStatus ow_core_import(OwDatabase *d, const unsigned char *bytes, size_t size,
       ((Occurrence *)lks_order_item(h))->handle = h;
   }
   {
-    const LksOrderHandle *h;
-    for (h = lks_managed_order_first(d->occurrences); h; h = lks_order_next(h))
-      if (!((Occurrence *)lks_order_item(h))->checkpoint_seen) {
+    OwOccIterator it;OwIndexed *entry;
+    for(entry=occ_first(d->occurrences,&it);entry;entry=occ_next(&it))
+      if (!((Occurrence *)entry)->checkpoint_seen) {
         status = OW_CORRUPT;
         goto done;
       }

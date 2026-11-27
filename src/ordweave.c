@@ -8,6 +8,7 @@
 #include <string.h>
 _Static_assert(sizeof(double) == 8 && DBL_MANT_DIG == 53 && DBL_MAX_EXP == 1024,
                "binary64 required");
+#include "occurrence_index.inc"
 typedef struct Field {
   char *name;
   OwValue value;
@@ -30,11 +31,12 @@ typedef struct {
   int checkpoint_seen;
 } Occurrence;
 struct OwDatabase {
-  LksManagedOrder *records, *collections, *occurrences;
+  LksManagedOrder *records, *collections;
+  OwOccIndex *occurrences;
   uint64_t rid, cid, oid, revision;
   OwStore *store;
 };
-const char *ordweave_version(void) { return "1.1.0-preview.1"; }
+const char *ordweave_version(void) { return "1.1.0-preview.2"; }
 static int utf8(const unsigned char *s, size_t n) {
   size_t i = 0;
   while (i < n) {
@@ -179,7 +181,7 @@ OwStatus ow_database_create(OwDatabase **out) {
     return OW_NOMEM;
   d->records = ow_index_create();
   d->collections = ow_index_create();
-  d->occurrences = ow_index_create();
+  d->occurrences = occ_create();
   if (!d->records || !d->collections || !d->occurrences) {
     ow_database_destroy(d);
     return OW_NOMEM;
@@ -212,7 +214,14 @@ void ow_database_destroy(OwDatabase *d) {
     lks_order_destroy(c->order);
     c->order = NULL;
   }
-  item = detach_index(d->occurrences);
+  {
+    OwOccIterator it;OwIndexed *entry;
+    item=NULL;
+    for(entry=occ_first(d->occurrences,&it);entry;entry=occ_next(&it)) {
+      entry->teardown_next=item;item=entry;
+    }
+    occ_destroy(d->occurrences);
+  }
   while (item) {
     next = item->teardown_next;
     free(item);
@@ -476,51 +485,10 @@ static OwStatus anchor_get(OwDatabase *d, Collection *c, OwPlacement p,
     return id.value ? OW_INVALID : OW_OK;
   if (!id.value)
     return OW_INVALID;
-  *out = ow_index_find(d->occurrences, id.value);
+  *out = occ_find(d->occurrences, id.value);
   if (!*out)
     return OW_NOT_FOUND;
   return (*out)->collection == c ? OW_OK : OW_INVALID;
-}
-/* Build an unpublished index borrowing stable objects. Do not replace their
- * current index handles until the complete operation commits. */
-static OwStatus stage_occurrences(OwDatabase *d, Occurrence *add,
-                                  Occurrence *omit, LksManagedOrder **out) {
-  const LksOrderHandle *h, *temporary;
-  LksManagedOrder *index = ow_index_create();
-  OwStatus s;
-  *out = NULL;
-  if (!index)
-    return OW_NOMEM;
-  for (h = lks_managed_order_first(d->occurrences); h; h = lks_order_next(h)) {
-    Occurrence *o = lks_order_item(h);
-    if (o == omit)
-      continue;
-    s = ow_lks_status(lks_managed_order_insert(index, o, &temporary));
-    if (s != OW_OK) {
-      lks_managed_order_destroy(index);
-      return s;
-    }
-  }
-  if (add) {
-    if (ow_index_find(index, add->key.id)) {
-      lks_managed_order_destroy(index);
-      return OW_CONFLICT;
-    }
-    s = ow_lks_status(lks_managed_order_insert(index, add, &temporary));
-    if (s != OW_OK) {
-      lks_managed_order_destroy(index);
-      return s;
-    }
-  }
-  *out = index;
-  return OW_OK;
-}
-static void publish_occurrences(OwDatabase *d, LksManagedOrder *index) {
-  const LksOrderHandle *h;
-  lks_managed_order_destroy(d->occurrences);
-  d->occurrences = index;
-  for (h = lks_managed_order_first(index); h; h = lks_order_next(h))
-    ((Occurrence *)lks_order_item(h))->key.index_handle = h;
 }
 OwStatus ow_occurrence_insert(OwDatabase *d, OwCollectionId cid, OwRecordId rid,
                               OwPlacement p, OwOccurrenceId aid,
@@ -529,7 +497,7 @@ OwStatus ow_occurrence_insert(OwDatabase *d, OwCollectionId cid, OwRecordId rid,
   Record *r;
   Occurrence *a, *o;
   OwStatus s;
-  LksManagedOrder *staged;
+  OwOccPlan staged;
   if (out)
     out->value = 0;
   if (!d || !out || !cid.value || !rid.value)
@@ -548,18 +516,18 @@ OwStatus ow_occurrence_insert(OwDatabase *d, OwCollectionId cid, OwRecordId rid,
   o->key.id = d->oid + 1;
   o->collection = c;
   o->record = r;
-  s = stage_occurrences(d, o, NULL, &staged);
+  s = occ_prepare(d->occurrences, o->key.id, &staged);
   if (s != OW_OK) {
     free(o);
     return s;
   }
   s = ow_order_insert(c->order, o, p, a ? a->handle : NULL, &o->handle);
   if (s != OW_OK) {
-    lks_managed_order_destroy(staged);
+    occ_abort(&staged);
     free(o);
     return s;
   }
-  publish_occurrences(d, staged);
+  occ_commit(d->occurrences, &staged, &o->key);
   ++r->refs;
   out->value = ++d->oid;
   ++d->revision;
@@ -572,7 +540,7 @@ OwStatus ow_occurrence_move(OwDatabase *d, OwOccurrenceId id, OwPlacement p,
   int noop;
   if (!d || !id.value)
     return OW_INVALID;
-  o = ow_index_find(d->occurrences, id.value);
+  o = occ_find(d->occurrences, id.value);
   if (!o)
     return OW_NOT_FOUND;
   if ((s = anchor_get(d, o->collection, p, aid, &a)) != OW_OK)
@@ -595,23 +563,18 @@ OwStatus ow_occurrence_move(OwDatabase *d, OwOccurrenceId id, OwPlacement p,
 OwStatus ow_occurrence_remove(OwDatabase *d, OwOccurrenceId id) {
   Occurrence *o;
   OwStatus s;
-  LksManagedOrder *staged;
   if (!d || !id.value)
     return OW_INVALID;
-  o = ow_index_find(d->occurrences, id.value);
+  o = occ_find(d->occurrences, id.value);
   if (!o)
     return OW_NOT_FOUND;
   if ((s = capacity(d, 0)) != OW_OK)
     return s;
-  if ((s = stage_occurrences(d, NULL, o, &staged)) != OW_OK)
-    return s;
   s = ow_lks_status(lks_order_remove(o->collection->order, o->handle, NULL));
-  if (s != OW_OK) {
-    lks_managed_order_destroy(staged);
+  if (s != OW_OK)
     return s;
-  }
   o->handle = NULL;
-  publish_occurrences(d, staged);
+  occ_remove(d->occurrences, id.value);
   --o->record->refs;
   free(o);
   ++d->revision;
@@ -626,7 +589,7 @@ OwStatus ow_occurrence_get(OwDatabase *d, OwOccurrenceId id,
     rid->value = 0;
   if (!d || !cid || !rid || !id.value)
     return OW_INVALID;
-  o = ow_index_find(d->occurrences, id.value);
+  o = occ_find(d->occurrences, id.value);
   if (!o)
     return OW_NOT_FOUND;
   cid->value = o->collection->key.id;
@@ -640,8 +603,8 @@ OwStatus ow_occurrence_compare(OwDatabase *d, OwOccurrenceId left,
     *out = 0;
   if (!d || !out || !left.value || !right.value)
     return OW_INVALID;
-  a = ow_index_find(d->occurrences, left.value);
-  b = ow_index_find(d->occurrences, right.value);
+  a = occ_find(d->occurrences, left.value);
+  b = occ_find(d->occurrences, right.value);
   if (!a || !b)
     return OW_NOT_FOUND;
   if (a->collection != b->collection)
@@ -752,14 +715,12 @@ int ow_core_same_state(const OwDatabase *a, const OwDatabase *b) {
   }
   if (x || y)
     return 0;
-  x = lks_managed_order_first(a->occurrences);
-  y = lks_managed_order_first(b->occurrences);
-  for (; x && y; x = lks_order_next(x), y = lks_order_next(y)) {
-    Occurrence *o = lks_order_item(x), *p = lks_order_item(y);
-    if (o->key.id != p->key.id ||
-        o->collection->key.id != p->collection->key.id ||
-        o->record->key.id != p->record->key.id)
-      return 0;
+  OwOccIterator ai,bi;
+  OwIndexed *ax=occ_first(a->occurrences,&ai),*by=occ_first(b->occurrences,&bi);
+  for(;ax && by;ax=occ_next(&ai),by=occ_next(&bi)) {
+    Occurrence *o=(Occurrence *)ax,*p=(Occurrence *)by;
+    if(o->key.id!=p->key.id || o->collection->key.id!=p->collection->key.id ||
+       o->record->key.id!=p->record->key.id) return 0;
   }
-  return !x && !y;
+  return !ax && !by;
 }

@@ -14,7 +14,8 @@
 
 ### TD-001 — insertion/removal rebuilds the global Occurrence index
 
-- **Category / status:** performance and temporary memory / Open.
+- **Category / status:** performance and temporary memory / Resolved in Preview.2 development; independent acceptance pending.
+- **History:** Open through accepted Preview.1. The original implementation/cost rationale below is preserved as the historical baseline, not the current implementation. Compressed nibble-radix preparation/publication removes global reconstruction; measured core and resource results and proofs are in [Preview.2](PREVIEW_2.md). LKS explicit Collection ordering remains. Reopen if a mutation again scans/rebuilds all Occurrences, sparse resources become unacceptable, or failure atomicity regresses.
 - **Module:** [ordweave.c](../src/ordweave.c), `stage_occurrences`, `publish_occurrences`, occurrence insert/remove; [lks_adapter.c](../src/lks_adapter.c).
 - **Current implementation:** 为插入或删除建立另一个ManagedOrder，借用全部仍存活对象（加入新项或排除待删项）。临时handles不覆盖live handles。Collection操作成功后销毁旧index并无分配地发布新handles。
 - **Cost / risk:** 规模越大全局重建与临时索引内存越昂贵；一次局部成员改变可能遍历所有Occurrence。没有基准数据，不给吞吐数字或服务级别保证。
