@@ -1,0 +1,45 @@
+{
+  "mixes": {
+    "balanced": [
+      25,
+      25,
+      25,
+      10,
+      15
+    ],
+    "read": [
+      10,
+      10,
+      15,
+      10,
+      55
+    ],
+    "modify": [
+      35,
+      35,
+      20,
+      5,
+      5
+    ],
+    "move": [
+      5,
+      5,
+      70,
+      10,
+      10
+    ]
+  },
+  "mix_order": [
+    "insert",
+    "remove",
+    "move",
+    "invalid_anchor",
+    "compare"
+  ],
+  "note": "Initial frozen protocol references mix names whose numeric thresholds were already present in driver.c before execution; these values make them explicit. Live-size bounds override choices deterministically.",
+  "supplements": "Literal task coverage gaps added as small focused probes: values/subnormals, lifetime/transitivity,100k dynamic Order, typed lifecycle, cache-state/reopen, sparse persistent highwaters, allocator/structure diagnostics. No outcome expectation relaxed.",
+  "oracle_issue": "Typed v1 overwrote borrowed model String/Binary bytes before old/new comparison. Code inspection found this; retain v1 but trust only corrected v2 fresh run. No observed original mismatch, no upstream attribution.",
+  "native_window": "Restore first32 all triggered; one expansion33..512 reached success at133. Initial move fixture had no allocation; targeted full-destination96 fixture triggered one. Initial structure moves were single-block; follow-up256-member fixture observed4096 cross-block moves.",
+  "memory": "GNU malloc/calloc/realloc/free requested-byte tracking is selected existing suitable Windows diagnostic. No sanitizer/leak-detector claim. Matched-length zero/20k controls both leave179 requested bytes; upstream probes assert zero live blocks. General process residual origin not attributed.",
+  "monitor": "Primary18 cases have subprocess watchdog/resource sampling; EG helper timeout600s; synchronous supplemental probes observed<10s each. Sampled private/working values are not exact lifetime maxima. No host exhaustion. Optional capacity enabled after measured72MB vs4.4GB cap."
+}

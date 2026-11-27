@@ -1,0 +1,122 @@
+{
+  "generator": "rr-v1-xorshift32",
+  "subject": "0350628f1b67353cc15283a7e1a1ae86a7004459",
+  "lks": "f751e1ee2afd682874281d6dc495969f9eca49eb",
+  "seeds": [
+    17,
+    29,
+    43,
+    71,
+    101
+  ],
+  "memory": [
+    {
+      "seed": 17,
+      "steps": 200000,
+      "size": 1024,
+      "mix": "balanced"
+    },
+    {
+      "seed": 29,
+      "steps": 200000,
+      "size": 1024,
+      "mix": "read"
+    },
+    {
+      "seed": 43,
+      "steps": 200000,
+      "size": 1024,
+      "mix": "modify"
+    },
+    {
+      "seed": 71,
+      "steps": 200000,
+      "size": 1024,
+      "mix": "move"
+    },
+    {
+      "seed": 101,
+      "steps": 200000,
+      "size": 1024,
+      "mix": "balanced"
+    }
+  ],
+  "capacity": [
+    [
+      1000,
+      5000,
+      10
+    ],
+    [
+      10000,
+      50000,
+      100
+    ],
+    [
+      100000,
+      500000,
+      1000
+    ],
+    [
+      32,
+      100000,
+      1
+    ]
+  ],
+  "persistence": [
+    [
+      32,
+      128,
+      8,
+      100
+    ],
+    [
+      64,
+      2048,
+      8,
+      10
+    ]
+  ],
+  "queries": {
+    "records": 8192,
+    "updates": 10000
+  },
+  "full_checks": {
+    "memory_every": 4096,
+    "capacity": "final all",
+    "small_fixture": "every step",
+    "queries_every": 64
+  },
+  "watchdogs": {
+    "memory": 600,
+    "capacity": 900,
+    "persistence": 900,
+    "fault": 600,
+    "total": 10800
+  },
+  "resource": {
+    "available": 7359381504,
+    "private_cap": 4415628902,
+    "disk_free": 418943209472,
+    "disk_floor": 149132462489
+  },
+  "escalation": "First failure preserve trace/fixture; stop affected case; one reproduction+one focused follow-up. No production fixes. Optional larger cases only if cheap; not default.",
+  "focused": [
+    {
+      "pattern": 1,
+      "steps": 16384,
+      "seed": 71
+    },
+    {
+      "pattern": 2,
+      "steps": 16384,
+      "seed": 71
+    },
+    {
+      "pattern": 3,
+      "steps": 16384,
+      "seed": 71
+    }
+  ],
+  "oracle_negative": "hand array fixtures; altered expected array must disagree; invalid cross-collection anchors preserve revision; baseline all-six fixed expectations"
+}
