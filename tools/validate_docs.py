@@ -136,11 +136,18 @@ def check() -> None:
     preview2 = "2bbf7640711e6561a5d5979f0de53a7f6ee0a1e8"
     preview3_paths = {"src/ordweave.c", "src/checkpoint_core.inc", "src/checkpoint_windows.inc",
                       "tests/failures.c", "tests/checkpoint_oracle.py", "tests/smoke.c", "tests/consumer/main.c"}
-    current_delta = set(command("git", "diff", "--name-only", preview2, "--", *protected, capture=True).splitlines())
+    current_delta = set(command("git", "diff", "--name-only", preview2, "edb9675b10125cecdf936e030bd9a54a90a84146", "--", *protected, capture=True).splitlines())
     assert current_delta <= preview3_paths, f"unexpected Preview.3 delta: {current_delta - preview3_paths}"
     for path in ("src/ordweave.c", "tests/smoke.c", "tests/consumer/main.c"):
         old = subprocess.check_output(["git", "show", f"{preview2}:{path}"], cwd=ROOT).decode()
-        assert (ROOT / path).read_text(encoding="utf-8") == old.replace("1.1.0-preview.2", "1.1.0-preview.3")
+        assert subprocess.check_output(["git", "show", f"edb9675b10125cecdf936e030bd9a54a90a84146:{path}"], cwd=ROOT).decode() == old.replace("1.1.0-preview.2", "1.1.0-preview.3")
+    preview3 = "edb9675b10125cecdf936e030bd9a54a90a84146"
+    preview4_paths = {"src/ordweave.c", "tests/smoke.c", "tests/consumer/main.c"}
+    current_delta = set(command("git", "diff", "--name-only", preview3, "--", *protected, capture=True).splitlines())
+    assert current_delta <= preview4_paths, f"unexpected Preview.4 delta: {current_delta - preview4_paths}"
+    for path in preview4_paths:
+        old = subprocess.check_output(["git", "show", f"{preview3}:{path}"], cwd=ROOT).decode()
+        assert (ROOT / path).read_text(encoding="utf-8") == old.replace("1.1.0-preview.3", "1.1.0-preview.4")
     for name in GUIDES:
         assert BASELINE in (ROOT / "docs" / name).read_text(encoding="utf-8"), name
     for name in ("PERSISTENCE.md", "CHECKPOINTS.md", "HISTORY.md"):

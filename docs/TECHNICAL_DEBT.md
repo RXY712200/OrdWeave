@@ -123,3 +123,7 @@ The original source-bound entries above and their status history are retained. T
 ## Preview.3 measured follow-up
 
 [Preview.3 decisions](PREVIEW_3.md) removes temporary explicit-order residences during unpublished import and reuses identical successful anchors only within one protected checkpoint-load operation. TD-002 remains Open (all semantic passes retained), TD-003 Open (whole buffers/native snapshots remain), TD-004 Deferred, TD-005 Open (provider lifecycle microbenchmark positive; no shared lifecycle introduced), TD-006 Open. TD-001 was introduced as resolved by `d641e3c8048bff12df36a8ba7e1439868bf8722f`; compressed index is unchanged. TD-103 and EG-001/002/003 history remain; EG-003 did not recur. No debt is newly claimed fully resolved by this stage.
+
+## Preview.4 research follow-up
+
+[Capability decisions](PREVIEW_4.md) retain all existing production paths and debt statuses. Repeated-query indexing is a pending opt-in product contract, not an unimplemented promised feature or automatically new technical debt. TD-001/103 resolved history, partial TD-002/003 mitigations, TD-004 Deferred, TD-005/006 Open and EG-001/002/003 remain. No EG-003 standalone campaign or root-cause claim.

@@ -36,7 +36,7 @@ struct OwDatabase {
   uint64_t rid, cid, oid, revision;
   OwStore *store;
 };
-const char *ordweave_version(void) { return "1.1.0-preview.3"; }
+const char *ordweave_version(void) { return "1.1.0-preview.4"; }
 static int utf8(const unsigned char *s, size_t n) {
   size_t i = 0;
   while (i < n) {

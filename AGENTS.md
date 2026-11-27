@@ -38,8 +38,10 @@ Select checks appropriate to the changed behavior. Keep source inspection, local
 
 ## Release and maintenance safeguards
 
-The six implementation phases are complete. Published `v1.0.0-rc.1` is a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; preserve its tag and Release. `v1.0.0` is published Stable at `32f853defc0a2e9f0ca809fb3535a90c977c7665`. This branch is unreleased `1.1.0-preview.3` development, limited to the authorized persistence/recovery optimization and validation; see [Preview.3](docs/PREVIEW_3.md). Further development or releases require a separate task. Documentation maintenance does not authorize production/API/format/dependency changes, upstream edits, new tags or Releases. Actual release evidence and compatibility constraints remain in [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md).
+The six implementation phases are complete. Published `v1.0.0-rc.1` is a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; preserve its tag and Release. `v1.0.0` is published Stable at `32f853defc0a2e9f0ca809fb3535a90c977c7665`. This branch is unreleased `1.1.0-preview.4` development, limited to the authorized capability research and version/documentation changes; see [Preview.4](docs/PREVIEW_4.md). Further development or releases require a separate task. Documentation maintenance does not authorize production/API/format/dependency changes, upstream edits, new tags or Releases. Actual release evidence and compatibility constraints remain in [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md).
 
-Current authorized work is Preview.3 Steps9–12: unpublished checkpoint import, local anchor reuse and persistence/recovery validation. See [Preview.3 decisions](docs/PREVIEW_3.md). Earlier Preview.1 task prose is historical; no Preview.4 or release is authorized.
+Current authorized work is Preview.4 Steps13–15: private capability prototypes, proposed contracts and version/documentation validation. See [Preview.4 decisions](docs/PREVIEW_4.md). Earlier Preview.1 task prose is historical; no RC.1 or release is authorized.
 
-Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No Preview.4 is authorized.
+Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
+
+Current Preview.4 is research-complete with no new public API or production data-path change. See [capability decisions and pending contract](docs/PREVIEW_4.md). Earlier stage-scope paragraphs are historical. RC.1 requires a separate task.
