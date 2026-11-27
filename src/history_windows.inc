@@ -703,6 +703,10 @@ OwStatus ow_history_cleanup(OwDatabase *db, OwHistoryRange *out) {
     memset(out, 0, sizeof(*out));
   if (!s || !out)
     return OW_INVALID;
+  /* Quarantined or busy sessions must not reconstruct or repair disk roots. */
+  status = ow_store_guard(s);
+  if (status != OW_OK)
+    return status;
   if (s->recovery_root[0]) {
     OwDatabase *validated = NULL;
     uint64_t now;

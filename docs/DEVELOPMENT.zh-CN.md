@@ -77,3 +77,7 @@ runtime Handle不持久化，不把指针或Handle伪装成数据库ID。restore
 历史候选版本为 `v1.0.0-rc.1` Prerelease，源码基线为 `3f99029da73e3b4f0a75a538dd241cf94cda23d7`；本次获准的首个Stable发布目标为 [v1.0.0](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0)，实际发布状态以Release为准；运行库版本字面量同步为1.0.0，其他实现行为保持RC.1基线。保留现有tag和Release，新的文档提交不进入历史标签。当前项目的格式、依赖、调用方串行化和资源所有权约束继续适用，具体证据见 [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md)。
 
 原六个实现阶段已完成，见 [ROADMAP](ROADMAP.md)。普通维护不会自动开启新产品阶段、改上游或创建版本。维护时核对实际remote与 [HANDOFF](HANDOFF.md) 中的固定基线，使用本指南的源码/格式/测试地图，不将旧文档的任务上下文当作当前修改权限。
+
+## Preview.1 开发分支增量
+
+已发布Stable为 `32f853defc0a2e9f0ca809fb3535a90c977c7665`；上述RC说明属于历史基线。当前未发布版本为 `1.1.0-preview.1`，CMake数值版本为1.1.0，Full4.2固定在 `f751e1ee2afd682874281d6dc495969f9eca49eb`。仅增加cleanup在恢复根重建之前执行既有会话guard及针对性回归，不改变44个API或磁盘格式。文档validator分别验证不可变RC→Stable版本差异和明确的Preview增量，保留API、wire表、源码inventory和导航检查。[完整能力及架构决策](PREVIEW_1.md)与单独证据分支记录本次验证，不将历史CI当作当前结果。

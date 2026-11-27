@@ -33,3 +33,10 @@
 - Add semantic corruption fixtures, historical checkpoint-interval assertions, five real process-kill cleanup boundaries and an external public-target C17 consumer.
 - All six development phases passed independent review; the release-era plan scheduled comprehensive source-grounded documentation for subsequent RC stabilization before Stable approval (see the post-release entry above).
 - Preserve all existing disk format versions and public status values. This is a release candidate, not a published Stable release.
+
+## 1.1.0-preview.1 — unreleased development
+
+- Integrate exact LayerKeySort Full4.2 Stable; retain frozen V4 public calls and database formats.
+- Reject busy/quarantined history cleanup before reconstruction or root repair; add focused regression coverage.
+- Keep immutable RC/Stable validation and explicitly check the bounded Preview integration delta.
+- Record capability/architecture review and isolated A/B/compatibility evidence on a separate evidence branch. No Preview release has been published.

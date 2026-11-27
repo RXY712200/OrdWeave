@@ -4,7 +4,7 @@
 
 OrdWeave 是面向 **Windows x64 的 C17 嵌入式静态数据库**，使用独立维护的 LayerKeySort Full 管理顺序和ID索引。它把“共享的数据”和“某次出现的位置”分开，适合需要重复成员、独立移动和历史恢复的有序清单、图层成员或编排数据。
 
-[**v1.0.0**](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) 是本次获准发布的首个 **Stable** 版本；发布状态以该链接为准。六个实现阶段已通过独立评审；本次最小发布差异与发布结果仍待独立复核。历史 RC.1 源码基线为 `3f99029da73e3b4f0a75a538dd241cf94cda23d7`，其 Prerelease 和标签保持不变。详细指南保留该基线的技术解释；Stable 仅同步版本字面量及必要发布说明。
+当前分支为 **1.1.0-preview.1 开发版**，尚未发布。[v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) 保持在 `32f853defc0a2e9f0ca809fb3535a90c977c7665`，使用Full4.1。本分支集成Full4.2及经回归验证的cleanup入口guard修复；见 [Preview.1决策](docs/PREVIEW_1.md)。历史RC.1和Stable标签、Release均不改变，详细旧指南保留准确RC源码基线。
 
 ## 数据模型与能力
 
@@ -17,7 +17,7 @@ Record拥有具名字段：null、bool、int64、有限double、UTF-8字符串�
 需要Windows x64、Git递归子模块、CMake 3.21+、C17编译器；启用测试还需Python 3。Visual Studio：
 
 ```powershell
-git clone --recurse-submodules --branch v1.0.0 https://github.com/RXY712200/OrdWeave.git
+git clone --recurse-submodules --branch dev/v1.1.0-preview.1 https://github.com/RXY712200/OrdWeave.git
 cd OrdWeave
 cmake -S . -B build -A x64
 cmake --build build --config Release
@@ -26,7 +26,7 @@ ctest --test-dir build -C Release --output-on-failure
 
 GCC/MinGW与Ninja使用独立目录并改为 `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release`，不要传 `-A x64`。已有clone执行 `git submodule update --init --recursive`。GitHub自动ZIP/tar不包含子模块，不是自包含源码包。需要本套新文档时阅读main；克隆RC标签获得的是原发布状态。
 
-固定LayerKeySort Full v4.1.0 Stable提交 `70d7f0ef5857b54381b863d292a213909d87459f`，仅通过公开API集成，不修改上游源码。
+固定LayerKeySort Full v4.2.0 Stable提交 `f751e1ee2afd682874281d6dc495969f9eca49eb`，仅通过公开API集成，不修改上游源码。
 
 ```c
 #include "ordweave.h"

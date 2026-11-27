@@ -99,3 +99,22 @@
 ### EG-002 — broader dynamic/static instrumentation
 
 **Status:** Open. 有本库分配注入和历史GCC analyzer审查，不等于覆盖上游/OS全部分配、sanitizer全矩阵或静态分析零诊断。`cp_write` realloc诊断的现有解释保留在 [RC记录](RELEASE_CANDIDATE.md)；未将其确认为真实leak。重审条件是工具链/CI投入或新的可复现错误；工具报告须独立验证后才能升级为缺陷。无解决commit。
+
+## Preview.1 evidence addendum
+
+The original source-bound entries above and their status history are retained. The new isolated A/B uses exact v1.0.0 runtime with Full4.1/4.2, generated seed17 update-heavy N128/2048, three measured repeats after warmup. It measures whole operations rather than isolating TD-001 or TD-005. TD-001 remains Open: larger memory operation medians are 33.6725ms / 22.0335ms, while rebuild logic is unchanged; no attribution percentage or complete resource bound follows. Persistent operations remain approximately flat (769.4658ms / 768.2291ms). TD-002/003 remain Open: larger checkpoint/reopen/history improve in this bounded run, but no semantic pass is removed. TD-004 Deferred, TD-005/006 Open, TD-101/102 Resolved, EG-001 Deferred and EG-002 Open remain unchanged. [Preview.1 decisions](PREVIEW_1.md) ranks feasibility and explains measurement limits; raw rows and protocol are in the separate evidence branch.
+
+### TD-103 — cleanup repaired recovery roots before rejecting busy sessions
+
+- **Category / status:** rejected-session side effects / Resolved in the Preview.1 development change; not backported or published.
+- **Module:** [history_windows.inc](../src/history_windows.inc), `ow_history_cleanup`.
+- **Confirmed former behavior:** after a real retained baseline and deletion of `recovery.current.bak`, a busy session returned OW_BUSY only after recreating that file. The original source therefore performed recovery reconstruction and disk publication before its guard in `ow_verify_database`. No data loss is demonstrated.
+- **Resolution:** call existing `ow_store_guard` after argument/output initialization and before recovery reconstruction; preserve success-path root repair and deletion sequencing. No new status, format or locking guarantee.
+- **Evidence:** [history.c](../tests/history.c) now independently asserts missing replica stays missing for busy and COMMIT_UNKNOWN-poisoned sessions, zero output, then valid close/reopen/cleanup recovery. Before/after logs and exact eventual commit are recorded in the Preview.1 evidence handoff. Existing corruption/fault tests remain enabled.
+- **Reopen trigger:** changes to cleanup entry, quarantine, root reconciliation, or pre-validation IO. Busy is not thread synchronization; callers still serialize access.
+
+### EG-003 — intermittent checkpoint OOM return classification
+
+**Status:** Open. First Preview.1 GCC Release full suite failed `tests/checkpoint.c` at explicit OOM boundary 126: OW_CORRUPT (8) instead of OW_NOMEM. The preserved fixture reopens successfully at Revision 21 using a native checkpoint. Targeted baseline/Full4.1, dependency-only Full4.2 and candidate runs passed; the subsequent complete Release and Debug suites each passed 12/12. No root cause, data-loss defect or upstream attribution is established. The initial log and failed database remain locally preserved; concise failure/reopen logs are archived with Preview.1 evidence. Reconsider on recurrence or independent CI failure; diagnose exact injected boundary and publication/import state before widening production scope. Rerun success does not resolve this evidence gap.
+
+**Focused follow-up:** [EG-003 investigation](EG003_INVESTIGATION.md) inspects all24 surviving checkpoint files and records three isolated checkpoint-test runs plus five fixture-copy attempts at124–128. No CORRUPT recurrence; boundary126 reaches field payload OOM during old-checkpoint sweep and returns NOMEM unchanged. Original selection/highest generation89 suggests an earlier phase than these new generation90 sweep failures, but the removed pending bytes and pre-call state are unavailable. Exact original return site remains unknown; no speculative production fix or test relaxation was applied. Status remains Open.

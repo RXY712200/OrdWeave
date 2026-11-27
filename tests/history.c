@@ -225,6 +225,36 @@ int main(int argc, char **argv) {
          after, (unsigned long long)range.earliest_revision,
          (unsigned long long)range.current_revision);
   uint64_t oldest = range.earliest_revision;
+  /* Rejected sessions must not repair roots, even when a replica is missing. */
+  {
+    char replica[MAX_PATH];
+    checked_format(replica, sizeof(replica), "%s\\recovery.current.bak", path);
+    T(DeleteFileA(replica));
+    ow_store_enter(ow_core_store(db));
+    T(ow_history_cleanup(db, &range) == OW_BUSY);
+    T(GetFileAttributesA(replica) == INVALID_FILE_ATTRIBUTES);
+    T(GetLastError() == ERROR_FILE_NOT_FOUND);
+    T(range.earliest_revision == 0 && range.current_revision == 0);
+    ow_store_leave(ow_core_store(db));
+    OK(ow_history_cleanup(db, &range));
+    T(GetFileAttributesA(replica) != INVALID_FILE_ATTRIBUTES);
+    /* A flushed but unacknowledged mutation quarantines the same session. */
+    value.type = OW_INT;
+    value.as.integer = 101;
+    ow_test_fault = 4;
+    T(ow_field_set(db, record, "counter", &value) == OW_COMMIT_UNKNOWN);
+    ow_test_fault = 0;
+    T(DeleteFileA(replica));
+    T(ow_history_cleanup(db, &range) == OW_RECOVERY_REQUIRED);
+    T(GetFileAttributesA(replica) == INVALID_FILE_ATTRIBUTES);
+    T(GetLastError() == ERROR_FILE_NOT_FOUND);
+    T(range.earliest_revision == 0 && range.current_revision == 0);
+    T(ow_database_close(db) == OW_RECOVERY_REQUIRED);
+    OK(ow_database_open(path, &db));
+    OK(ow_history_cleanup(db, &range));
+    T(GetFileAttributesA(replica) != INVALID_FILE_ATTRIBUTES);
+    latest = revision(db);
+  }
   T(ow_history_open(db, oldest - 1, &view) == OW_HISTORY_UNAVAILABLE);
   for (uint64_t i = oldest; i <= latest; i++) {
     OK(ow_history_open(db, i, &view));

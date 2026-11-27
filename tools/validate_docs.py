@@ -88,21 +88,40 @@ def check() -> None:
     print("Production coverage: 6 C translation units, 3 owned implementation includes, 5 private headers")
     assert command("git", "rev-parse", "v1.0.0-rc.1^{}", capture=True) == BASELINE
     assert command("git", "rev-parse", "v1.0.0-rc.1", capture=True) == TAG_OBJECT
+    stable = "32f853defc0a2e9f0ca809fb3535a90c977c7665"
+    assert command("git", "rev-parse", "v1.0.0^{}", capture=True) == stable
     protected = ["src", "include", "tests", "CMakeLists.txt", "third_party", ".github", ".gitmodules"]
-    diff = command("git", "diff", "--name-only", BASELINE, "--", *protected, capture=True)
-    # Stable permits only these exact full-file transformations of the immutable RC.
     version_paths = {"src/ordweave.c", "tests/smoke.c", "tests/consumer/main.c"}
-    changed = set(diff.splitlines())
-    assert changed == version_paths, f"unexpected implementation delta: {changed}"
+    historical = set(command("git", "diff", "--name-only", BASELINE, stable,
+                             "--", *protected, capture=True).splitlines())
+    assert historical == version_paths, f"unexpected historical Stable delta: {historical}"
     for path in sorted(version_paths):
         original = subprocess.check_output(["git", "show", f"{BASELINE}:{path}"], cwd=ROOT)
+        released = subprocess.check_output(["git", "show", f"{stable}:{path}"], cwd=ROOT)
         before = b'"1.0.0-rc.1"'
         assert original.count(before) == 1, path
-        # Normalize checkout line endings only; every other byte must match.
+        assert released == original.replace(before, b'"1.0.0"'), path
         current = (ROOT / path).read_bytes().replace(b"\r\n", b"\n")
-        expected_bytes = original.replace(b"\r\n", b"\n").replace(before, b'"1.0.0"')
-        assert current == expected_bytes, f"non-version change since RC baseline: {path}"
-    assert command("git", "-C", "third_party/LayerKeySort", "rev-parse", "HEAD", capture=True) == "70d7f0ef5857b54381b863d292a213909d87459f"
+        assert current == released.replace(b"\r\n", b"\n").replace(b'"1.0.0"', b'"1.1.0-preview.1"'), path
+    allowed = version_paths | {"src/history_windows.inc", "tests/history.c",
+                              "third_party/LayerKeySort", ".github/workflows/windows.yml", "CMakeLists.txt"}
+    changed = set(command("git", "diff", "--name-only", stable, "--", *protected, capture=True).splitlines())
+    assert changed <= allowed, f"unexpected Preview.1 implementation delta: {changed - allowed}"
+    # The only non-version production correction is the reviewed early guard.
+    original = subprocess.check_output(["git", "show", f"{stable}:src/history_windows.inc"], cwd=ROOT).decode()
+    marker = "OwStatus ow_history_cleanup("
+    prefix, body = original.split(marker)
+    needle = "  if (s->recovery_root[0]) {"
+    guard = ("  /* Quarantined or busy sessions must not reconstruct or repair disk roots. */\n"
+             "  status = ow_store_guard(s);\n  if (status != OW_OK)\n    return status;\n")
+    expected_body = body.replace(needle, guard + needle, 1)
+    assert (ROOT / "src/history_windows.inc").read_text(encoding="utf-8") == prefix + marker + expected_body
+    cmake_before = subprocess.check_output(["git", "show", f"{stable}:CMakeLists.txt"], cwd=ROOT).decode()
+    assert cmake == cmake_before.replace("project(OrdWeave VERSION 1.0.0", "project(OrdWeave VERSION 1.1.0")
+    pin = "f751e1ee2afd682874281d6dc495969f9eca49eb"
+    assert command("git", "-C", "third_party/LayerKeySort", "rev-parse", "HEAD", capture=True) == pin
+    workflow_before = subprocess.check_output(["git", "show", f"{stable}:.github/workflows/windows.yml"], cwd=ROOT).decode()
+    assert (ROOT / ".github/workflows/windows.yml").read_text(encoding="utf-8") == workflow_before.replace("70d7f0ef5857b54381b863d292a213909d87459f", pin)
     for name in GUIDES:
         assert BASELINE in (ROOT / "docs" / name).read_text(encoding="utf-8"), name
     for name in ("PERSISTENCE.md", "CHECKPOINTS.md", "HISTORY.md"):
@@ -113,7 +132,7 @@ def check() -> None:
             original_text = original.decode("cp1252")  # Legacy separator encoding, not format bytes.
         rows = lambda text: [line for line in text.splitlines() if line.startswith("|")]
         assert rows(original_text) == rows((ROOT / "docs" / name).read_text(encoding="utf-8")), name
-    print("RC baseline/tag/dependency/wire tables preserved; protected paths allow only 3 exact Stable version literals")
+    print("Immutable RC/Stable provenance and wire tables preserved; explicit Preview.1 pin/version/guard/path gates")
     documents = [ROOT / "AGENTS.md", ROOT / "README.md", ROOT / "README.zh-CN.md",
                  ROOT / "CHANGELOG.md",
                  ROOT / "THIRD_PARTY_NOTICES.md", *sorted((ROOT / "docs").rglob("*.md"))]
