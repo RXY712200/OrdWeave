@@ -1,0 +1,32 @@
+[
+  {
+    "trace": "db-128-17-insert-remove-heavy.trace",
+    "base": 0.0042554,
+    "candidate": 0.0001056,
+    "speedup": 40.297348484848484
+  },
+  {
+    "trace": "db-128-17-update-heavy.trace",
+    "base": 0.0015911,
+    "candidate": 8.11e-05,
+    "speedup": 19.618988902589393
+  },
+  {
+    "trace": "db-2048-17-update-heavy.trace",
+    "base": 0.0218684,
+    "candidate": 9.53e-05,
+    "speedup": 229.46904512067155
+  },
+  {
+    "trace": "db-8192-17-insert-remove-heavy.trace",
+    "base": 0.3053153,
+    "candidate": 0.0001362,
+    "speedup": 2241.6688693098386
+  },
+  {
+    "trace": "db-8192-17-update-heavy.trace",
+    "base": 0.0943459,
+    "candidate": 0.0001218,
+    "speedup": 774.5968801313628
+  }
+]

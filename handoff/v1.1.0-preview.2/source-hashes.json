@@ -1,0 +1,37 @@
+{
+  "base": {
+    "checkpoint_core.inc": "de0d5435025f6601675ef35c3dd2ad36880565d7384a05b44f20952263512099",
+    "checkpoint_internal.h": "4f882fe0d5097dcc8c6754481bab631ab747188f608288ececdb181b63123740",
+    "checkpoint_windows.inc": "7726f413b4f1d668d4474fe12a27b0bded2a751961b971bbef1905b6c71f9e39",
+    "core_internal.h": "307327cb922e2c1d73b49f0644ae377448149e26f64c9d4eb23681d085a8f6ad",
+    "core_names.h": "e7d1dec2198f18fba4c7ca497f6be2246b3cf3c7fefcaed43df3bd9cf7b66608",
+    "history_windows.inc": "189600f7d3f0f666572157a4aa5932bd1177f2cbf75f6c36022cf24dd3ded164",
+    "lks_adapter.c": "fe461622a9e7e828cf4897e9d60ebfa12c754a4865ca9ba73290d85799ec9132",
+    "lks_adapter.h": "aa8d3a807cacfad6aaf801bd0de58cc7356f3a66e7fc1a825019249f7f86a3ed",
+    "ordweave.c": "2b0d1b4a75d6c1d18bca966ab669271e225d7c1d83ffe50bc12cf2695aecb131",
+    "persistence.c": "5890a4e0f9589f3abd1b4fb66a3216e65254522029a4fbaf9737b64f2a3d9d0a",
+    "sha256.c": "9fc8de238d658535508f578c100ea432aed2b6721340a8e554b9ba4827d7b98d",
+    "wal_format.c": "dff0ef79e4ab07edac3b719414814480bc45e3a8953e63916cb40168dd36cd25",
+    "wal_internal.h": "b421d48fd75e5b8ae357ad718f7d162071c0dd258909c3e045136589b4a50230",
+    "wal_windows.c": "f8ce2940e17a297637c0e28fcc51624cfc996c273d6c3eb2781195f0939affed"
+  },
+  "candidate": {
+    "checkpoint_core.inc": "b7b8071c6288bcd7aa8811b920f6a7c8f67d15e705a500326596f11c9ed162ef",
+    "checkpoint_internal.h": "4f882fe0d5097dcc8c6754481bab631ab747188f608288ececdb181b63123740",
+    "checkpoint_windows.inc": "7726f413b4f1d668d4474fe12a27b0bded2a751961b971bbef1905b6c71f9e39",
+    "core_internal.h": "307327cb922e2c1d73b49f0644ae377448149e26f64c9d4eb23681d085a8f6ad",
+    "core_names.h": "e7d1dec2198f18fba4c7ca497f6be2246b3cf3c7fefcaed43df3bd9cf7b66608",
+    "history_windows.inc": "189600f7d3f0f666572157a4aa5932bd1177f2cbf75f6c36022cf24dd3ded164",
+    "lks_adapter.c": "fe461622a9e7e828cf4897e9d60ebfa12c754a4865ca9ba73290d85799ec9132",
+    "lks_adapter.h": "aa8d3a807cacfad6aaf801bd0de58cc7356f3a66e7fc1a825019249f7f86a3ed",
+    "occurrence_index.inc": "444e30402f911e370b1d7034603b24352c735e3d408ec64a6fa760a296aa430b",
+    "ordweave.c": "c46b5ca0a9b347f4c36540f4c22545d3e07dad1be20623fa590a1054bec44f8d",
+    "persistence.c": "5890a4e0f9589f3abd1b4fb66a3216e65254522029a4fbaf9737b64f2a3d9d0a",
+    "sha256.c": "9fc8de238d658535508f578c100ea432aed2b6721340a8e554b9ba4827d7b98d",
+    "wal_format.c": "dff0ef79e4ab07edac3b719414814480bc45e3a8953e63916cb40168dd36cd25",
+    "wal_internal.h": "b421d48fd75e5b8ae357ad718f7d162071c0dd258909c3e045136589b4a50230",
+    "wal_windows.c": "f8ce2940e17a297637c0e28fcc51624cfc996c273d6c3eb2781195f0939affed"
+  },
+  "candidate_commit": "d641e3c8048bff12df36a8ba7e1439868bf8722f",
+  "base_commit": "3c5f371ca53c62912dc3d4d63aa11dc5277af020"
+}

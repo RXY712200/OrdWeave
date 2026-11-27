@@ -1,0 +1,56 @@
+[
+  {
+    "candidate": "A",
+    "n": 128,
+    "setup": 0.0002672,
+    "operations": 0.0077488
+  },
+  {
+    "candidate": "C",
+    "n": 128,
+    "setup": 0.0002664,
+    "operations": 0.0059259
+  },
+  {
+    "candidate": "D",
+    "n": 128,
+    "setup": 1.3e-06,
+    "operations": 6.6e-06
+  },
+  {
+    "candidate": "A",
+    "n": 2048,
+    "setup": 0.0690985,
+    "operations": 0.1337104
+  },
+  {
+    "candidate": "C",
+    "n": 2048,
+    "setup": 0.0077268,
+    "operations": 0.0095367
+  },
+  {
+    "candidate": "D",
+    "n": 2048,
+    "setup": 1.12e-05,
+    "operations": 9e-06
+  },
+  {
+    "candidate": "A",
+    "n": 8192,
+    "setup": 1.1430565,
+    "operations": 0.5710637
+  },
+  {
+    "candidate": "C",
+    "n": 8192,
+    "setup": 0.0305747,
+    "operations": 0.0111795
+  },
+  {
+    "candidate": "D",
+    "n": 8192,
+    "setup": 6.27e-05,
+    "operations": 7.5e-06
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "candidate": "A",
+    "n": 128,
+    "sparse": 0,
+    "stdout": "memory,setup,33160,38104,8745\nmemory,operations,33160,38104,265000\nmemory,closed,96,33160,0\nresult,A,128,0,0.000271700,0.007699400\n"
+  },
+  {
+    "candidate": "A",
+    "n": 128,
+    "sparse": 1,
+    "stdout": "memory,setup,33160,38104,8745\nmemory,operations,33160,38104,265000\nmemory,closed,96,33160,0\nresult,A,128,1,0.000271700,0.007683800\n"
+  },
+  {
+    "candidate": "C",
+    "n": 128,
+    "sparse": 0,
+    "stdout": "memory,setup,33224,38168,8744\nmemory,operations,33920,38840,201652\nmemory,closed,96,33920,0\nresult,C,128,0,0.000286400,0.006026200\n"
+  },
+  {
+    "candidate": "C",
+    "n": 128,
+    "sparse": 1,
+    "stdout": "memory,setup,122400,122400,525\nmemory,operations,122400,122496,6000\nmemory,closed,96,122400,0\nresult,C,128,1,0.000060500,0.000195300\n"
+  },
+  {
+    "candidate": "D",
+    "n": 128,
+    "sparse": 0,
+    "stdout": "memory,setup,30272,30272,9\nmemory,operations,34400,34400,8\nmemory,closed,96,34400,0\nresult,D,128,0,0.000001300,0.000006600\n"
+  },
+  {
+    "candidate": "D",
+    "n": 128,
+    "sparse": 1,
+    "stdout": "memory,setup,294464,294464,137\nmemory,operations,298592,298592,1008\nmemory,closed,96,298592,0\nresult,D,128,1,0.000089800,0.000067800\n"
+  },
+  {
+    "candidate": "A",
+    "n": 2048,
+    "sparse": 0,
+    "stdout": "memory,setup,176681,263705,2166825\nmemory,operations,176681,263705,4225000\nmemory,closed,97,176681,0\nresult,A,2048,0,0.070274700,0.137580800\n"
+  },
+  {
+    "candidate": "C",
+    "n": 2048,
+    "sparse": 0,
+    "stdout": "memory,setup,174105,183673,274437\nmemory,operations,174993,187137,331949\nmemory,closed,97,174993,0\nresult,C,2048,0,0.007999300,0.010293200\n"
+  },
+  {
+    "candidate": "D",
+    "n": 2048,
+    "sparse": 0,
+    "stdout": "memory,setup,110289,110289,18\nmemory,operations,116481,116481,3\nmemory,closed,97,116481,0\nresult,D,2048,0,0.000011200,0.000008900\n"
+  },
+  {
+    "candidate": "A",
+    "n": 8192,
+    "sparse": 0,
+    "stdout": "memory,setup,635945,985625,34619433\nmemory,operations,635945,985625,16897000\nmemory,closed,97,635945,0\nresult,A,8192,0,1.252025300,0.631421400\n"
+  },
+  {
+    "candidate": "C",
+    "n": 8192,
+    "sparse": 0,
+    "stdout": "memory,setup,622041,631225,1098503\nmemory,operations,628329,644433,379791\nmemory,closed,97,628329,0\nresult,C,8192,0,0.031910500,0.012249000\n"
+  },
+  {
+    "candidate": "D",
+    "n": 8192,
+    "sparse": 0,
+    "stdout": "memory,setup,356433,356433,42\nmemory,operations,362625,362625,3\nmemory,closed,97,362625,0\nresult,D,8192,0,0.000065200,0.000007700\n"
+  }
+]
