@@ -49,7 +49,7 @@ Each Collection is captured with lks_order_snapshot_capture, sized with lks_snap
 
 The native format is upstream's frozen grammar: magic LKS4SNP1 (8), flags zero (4), namespace length (4), row count (8), namespace, and for every row association length (8) and association bytes. OrdWeave does not implement this encoder or order engine; only the independent test oracle assembles expected bytes.
 
-Import builds complete Records, Collections and Occurrences before invoking lks_snapshot_deserialize and lks_snapshot_restore_order. The resolver maps IDs to stable database-owned Occurrences, checks Collection ownership and rejects duplicate resolution. Namespace, row counts and association lengths must match. Restored orders replace unpublished construction orders; traversal installs new runtime handles. Every live Occurrence must be seen once. Failure destroys all unpublished objects/containers without dereferencing expired handles.
+Import builds complete Records, Collections and Occurrences before invoking lks_snapshot_deserialize and lks_snapshot_restore_order. The resolver maps IDs to stable database-owned Occurrences, checks Collection ownership and rejects duplicate resolution. Namespace, row counts and association lengths must match. Restored orders replace the initially empty Collection orders; traversal installs new runtime handles. Every live Occurrence must be seen once. Failure destroys all unpublished objects/containers without dereferencing expired handles.
 
 ## Selection metadata — exactly 416 bytes
 

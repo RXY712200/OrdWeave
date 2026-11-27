@@ -89,7 +89,7 @@ HISTORY_UNAVAILABLE identifies future/pruned Revisions; RETENTION_UNSUPPORTED id
 
 ## Compatibility and ownership
 
-Existing public signatures, struct layouts and numeric status values are preserved. `ordweave_version()` now reports `1.0.0-rc.1`. Target C17 Windows x64; compile library/consumer with matching enum/packing/CRT settings. Native runtime LKS handles remain private. The candidate preserves every existing disk format and rejects semantically invalid WAL even before a newer checkpoint. See RELEASE_CANDIDATE.md for validation evidence and publication approval requirements.
+Existing public signatures, struct layouts and numeric status values are preserved. `ordweave_version()` reports the actual library build version; release-specific literals are recorded in [HANDOFF](HANDOFF.md). Target C17 Windows x64; compile library/consumer with matching enum/packing/CRT settings. Native runtime LKS handles remain private. v1.1.0 preserves every existing disk format and rejects semantically invalid WAL even before a newer checkpoint. See RELEASE_CANDIDATE.md for validation evidence and publication approval requirements.
 
 ## Explicit field indexing and typed range queries
 

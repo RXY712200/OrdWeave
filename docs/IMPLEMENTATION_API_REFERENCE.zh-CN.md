@@ -100,6 +100,10 @@ C17公开结构不是磁盘布局。Windows x64的源消费需要匹配枚举尺
 |[ow_occurrence_compare](#api-ow-occurrence-compare)|比较同Collection动态顺序|读取；不能用ID或指针数值替代此比较。|
 |[ow_query_equal](#api-ow-query-equal)|按字段严格相等扫描Records|读取；不是二级索引、SQL或类型自动转换。|
 |[ow_array_release](#api-ow-array-release)|释放库返回数组|不修改数据库/Revision。|
+|[ow_field_index_enable](#api-ow-field-index-enable)|显式有界字段缓存|会话配置，不改Revision；失败保留旧cache。|
+|[ow_field_index_disable](#api-ow-field-index-disable)|释放可选字段缓存|幂等，不影响返回数组。|
+|[ow_query_range](#api-ow-query-range)|live类型有序范围|只读，值升序后永久ID，独立数组。|
+|[ow_history_query_range](#api-ow-history-query-range)|历史类型有序范围|独立不可变core扫描/排序。|
 
 ## 5. 逐函数约定
 
@@ -111,7 +115,7 @@ C17公开结构不是磁盘布局。Windows x64的源消费需要匹配枚举尺
 const char *ordweave_version(void);
 ```
 
-- **用途与参数**：查询库版本。无参数，当前字符串为 1.0.0-rc.1；不读取磁盘。
+- **用途与参数**：查询库版本。无参数，返回实际构建版本字符串；当前发布元数据见[HANDOFF](HANDOFF.md)，不读取磁盘。
 - **输出、所有权**：返回静态库拥有的 const char*，不释放。
 - **可观察变化/无操作**：读取；不改变 Revision。
 - **关键失败**：无OwStatus失败通道；无需database或初始化。

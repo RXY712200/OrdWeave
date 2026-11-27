@@ -24,7 +24,7 @@ cmake --build build --config Release
 ctest --test-dir build -C Release --output-on-failure
 ```
 
-GCC/MinGW与Ninja使用独立目录并改为 `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release`，不要传 `-A x64`。已有clone执行 `git submodule update --init --recursive`。GitHub自动ZIP/tar不包含子模块，不是自包含源码包。需要本套新文档时阅读main；克隆RC标签获得的是原发布状态。
+GCC/MinGW与Ninja使用独立目录并改为 `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release`，不要传 `-A x64`。已有clone执行 `git submodule update --init --recursive`。GitHub自动ZIP/tar不包含子模块，不是自包含源码包。按交接记录选择准确源码提交；旧版本标签保留当时的源码与文档。
 
 固定LayerKeySort Full v4.2.0 Stable提交 `f751e1ee2afd682874281d6dc495969f9eca49eb`，仅通过公开API集成，不修改上游源码。
 
