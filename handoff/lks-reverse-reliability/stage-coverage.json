@@ -1,0 +1,44 @@
+[
+  {
+    "stage": 1,
+    "status": "COMPLETE",
+    "planned": "independent model, negative controls,capacity ladder,concentrated Order,representative six types",
+    "completed": "3 required ladder cells,100k concentrated,2 optional million-capacity cells,128-step pilot,values/subnormal fixture;1000/2000/4000 tiny/shared/empty targeted case",
+    "skipped": "No intentional host exhaustion; max payload limit expansion not required."
+  },
+  {
+    "stage": 2,
+    "status": "COMPLETE",
+    "planned": "1m sustained,5seeds,focused ordering patterns",
+    "completed": "5x200k;3x16384 oscillation/anchor patterns;public8192fixed+8192changing gaps;100k Order1024moves/noops;2048fill/clear/delete lifetimes;diagnostic observed paths",
+    "skipped": "Optional10m operations not needed. Tag repair/fallback not observed."
+  },
+  {
+    "stage": 3,
+    "status": "COMPLETE",
+    "planned": "enabled/disabled/oracle,range/type/cache lifecycle",
+    "completed": "8192records10000 genuine Int ranges;4096 corrected six-type lifecycle steps;existing hand arrays;cache allocation probe;fresh owned/upstream fault assertions",
+    "skipped": "No true equal ManagedOrder comparator-key qualification; rows compare value+ID."
+  },
+  {
+    "stage": 4,
+    "status": "COMPLETE",
+    "planned": "100small/10largercycles,history,highwaters,retention,backup",
+    "completed": "100cycles32/128/8;10cycles64/2048/8;past-model range/highwater probe;cache reopen;fresh history/audit roots/pruned/backup assertions",
+    "skipped": "Generated110cycle fixtures retained earliest0; actual pruning/root/crash checks are fresh existing history/audit executables, not mislabeled as those fixtures."
+  },
+  {
+    "stage": 5,
+    "status": "COMPLETE",
+    "planned": "bounded allocations,IO/crash/corruption,EG003,memory diagnostics",
+    "completed": "Direct native ordinals with one restore expansion;fresh owned/upstream faults;9selected CTests;one Stable instrumented124..128 window;requested allocation/control probes",
+    "skipped": "No ASan/UBSan/leak-detector claim. No hardware power loss. No full upstream qualification."
+  },
+  {
+    "stage": 6,
+    "status": "COMPLETE",
+    "planned": "attribute anomalies,publish reproducible code/raw evidence,preserve refs",
+    "completed": "Oracle defect repaired impacted case only;diagnostic coverage refinements;EG003/memory limits retained;source/evidence branches published",
+    "skipped": "No production patch,issue,release,merge or follow-on work."
+  }
+]

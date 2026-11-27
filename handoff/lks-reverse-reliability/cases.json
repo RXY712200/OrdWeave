@@ -1,0 +1,343 @@
+[
+  {
+    "case": "pilot",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "17",
+      "128",
+      "balanced",
+      "D:\\OrdWeave\\build\\reverse\\pilot.trace",
+      "0"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.131176000002597,
+    "peak_private_bytes": 413696,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "6daa0d5aafca1d1573f8daf73d8d8f9051cb7013590193e5a57ec5e3997a8260",
+    "trace_bytes": 5120,
+    "trace_sha256": "d0622adf976717b7c4971d9b1ca802ad125975e3541922596be6ac6b2d6f6451"
+  },
+  {
+    "case": "capacity-1000-5000-10",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "capacity",
+      "1000",
+      "5000",
+      "10"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10694220000004862,
+    "peak_private_bytes": 405504,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "920b02330f63a5442f03596e70c97baa1f90f59eb38bd748c14e3053c3ac311e"
+  },
+  {
+    "case": "capacity-10000-50000-100",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "capacity",
+      "10000",
+      "50000",
+      "100"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10644179999871994,
+    "peak_private_bytes": 405504,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "4ede84bd6d59ff9f0699ca8a9bc73e609587883607e692d6d4c0e959960fd517"
+  },
+  {
+    "case": "capacity-100000-500000-1000",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "capacity",
+      "100000",
+      "500000",
+      "1000"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.30685079999966547,
+    "peak_private_bytes": 72060928,
+    "peak_sampled_working_set": 73515008,
+    "log_sha256": "5868ba5ba75e49121644be07c77b3753f96f62721696d75a5b560fc4d89770d1"
+  },
+  {
+    "case": "capacity-32-100000-1",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "capacity",
+      "32",
+      "100000",
+      "1"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10624339999776566,
+    "peak_private_bytes": 405504,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "1137cc36d4c91f479931cb8017c7345ddce11bf10a30e463d8061a222299f84a"
+  },
+  {
+    "case": "memory-17",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "17",
+      "200000",
+      "balanced",
+      "D:\\OrdWeave\\build\\reverse\\memory-17.trace",
+      "0"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10621029999674647,
+    "peak_private_bytes": 405504,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "17b0828c1f1f8ee42b4709d50a028381dce91b7fed5bc1b29e7e4584a414c82f",
+    "trace_bytes": 8000000,
+    "trace_sha256": "da65650e4e90dc802a70a6225e813b6794c5b1414ccbf818f45af6345ed8b6ca"
+  },
+  {
+    "case": "memory-29",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "29",
+      "200000",
+      "read",
+      "D:\\OrdWeave\\build\\reverse\\memory-29.trace",
+      "0"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10619969999970635,
+    "peak_private_bytes": 409600,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "9109152930755eb41efe2714e2768786d4083aeffefdad0603d11f12dfa14a40",
+    "trace_bytes": 8000000,
+    "trace_sha256": "b20118fbaf81cf904f0480ce673b76b109cb76eea09f47741ebc83db2a651c05"
+  },
+  {
+    "case": "memory-43",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "43",
+      "200000",
+      "modify",
+      "D:\\OrdWeave\\build\\reverse\\memory-43.trace",
+      "0"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10582330000033835,
+    "peak_private_bytes": 409600,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "fd1a43293e1ca7096894001d7a94f7d892ffb85329a21bfe3200bac41021ebc6",
+    "trace_bytes": 8000000,
+    "trace_sha256": "98480e30f2dae9ef654819b58fe22c1ddb55e4ba51904dbf07b4f2d29b497033"
+  },
+  {
+    "case": "memory-71",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "71",
+      "200000",
+      "move",
+      "D:\\OrdWeave\\build\\reverse\\memory-71.trace",
+      "0"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10652130000016768,
+    "peak_private_bytes": 409600,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "359b3dacb56eab8f9ed79c56bcf97f2c91cb990e0fa5ae8b52bde2f079c8e1a8",
+    "trace_bytes": 8000000,
+    "trace_sha256": "484182cd9ce96d8e3d9c691fa05064ce8d5d53eb985cb1ac40639855cd54944a"
+  },
+  {
+    "case": "memory-101",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "101",
+      "200000",
+      "balanced",
+      "D:\\OrdWeave\\build\\reverse\\memory-101.trace",
+      "0"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.1103679000007105,
+    "peak_private_bytes": 409600,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "d1760f9f04f3492e3beea3e0c1297853ebe10e4c88d4de5e58c4e9ccfcd884ce",
+    "trace_bytes": 8000000,
+    "trace_sha256": "aad7b1f5cc65861a38a563e4dbae518944f411cbf06da6d5204e524e57b2baf9"
+  },
+  {
+    "case": "pattern-1",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "71",
+      "16384",
+      "balanced",
+      "D:\\OrdWeave\\build\\reverse\\pattern-1.trace",
+      "1"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10709629999837489,
+    "peak_private_bytes": 413696,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "5768719240b9d0988b296e22978239a2a75410dd6370f5dd597a8826299ecbae",
+    "trace_bytes": 655360,
+    "trace_sha256": "143df10c0d9236b30d3826b80341394be6de795225e90a2f5f8c2e2cd34e1814"
+  },
+  {
+    "case": "pattern-2",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "71",
+      "16384",
+      "balanced",
+      "D:\\OrdWeave\\build\\reverse\\pattern-2.trace",
+      "2"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10569129999930738,
+    "peak_private_bytes": 409600,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "5768719240b9d0988b296e22978239a2a75410dd6370f5dd597a8826299ecbae",
+    "trace_bytes": 655360,
+    "trace_sha256": "d94313d8bb93abfd8fec5921a289446e057e6d1a51c67db44a507a512c433bf7"
+  },
+  {
+    "case": "pattern-3",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "memory",
+      "71",
+      "16384",
+      "balanced",
+      "D:\\OrdWeave\\build\\reverse\\pattern-3.trace",
+      "3"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.1063837000001513,
+    "peak_private_bytes": 413696,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "1b6c71315f921d95cb828094387624887cb267bfd0e9fb8d4ea4ecd47e788abc",
+    "trace_bytes": 655360,
+    "trace_sha256": "2c48fe3817eff472b4c6ebc9faa57a14ee4910f7a5299fbdd4498e7004ada9cb"
+  },
+  {
+    "case": "queries",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "query"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 2.8147977000007813,
+    "peak_private_bytes": 5808128,
+    "peak_sampled_working_set": 9596928,
+    "log_sha256": "4045037eb729b2a0fb18aced138f3402ae041106d105fa4fcb2a55d80291d576"
+  },
+  {
+    "case": "persistence-100",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "persistence",
+      "D:\\OrdWeave\\build\\reverse\\persistence-100-db",
+      "32",
+      "128",
+      "8",
+      "100"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 2.8150698999997985,
+    "peak_private_bytes": 1368064,
+    "peak_sampled_working_set": 5677056,
+    "log_sha256": "f7e77cf9e4ceb65469a7c6a3cab53735619a0e3ba655a3c968efb84d159198a8"
+  },
+  {
+    "case": "persistence-10",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "persistence",
+      "D:\\OrdWeave\\build\\reverse\\persistence-10-db",
+      "64",
+      "2048",
+      "8",
+      "10"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 3.4202531999981147,
+    "peak_private_bytes": 2682880,
+    "peak_sampled_working_set": 6836224,
+    "log_sha256": "91a48dd6782b37947a53af4f2cca873a783994d47cb5a0a3cb46bdeadd98a294"
+  },
+  {
+    "case": "capacity-optional-200k-1m-2000",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "capacity",
+      "200000",
+      "1000000",
+      "2000"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.7099277000015718,
+    "peak_private_bytes": 157102080,
+    "peak_sampled_working_set": 155574272,
+    "log_sha256": "f241253fcdc7adb0478512d9dde21f98f010af4e25a709f6a9397442b8f18c81"
+  },
+  {
+    "case": "capacity-optional-order-1m",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "capacity",
+      "32",
+      "1000000",
+      "1"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.3072754000022542,
+    "peak_private_bytes": 121933824,
+    "peak_sampled_working_set": 121622528,
+    "log_sha256": "e1dd5affded15c89159b0d7cf400f43899d069ba98e964000c8e35ced840f9e4"
+  },
+  {
+    "case": "capacity-tiny-shared-empty",
+    "command": [
+      "D:\\OrdWeave\\build\\reverse\\driver.exe",
+      "capacity",
+      "1000",
+      "2000",
+      "4000"
+    ],
+    "code": 0,
+    "result": "PASS",
+    "seconds": 0.10630200000014156,
+    "peak_private_bytes": 405504,
+    "peak_sampled_working_set": 2617344,
+    "log_sha256": "49d08eff7b4f65efaca585be6662db67ead30ee569f35cbe3a3bb4251d766083"
+  }
+]

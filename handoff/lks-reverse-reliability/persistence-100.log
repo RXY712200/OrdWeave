@@ -1,0 +1,12 @@
+oracle hand fixture and deliberately altered expectation rejected
+progress,cycle,0
+progress,cycle,10
+progress,cycle,20
+progress,cycle,30
+progress,cycle,40
+progress,cycle,50
+progress,cycle,60
+progress,cycle,70
+progress,cycle,80
+progress,cycle,90
+result,persistence,cycles=100,public=27341,revision=400,earliest=0

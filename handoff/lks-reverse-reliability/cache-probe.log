@@ -1,0 +1,4 @@
+cache allocations=2
+cache allocations=1
+cache allocations=2
+cache active then absent on reopen; diagnostic malloc counts, unchanged library

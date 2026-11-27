@@ -1,0 +1,4 @@
+field index upstream enable: 4 failing ordinals
+field index upstream maintenance: 2 failing ordinals
+upstream insert allocation sweep: 2 failing ordinals
+allocation failures, safe outputs and counter exhaustion verified

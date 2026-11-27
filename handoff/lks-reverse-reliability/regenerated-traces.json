@@ -1,0 +1,56 @@
+[
+  {
+    "case": "pilot",
+    "sha256": "d0622adf976717b7c4971d9b1ca802ad125975e3541922596be6ac6b2d6f6451",
+    "rows": 128,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "memory-17",
+    "sha256": "da65650e4e90dc802a70a6225e813b6794c5b1414ccbf818f45af6345ed8b6ca",
+    "rows": 200000,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "memory-29",
+    "sha256": "b20118fbaf81cf904f0480ce673b76b109cb76eea09f47741ebc83db2a651c05",
+    "rows": 200000,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "memory-43",
+    "sha256": "98480e30f2dae9ef654819b58fe22c1ddb55e4ba51904dbf07b4f2d29b497033",
+    "rows": 200000,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "memory-71",
+    "sha256": "484182cd9ce96d8e3d9c691fa05064ce8d5d53eb985cb1ac40639855cd54944a",
+    "rows": 200000,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "memory-101",
+    "sha256": "aad7b1f5cc65861a38a563e4dbae518944f411cbf06da6d5204e524e57b2baf9",
+    "rows": 200000,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "pattern-1",
+    "sha256": "143df10c0d9236b30d3826b80341394be6de795225e90a2f5f8c2e2cd34e1814",
+    "rows": 16384,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "pattern-2",
+    "sha256": "d94313d8bb93abfd8fec5921a289446e057e6d1a51c67db44a507a512c433bf7",
+    "rows": 16384,
+    "verified_independent_regeneration": true
+  },
+  {
+    "case": "pattern-3",
+    "sha256": "2c48fe3817eff472b4c6ebc9faa57a14ee4910f7a5299fbdd4498e7004ada9cb",
+    "rows": 16384,
+    "verified_independent_regeneration": true
+  }
+]

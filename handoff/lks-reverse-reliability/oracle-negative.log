@@ -1,0 +1,2 @@
+oracle hand fixture and deliberately altered expectation rejected
+FIRST_FAILURE line=18 step=0 out[i].value==a[i]

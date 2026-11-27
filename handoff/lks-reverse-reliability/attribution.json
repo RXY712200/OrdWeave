@@ -1,0 +1,29 @@
+[
+  {
+    "id": "H-001",
+    "classification": "harness/oracle defect",
+    "severity": "test oracle reliability; no observed DUT mismatch",
+    "evidence": "typed_lifecycle_v1.c mutated model bytes before old/new comparison; detected by code inspection",
+    "reproduction": "Source inspection, retained v1; corrected typed_lifecycle.c rerun4096 steps passes, same final Revision3164",
+    "confidence": "high",
+    "attribution": "No LKS/OrdWeave defect demonstrated; initial affected result superseded"
+  },
+  {
+    "id": "D-001",
+    "classification": "environmental/diagnostic issue; process residual origin unresolved",
+    "severity": "low instrumentation limitation",
+    "evidence": "Requested-byte wrapper control179 and20k control179 with equal-length arguments; initial different-length residual172/182",
+    "reproduction": "memory-diag.exe memory101 00000/20000 modify equal-length output paths",
+    "confidence": "high for equal residual observations; unknown allocator origin",
+    "attribution": "No incremental outstanding request delta in matched controls; not a whole-process leak or UB certification. Native diagnostic LKS teardown independently zero."
+  },
+  {
+    "id": "EG-003",
+    "classification": "unresolved historical anomaly",
+    "severity": "credible historical checkpoint OOM unexpected status; no demonstrated data loss or upstream cause",
+    "evidence": "Current Stable instrumented124..128 all status5=NOMEM and reopen Revision21;126 site checkpoint_core.inc:333 in instrumented copy",
+    "reproduction": "Preserved already-reopened29-file fixture archive;eg003.py applies exact diagnostic patch on disposable current Stable source",
+    "confidence": "high for current observations, insufficient for historical cause",
+    "attribution": "Open; no original OW_CORRUPT recurrence, no root cause or fix claimed."
+  }
+]

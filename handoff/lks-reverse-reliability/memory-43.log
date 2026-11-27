@@ -1,0 +1,6 @@
+oracle hand fixture and deliberately altered expectation rejected
+progress,0,1023
+progress,50000,1041
+progress,100000,1182
+progress,150000,1192
+result,memory,43,200000,setup=1028,public=459288,mutations=179969,noops=51,rejected=9931,queries=10050,live=1194,high=71181
