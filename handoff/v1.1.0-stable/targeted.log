@@ -1,0 +1,9 @@
+Test project D:/OrdWeave/build/rc1-release
+    Start  1: ordweave_smoke
+1/2 Test  #1: ordweave_smoke ...................   Passed    0.03 sec
+    Start 12: ordweave_external_consumer
+2/2 Test #12: ordweave_external_consumer .......   Passed    2.44 sec
+
+100% tests passed out of 2
+
+Total Test time (real) =   2.50 sec

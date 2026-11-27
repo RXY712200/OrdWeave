@@ -1,0 +1,2 @@
+36e07e7a0fccaa4ea54acb59991a0d2572ee1a4a	refs/tags/v1.1.0
+0350628f1b67353cc15283a7e1a1ae86a7004459	refs/tags/v1.1.0^{}

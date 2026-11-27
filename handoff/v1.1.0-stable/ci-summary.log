@@ -1,0 +1,4 @@
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T09:28:09.7703396Z 100% tests passed out of 12
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T09:28:09.7704697Z Total Test time (real) =  10.26 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T09:28:05.5487915Z 100% tests passed out of 12
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T09:28:05.5488313Z Total Test time (real) =  11.31 sec

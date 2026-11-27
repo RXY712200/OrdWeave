@@ -1,0 +1,18 @@
+{
+  "v1.0.0": {
+    "id": 459362640,
+    "body_sha256": "5c03212dbe1a13e634b76db304ff3f49396418efb3d700d8a86761b604e55050",
+    "tag_object": "1a4d62b2f53ed0d4525f71dfd46de2413177dbf8",
+    "peeled": "32f853defc0a2e9f0ca809fb3535a90c977c7665",
+    "draft": false,
+    "prerelease": false
+  },
+  "v1.0.0-rc.1": {
+    "id": 446640088,
+    "body_sha256": "54c7ce3603247dc8b99e5023eaeb0543fccfc8d84704a1ed8c82fd19930f205b",
+    "tag_object": "165b1a72f2c689c78d271d4ab61651e6eefc217e",
+    "peeled": "3f99029da73e3b4f0a75a538dd241cf94cda23d7",
+    "draft": false,
+    "prerelease": true
+  }
+}

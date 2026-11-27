@@ -1,0 +1,19 @@
+{
+  "main": "0350628f1b67353cc15283a7e1a1ae86a7004459",
+  "tag_object": "36e07e7a0fccaa4ea54acb59991a0d2572ee1a4a",
+  "peeled": "0350628f1b67353cc15283a7e1a1ae86a7004459",
+  "release": {
+    "id": 460390016,
+    "html_url": "https://github.com/RXY712200/OrdWeave/releases/tag/v1.1.0",
+    "name": "OrdWeave v1.1.0 Stable",
+    "tag_name": "v1.1.0",
+    "target_commitish": "main",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-11-27T09:28:44Z",
+    "assets": []
+  },
+  "latest": true,
+  "body_sha256": "f6c7068b8cfb32a3144b3128aefcbc2e9ee609aa493511adc2e9503991f35f75",
+  "historical_preserved": true
+}

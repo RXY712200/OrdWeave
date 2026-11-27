@@ -1,0 +1,13 @@
+{
+  "accepted": "76484149fb51cac7d7691a6a9cacc568c4b388fa",
+  "paths": [
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "docs/API.md",
+    "docs/HANDOFF.md",
+    "docs/RELEASE_CANDIDATE.md",
+    "src/ordweave.c",
+    "tests/consumer/main.c",
+    "tests/smoke.c"
+  ]
+}
