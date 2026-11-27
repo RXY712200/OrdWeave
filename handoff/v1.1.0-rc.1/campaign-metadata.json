@@ -1,0 +1,40 @@
+{
+  "A_source": "32f853defc0a2e9f0ca809fb3535a90c977c7665",
+  "B_source": "32f853defc0a2e9f0ca809fb3535a90c977c7665",
+  "C_parent": "5ab01df34bcb62a9feb1c61a443a1f08c0a56a06",
+  "C_delta": "only version literal1.1.0-preview.4 to1.1.0-rc.1",
+  "pins": {
+    "A": "70d7f0ef5857b54381b863d292a213909d87459f",
+    "B": "f751e1ee2afd682874281d6dc495969f9eca49eb",
+    "C": "f751e1ee2afd682874281d6dc495969f9eca49eb"
+  },
+  "A_B_runtime_hashes": {
+    "src\\checkpoint_core.inc": "14e0a44f90e3a82d5b4506509d6be6944099868a797838e6c4b1bb636ee9c83c",
+    "src\\checkpoint_internal.h": "85afaf03d06f4ba7c83e8518a1b51330c094f146290ad90d22b8e16f0ae1e581",
+    "src\\checkpoint_windows.inc": "9988cb54757ad2cad3220a0d9bde513b99b8b1af228f93dc6f824964687a8ff9",
+    "src\\core_internal.h": "76515ecfccce8f22881c2620bd07bb0397d809112c3a26503adf4184bcf6933e",
+    "src\\core_names.h": "1cbd5119bbeebf44b994f875533cc844467ff53a5197bdac7c1dbb9f884a2677",
+    "src\\history_windows.inc": "7016e7f0617be8a628ea9a12c2a0d9e0ca7e7d08322e2448d780112b729eda20",
+    "src\\lks_adapter.c": "1793765cec2c7016c883eb2ac7937a1da8e2c2238550179e75a10b4adaaa58fd",
+    "src\\lks_adapter.h": "d5bc47d301158d3527b99b3902586f28600d0dc1c3241e58ae9d7ee73bec709d",
+    "src\\ordweave.c": "5511dcf7ab8df215649996a01ccaee93aef6b0876082fc9f076588de9ba6f21f",
+    "src\\persistence.c": "67db449989a89b7dbf7bf769efddc2ff0cd5771574a2680cdafbcf097f810283",
+    "src\\sha256.c": "313369ae751da6098c91f165543b2b648bccaf6a8b67b0d5c448d699dbb35bcb",
+    "src\\wal_format.c": "ee6b59f6bee61fbecf36809f40177405397f916f791a356f849cff7afca470b0",
+    "src\\wal_internal.h": "ba271921cae6059541a7160951b2bf323857b029e30e57af84b3db4751db4c11",
+    "src\\wal_windows.c": "738c6edda0cd7865b331b773711611925704e0d8089a8c2e6a8814ff79f507a1",
+    "include\\ordweave.h": "71f3bb8484c12e3c3aa043cee49d7e3dfcd25b30632df302c0f59158070a62a4"
+  },
+  "traces": {
+    "db-128-17-update-heavy.trace": "62731dd7f518524c70703cdef75fe638fb3eb7eab4eef082c629988659c193df",
+    "db-2048-17-update-heavy.trace": "c48d4dcfc91b672f5f70a7d17591fe8c2dbc27ea3e64de0ebdd719d550b7394d"
+  },
+  "platform": "Windows-11-10.0.26300-SP0",
+  "compiler": "gcc (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "binaries": {
+    "common-A.exe": "2dc2460f6156557df9ea829b26ef418a899a2cae368da58b26a929d64747abc9",
+    "common-B.exe": "478d02c92731db7a03a5cf6135cb67988328a9a7b12dac10ffb48f231a3f15ee",
+    "common-C.exe": "02eeb0fb6291cf5073f67af6d0bb9987065770602e5268caf1a6cd2a4ea04238",
+    "index-C.exe": "0eafe49334c61dede65d3a709a219652621eca4b5044b16e20658900b087a4e5"
+  }
+}

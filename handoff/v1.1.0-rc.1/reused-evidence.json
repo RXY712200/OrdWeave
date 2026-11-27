@@ -1,0 +1,26 @@
+{
+  "commit": "41d49ed610879de00e9464f29b9cf0935a69501f",
+  "execution": "Reused accepted evidence, not freshly rerun",
+  "items": {
+    "compatibility.json": {
+      "sha256": "6f03cb37b2dd5c37fa464217ee168d30a02fd8010f24e886fe74e8260b51c2d9",
+      "url": "https://github.com/RXY712200/OrdWeave/blob/41d49ed610879de00e9464f29b9cf0935a69501f/handoff/v1.1.0-preview.4/step15-implementation/compatibility.json"
+    },
+    "upstream-faults.log": {
+      "sha256": "c002384242c603be417777d607b091517e76a9b1a7d7d1d9a5ab81112d23b651",
+      "url": "https://github.com/RXY712200/OrdWeave/blob/41d49ed610879de00e9464f29b9cf0935a69501f/handoff/v1.1.0-preview.4/step15-implementation/upstream-faults.log"
+    },
+    "provenance.json": {
+      "sha256": "d81707b573e717a0a7ab353fbda5242ac8def1dda0f810170ac73c1f09c962c5",
+      "url": "https://github.com/RXY712200/OrdWeave/blob/41d49ed610879de00e9464f29b9cf0935a69501f/handoff/v1.1.0-preview.4/step15-implementation/provenance.json"
+    },
+    "production-resources.json": {
+      "sha256": "43f888e9197d878f7e12a37b1fdd51096550fd281caafa17552c73f62880bf89",
+      "url": "https://github.com/RXY712200/OrdWeave/blob/41d49ed610879de00e9464f29b9cf0935a69501f/handoff/v1.1.0-preview.4/step15-implementation/production-resources.json"
+    },
+    "SHA256.json": {
+      "sha256": "99dd1ca1f851385f270f1853909754c288d35fac34e4aace3312906859354f37",
+      "url": "https://github.com/RXY712200/OrdWeave/blob/41d49ed610879de00e9464f29b9cf0935a69501f/handoff/v1.1.0-preview.4/step15-implementation/SHA256.json"
+    }
+  }
+}

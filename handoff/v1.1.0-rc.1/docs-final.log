@@ -1,0 +1,4 @@
+Public API: 48/48 exact signatures and unique entries
+Production coverage: 6 C translation units, 5 owned implementation includes, 5 private headers
+Immutable RC/Stable provenance and wire tables preserved; explicit Preview.1 pin/version/guard/path gates
+UTF-8 and local Markdown: 25 documents, 509 links including fragments

@@ -1,0 +1,49 @@
+function,direct_test_sources
+ordweave_version,tests/smoke.c; tests/consumer/main.c
+ow_database_create,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/index_failures.inc; tests/range_cases.inc; tests/consumer/main.c
+ow_database_destroy,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/index_failures.inc; tests/range_cases.inc; tests/consumer/main.c
+ow_database_create_persistent,tests/audit.c; tests/checkpoint.c; tests/history.c; tests/persistence.c; tests/consumer/main.c
+ow_database_open,tests/audit.c; tests/checkpoint.c; tests/history.c; tests/persistence.c; tests/consumer/main.c
+ow_database_close,tests/audit.c; tests/checkpoint.c; tests/history.c; tests/persistence.c; tests/consumer/main.c
+ow_history_open,tests/audit.c; tests/history.c; tests/consumer/main.c
+ow_history_close,tests/audit.c; tests/history.c; tests/consumer/main.c
+ow_history_revision,tests/audit.c; tests/history.c
+ow_history_record_exists,tests/audit.c
+ow_history_field_get,tests/audit.c; tests/history.c
+ow_history_collection_count,tests/history.c
+ow_history_collection_members,tests/audit.c; tests/history.c
+ow_history_occurrence_get,tests/history.c
+ow_history_occurrence_compare,tests/history.c
+ow_history_query_equal,tests/history.c
+ow_history_policy,tests/audit.c; tests/history.c
+ow_history_range,tests/history.c
+ow_history_cleanup,tests/audit.c; tests/history.c
+ow_backup_create,tests/audit.c; tests/history.c
+ow_verify_database,tests/audit.c; tests/history.c
+ow_checkpoint_create,tests/audit.c; tests/checkpoint.c; tests/history.c
+ow_checkpoint_info,tests/checkpoint.c
+ow_checkpoint_retention,tests/audit.c; tests/checkpoint.c
+ow_database_identity,tests/persistence.c
+ow_revision,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/history.c; tests/persistence.c; tests/consumer/main.c
+ow_record_create,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/history.c; tests/index_failures.inc; tests/persistence.c; tests/range_cases.inc; tests/consumer/main.c
+ow_record_delete,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/history.c; tests/index_failures.inc; tests/persistence.c; tests/range_cases.inc
+ow_record_exists,tests/core.c
+ow_field_set,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/history.c; tests/index_failures.inc; tests/persistence.c; tests/range_cases.inc; tests/consumer/main.c
+ow_field_get,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/history.c; tests/persistence.c; tests/consumer/main.c
+ow_field_remove,tests/audit.c; tests/core.c; tests/failures.c; tests/index_failures.inc; tests/persistence.c; tests/range_cases.inc
+ow_value_release,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/history.c; tests/persistence.c; tests/consumer/main.c
+ow_collection_create,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/history.c; tests/persistence.c
+ow_collection_delete,tests/checkpoint.c; tests/core.c; tests/persistence.c
+ow_collection_count,tests/core.c; tests/failures.c
+ow_collection_members,tests/checkpoint.c; tests/core.c; tests/failures.c; tests/persistence.c
+ow_occurrence_insert,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/history.c; tests/persistence.c
+ow_occurrence_move,tests/audit.c; tests/core.c; tests/failures.c; tests/history.c; tests/persistence.c
+ow_occurrence_remove,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/failures.c; tests/persistence.c
+ow_occurrence_get,tests/core.c
+ow_occurrence_compare,tests/core.c
+ow_query_equal,tests/core.c; tests/failures.c; tests/index_failures.inc; tests/range_cases.inc
+ow_array_release,tests/audit.c; tests/checkpoint.c; tests/core.c; tests/history.c; tests/index_failures.inc; tests/persistence.c; tests/range_cases.inc; tests/consumer/main.c
+ow_field_index_enable,tests/history.c; tests/index_failures.inc; tests/range_cases.inc; tests/consumer/main.c
+ow_field_index_disable,tests/history.c; tests/index_failures.inc; tests/range_cases.inc; tests/consumer/main.c
+ow_query_range,tests/history.c; tests/index_failures.inc; tests/range_cases.inc; tests/consumer/main.c
+ow_history_query_range,tests/history.c; tests/consumer/main.c

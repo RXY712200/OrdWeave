@@ -1,0 +1,13 @@
+{
+  "parent": "5ab01df34bcb62a9feb1c61a443a1f08c0a56a06",
+  "protected_changed": [
+    "src/ordweave.c",
+    "tests/consumer/main.c",
+    "tests/history.c",
+    "tests/smoke.c"
+  ],
+  "runtime_version_only": true,
+  "test_addition": "Exact14-line historical facade assertion block; all original test content preserved. tools/validate_docs.py compares full expected files.",
+  "public_api_count": 48,
+  "reuse": "Accepted Step15 runtime semantics, dependency and build unchanged. Reuse bilateral Stable/Preview.3 compatibility, canonical386-byte equivalence and owned/upstream faults from41d49ed. No redundant round trip/OOM campaign."
+}
