@@ -1,0 +1,6 @@
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T05:13:30.7502167Z 12/12 Test #12: ordweave_external_consumer .......   Passed    5.46 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T05:13:30.7512123Z 100% tests passed out of 12
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T05:13:30.7512610Z Total Test time (real) =  10.96 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T05:13:21.2409827Z 12/12 Test #12: ordweave_external_consumer .......   Passed    3.81 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T05:13:21.2418412Z 100% tests passed out of 12
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T05:13:21.2418679Z Total Test time (real) =   9.20 sec

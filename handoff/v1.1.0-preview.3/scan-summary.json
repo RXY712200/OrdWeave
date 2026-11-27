@@ -1,0 +1,30 @@
+{
+  "base-genesis-8192": {
+    "segment_calls": 73,
+    "frames": 598235,
+    "seconds": 2.169835,
+    "structural_calls": 48,
+    "semantic_calls": 15
+  },
+  "base-retained": {
+    "segment_calls": 55,
+    "frames": 275,
+    "seconds": 0.0041399,
+    "structural_calls": 30,
+    "semantic_calls": 15
+  },
+  "candidate-genesis-8192": {
+    "segment_calls": 54,
+    "frames": 442530,
+    "seconds": 1.6014094,
+    "structural_calls": 29,
+    "semantic_calls": 15
+  },
+  "candidate-retained": {
+    "segment_calls": 45,
+    "frames": 225,
+    "seconds": 0.0038848,
+    "structural_calls": 20,
+    "semantic_calls": 15
+  }
+}

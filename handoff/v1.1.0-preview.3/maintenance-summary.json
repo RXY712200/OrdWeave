@@ -1,0 +1,107 @@
+[
+  {
+    "fixture": "genesis-128",
+    "metric": "open",
+    "base": 0.0113642,
+    "candidate": 0.0095986,
+    "ratio": 0.8446349061086571
+  },
+  {
+    "fixture": "genesis-128",
+    "metric": "checkpoint",
+    "base": 0.0102296,
+    "candidate": 0.0106404,
+    "ratio": 1.0401579729412684
+  },
+  {
+    "fixture": "genesis-128",
+    "metric": "history",
+    "base": 0.0045342,
+    "candidate": 0.0037387,
+    "ratio": 0.82455559966477
+  },
+  {
+    "fixture": "genesis-128",
+    "metric": "verify",
+    "base": 0.0084441,
+    "candidate": 0.0063181,
+    "ratio": 0.7482265723996637
+  },
+  {
+    "fixture": "genesis-128",
+    "metric": "backup",
+    "base": 0.0340671,
+    "candidate": 0.0268382,
+    "ratio": 0.7878040690284761
+  },
+  {
+    "fixture": "genesis-8192",
+    "metric": "open",
+    "base": 0.1591543,
+    "candidate": 0.1311642,
+    "ratio": 0.8241323043109737
+  },
+  {
+    "fixture": "genesis-8192",
+    "metric": "checkpoint",
+    "base": 0.0190206,
+    "candidate": 0.0172065,
+    "ratio": 0.904624459796221
+  },
+  {
+    "fixture": "genesis-8192",
+    "metric": "history",
+    "base": 0.2393537,
+    "candidate": 0.1819774,
+    "ratio": 0.7602865550020744
+  },
+  {
+    "fixture": "genesis-8192",
+    "metric": "verify",
+    "base": 0.4497325,
+    "candidate": 0.333321,
+    "ratio": 0.7411539081565153
+  },
+  {
+    "fixture": "genesis-8192",
+    "metric": "backup",
+    "base": 1.1085005,
+    "candidate": 0.8415415,
+    "ratio": 0.7591710603648802
+  },
+  {
+    "fixture": "retained",
+    "metric": "open",
+    "base": 0.0131277,
+    "candidate": 0.0114399,
+    "ratio": 0.8714321625265659
+  },
+  {
+    "fixture": "retained",
+    "metric": "checkpoint",
+    "base": 0.0111443,
+    "candidate": 0.0115245,
+    "ratio": 1.0341160952235673
+  },
+  {
+    "fixture": "retained",
+    "metric": "history",
+    "base": 0.0007577,
+    "candidate": 0.0007379,
+    "ratio": 0.9738682856011613
+  },
+  {
+    "fixture": "retained",
+    "metric": "verify",
+    "base": 0.0018261,
+    "candidate": 0.0016755,
+    "ratio": 0.9175291605059963
+  },
+  {
+    "fixture": "retained",
+    "metric": "backup",
+    "base": 0.0231666,
+    "candidate": 0.0224283,
+    "ratio": 0.968130843541996
+  }
+]

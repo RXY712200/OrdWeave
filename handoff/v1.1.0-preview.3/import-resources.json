@@ -1,0 +1,58 @@
+[
+  {
+    "variant": "base",
+    "n": 128,
+    "collections": 1,
+    "fields": 6,
+    "output": "memory,before_import,23991,23991,322\nmemory,after_import,38545,46697,435\n128,1,6,0.000066800,0.000288700,0.000049600,5562\n"
+  },
+  {
+    "variant": "base",
+    "n": 8192,
+    "collections": 1,
+    "fields": 6,
+    "output": "memory,before_import,1413880,1413880,17247\nmemory,after_import,2226626,2773050,25543\n8192,1,6,0.001105100,0.001108800,0.001625100,328122\n"
+  },
+  {
+    "variant": "base",
+    "n": 8192,
+    "collections": 8,
+    "fields": 6,
+    "output": "memory,before_import,1410576,1410576,17338\nmemory,after_import,2224162,2355346,25585\n8192,8,6,0.001261100,0.000758500,0.001821300,328738\n"
+  },
+  {
+    "variant": "base",
+    "n": 2048,
+    "collections": 8,
+    "fields": 64,
+    "output": "memory,before_import,354381,354381,4606\nmemory,after_import,562587,592107,6687\n2048,8,64,0.000368300,0.000388900,0.000406000,84598\n"
+  },
+  {
+    "variant": "candidate",
+    "n": 128,
+    "collections": 1,
+    "fields": 6,
+    "output": "memory,before_import,23996,23996,322\nmemory,after_import,38550,41838,304\n128,1,6,0.000058000,0.000277200,0.000041200,5562\n"
+  },
+  {
+    "variant": "candidate",
+    "n": 8192,
+    "collections": 1,
+    "fields": 6,
+    "output": "memory,before_import,1413885,1413885,17247\nmemory,after_import,2226631,2423455,17096\n8192,1,6,0.001089500,0.000840700,0.001086700,328122\n"
+  },
+  {
+    "variant": "candidate",
+    "n": 8192,
+    "collections": 8,
+    "fields": 6,
+    "output": "memory,before_import,1410581,1410581,17338\nmemory,after_import,2224167,2249239,17145\n8192,8,6,0.001207000,0.000934700,0.001172900,328738\n"
+  },
+  {
+    "variant": "candidate",
+    "n": 2048,
+    "collections": 8,
+    "fields": 64,
+    "output": "memory,before_import,354386,354386,4606\nmemory,after_import,562592,569232,4583\n2048,8,64,0.000370600,0.000397600,0.000320400,84598\n"
+  }
+]

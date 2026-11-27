@@ -1,0 +1,41 @@
+--- a/src/wal_windows.c
++++ b/src/wal_windows.c
+@@ -0,0 +1 @@
++#include <stdio.h>
+@@ -39,0 +41,3 @@
++static unsigned long long diag_flush_count;static double diag_flush_seconds;
++static int diag_flush(HANDLE h){LARGE_INTEGER a,b,f;QueryPerformanceFrequency(&f);QueryPerformanceCounter(&a);int ok=FlushFileBuffers(h);QueryPerformanceCounter(&b);diag_flush_count++;diag_flush_seconds+=(double)(b.QuadPart-a.QuadPart)/f.QuadPart;return ok;}
++void diagnostic_report(void){fprintf(stderr,"flush,%llu,%.9f\n",diag_flush_count,diag_flush_seconds);}
+@@ -240 +244 @@
+-  if (status == OW_OK && !FlushFileBuffers(h))
++  if (status == OW_OK && !diag_flush(h))
+@@ -356 +360 @@
+-  if (!FlushFileBuffers(s->wal)) {
++  if (!diag_flush(s->wal)) {
+@@ -375 +379,2 @@
+-static OwStatus replay_segment(OwStore *s, OwDatabase *db, uint64_t seq,
++static unsigned long long diagnostic_frames;
++static OwStatus diagnostic_replay_impl(OwStore *s, OwDatabase *db, uint64_t seq,
+@@ -504,0 +510 @@
++    diagnostic_frames++;
+@@ -521 +527 @@
+-  if (!s->validating && !s->readonly_scan && (!seek(h, offset) || !SetEndOfFile(h) || !FlushFileBuffers(h))) {
++  if (!s->validating && !s->readonly_scan && (!seek(h, offset) || !SetEndOfFile(h) || !diag_flush(h))) {
+@@ -595,0 +602,6 @@
++}
++static OwStatus replay_segment(OwStore *s,OwDatabase *db,uint64_t seq,int last){
++ LARGE_INTEGER a,b,f;QueryPerformanceFrequency(&f);QueryPerformanceCounter(&a);
++ unsigned long long before=diagnostic_frames;int v=s->validating,m=s->semantic_scan,l=s->limit_replay;
++ OwStatus status=diagnostic_replay_impl(s,db,seq,last);QueryPerformanceCounter(&b);
++ fprintf(stderr,"scan,%d,%d,%d,%llu,%llu,%d,%.9f\n",v,m,l,(unsigned long long)seq,diagnostic_frames-before,status,(double)(b.QuadPart-a.QuadPart)/f.QuadPart);return status;
+@@ -752 +764 @@
+-    if (status == OW_OK && !FlushFileBuffers(m))
++    if (status == OW_OK && !diag_flush(m))
+--- a/src/sha256.c
++++ b/src/sha256.c
+@@ -0,0 +1 @@
++#include <stdio.h>
+@@ -32,0 +34 @@
++  LARGE_INTEGER da,db,df;QueryPerformanceFrequency(&df);QueryPerformanceCounter(&da);
+@@ -35,0 +38 @@
++  QueryPerformanceCounter(&db);fprintf(stderr,"provider,%.9f\n",(double)(db.QuadPart-da.QuadPart)/df.QuadPart);
