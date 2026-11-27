@@ -1,0 +1,182 @@
+[
+  {
+    "n": 128,
+    "mode": "memory",
+    "metric": "setup",
+    "A": 0.0004403,
+    "B": 0.0003333,
+    "ratio": 0.7569838746309334,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "memory",
+    "metric": "operations",
+    "A": 0.0023344,
+    "B": 0.0016003,
+    "ratio": 0.6855294722412612,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "memory",
+    "metric": "checkpoint",
+    "A": 0.0,
+    "B": 0.0,
+    "ratio": null,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "memory",
+    "metric": "reopen",
+    "A": 0.0,
+    "B": 0.0,
+    "ratio": null,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "memory",
+    "metric": "history",
+    "A": 0.0,
+    "B": 0.0,
+    "ratio": null,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "persistent",
+    "metric": "setup",
+    "A": 0.2481894,
+    "B": 0.2433727,
+    "ratio": 0.9805926441661086,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "persistent",
+    "metric": "operations",
+    "A": 0.737647,
+    "B": 0.724691,
+    "ratio": 0.9824360432564627,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "persistent",
+    "metric": "checkpoint",
+    "A": 0.0085321,
+    "B": 0.0080657,
+    "ratio": 0.9453358493219722,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "persistent",
+    "metric": "reopen",
+    "A": 0.026502,
+    "B": 0.0251941,
+    "ratio": 0.9506490076220663,
+    "flag": false
+  },
+  {
+    "n": 128,
+    "mode": "persistent",
+    "metric": "history",
+    "A": 0.0309513,
+    "B": 0.0298827,
+    "ratio": 0.9654747942735846,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "memory",
+    "metric": "setup",
+    "A": 0.1183817,
+    "B": 0.0766665,
+    "ratio": 0.6476212117244472,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "memory",
+    "metric": "operations",
+    "A": 0.0336725,
+    "B": 0.0220335,
+    "ratio": 0.6543470190808524,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "memory",
+    "metric": "checkpoint",
+    "A": 0.0,
+    "B": 0.0,
+    "ratio": null,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "memory",
+    "metric": "reopen",
+    "A": 0.0,
+    "B": 0.0,
+    "ratio": null,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "memory",
+    "metric": "history",
+    "A": 0.0,
+    "B": 0.0,
+    "ratio": null,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "persistent",
+    "metric": "setup",
+    "A": 2.0263645,
+    "B": 1.8775078,
+    "ratio": 0.9265400178497007,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "persistent",
+    "metric": "operations",
+    "A": 0.7694658,
+    "B": 0.7682291,
+    "ratio": 0.998392781069672,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "persistent",
+    "metric": "checkpoint",
+    "A": 0.2604646,
+    "B": 0.1858299,
+    "ratio": 0.7134554945278552,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "persistent",
+    "metric": "reopen",
+    "A": 0.3198739,
+    "B": 0.2248322,
+    "ratio": 0.7028776027053161,
+    "flag": false
+  },
+  {
+    "n": 2048,
+    "mode": "persistent",
+    "metric": "history",
+    "A": 0.4432871,
+    "B": 0.3108018,
+    "ratio": 0.7011298095523195,
+    "flag": false
+  }
+]

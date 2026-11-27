@@ -1,0 +1,26 @@
+[
+  {
+    "direction": "old->new",
+    "code": 0,
+    "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+    "stderr": ""
+  },
+  {
+    "direction": "old->new->old",
+    "code": 0,
+    "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+    "stderr": ""
+  },
+  {
+    "direction": "new->old",
+    "code": 0,
+    "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+    "stderr": ""
+  },
+  {
+    "direction": "new->old->new",
+    "code": 0,
+    "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+    "stderr": ""
+  }
+]

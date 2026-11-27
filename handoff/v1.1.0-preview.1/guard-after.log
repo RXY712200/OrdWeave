@@ -1,0 +1,2 @@
+physical WAL deletion: 9 -> 2; retained 35..41
+history, root cleanup, independent backups, verification and fault paths verified

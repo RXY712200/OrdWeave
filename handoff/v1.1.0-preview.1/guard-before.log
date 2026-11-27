@@ -1,0 +1,2 @@
+physical WAL deletion: 9 -> 2; retained 35..41
+235: GetFileAttributesA(replica) == INVALID_FILE_ATTRIBUTES (win=0)

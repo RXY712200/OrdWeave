@@ -1,0 +1,460 @@
+[
+  {
+    "function": "lks_status_string",
+    "family": "Diagnostics",
+    "production": [],
+    "disposition": "Not applicable"
+  },
+  {
+    "function": "lks_sort",
+    "family": "Stable sort",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_order_create",
+    "family": "Explicit Order",
+    "production": [
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_destroy",
+    "family": "Explicit Order",
+    "production": [
+      "src/checkpoint_core.inc",
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_size",
+    "family": "Explicit Order",
+    "production": [
+      "src/checkpoint_core.inc",
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_insert_front",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_insert_back",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_insert_before",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_insert_after",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_remove",
+    "family": "Explicit Order",
+    "production": [
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_first",
+    "family": "Explicit Order",
+    "production": [
+      "src/checkpoint_core.inc",
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_last",
+    "family": "Explicit Order",
+    "production": [
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_next",
+    "family": "Explicit Order",
+    "production": [
+      "src/checkpoint_core.inc",
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_previous",
+    "family": "Explicit Order",
+    "production": [
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_item",
+    "family": "Explicit Order",
+    "production": [
+      "src/checkpoint_core.inc",
+      "src/lks_adapter.c",
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_compare",
+    "family": "Explicit Order",
+    "production": [
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_move_front",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_move_back",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_move_before",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_move_after",
+    "family": "Explicit Order",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_create",
+    "family": "ManagedOrder",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_destroy",
+    "family": "ManagedOrder",
+    "production": [
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_size",
+    "family": "ManagedOrder",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_insert",
+    "family": "ManagedOrder",
+    "production": [
+      "src/lks_adapter.c",
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_locate",
+    "family": "ManagedOrder",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_remove",
+    "family": "ManagedOrder",
+    "production": [
+      "src/lks_adapter.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_first",
+    "family": "ManagedOrder",
+    "production": [
+      "src/checkpoint_core.inc",
+      "src/ordweave.c"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_last",
+    "family": "ManagedOrder",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_managed_order_compare",
+    "family": "ManagedOrder",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_order_cursor_create",
+    "family": "Cursor",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_managed_order_cursor_create",
+    "family": "Cursor",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_order_cursor_next",
+    "family": "Cursor",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_order_cursor_destroy",
+    "family": "Cursor",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_order_snapshot_capture",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_managed_order_snapshot_capture",
+    "family": "Snapshot",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_order_snapshot_is_current",
+    "family": "Snapshot",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_managed_order_snapshot_is_current",
+    "family": "Snapshot",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_snapshot_destroy",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_snapshot_count",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_snapshot_namespace",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_snapshot_association",
+    "family": "Snapshot",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_snapshot_key_length",
+    "family": "Keys / legacy migration",
+    "production": [],
+    "disposition": "Not applicable"
+  },
+  {
+    "function": "lks_snapshot_key_format",
+    "family": "Keys / legacy migration",
+    "production": [],
+    "disposition": "Not applicable"
+  },
+  {
+    "function": "lks_snapshot_key_validate",
+    "family": "Keys / legacy migration",
+    "production": [],
+    "disposition": "Not applicable"
+  },
+  {
+    "function": "lks_snapshot_key_compare",
+    "family": "Keys / legacy migration",
+    "production": [],
+    "disposition": "Not applicable"
+  },
+  {
+    "function": "lks_snapshot_serialized_size",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_snapshot_serialize",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_snapshot_deserialize",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_snapshot_restore_order",
+    "family": "Snapshot",
+    "production": [
+      "src/checkpoint_core.inc"
+    ],
+    "disposition": "Retain"
+  },
+  {
+    "function": "lks_order_import_v3_lk1",
+    "family": "Keys / legacy migration",
+    "production": [],
+    "disposition": "Not applicable"
+  },
+  {
+    "function": "lks_group_build",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_destroy",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_size",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_item_at",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_merge",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_batch_build",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_batch_destroy",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_batch_size",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_batch_group_count",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_batch_group_size",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_batch_group_at",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_batch_merge_all",
+    "family": "Immutable group / batch",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_snapshot_capture",
+    "family": "Snapshot",
+    "production": [],
+    "disposition": "Research"
+  },
+  {
+    "function": "lks_group_snapshot_is_current",
+    "family": "Snapshot",
+    "production": [],
+    "disposition": "Research"
+  }
+]

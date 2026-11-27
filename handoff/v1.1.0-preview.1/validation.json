@@ -1,0 +1,108 @@
+[
+  {
+    "config": "Release",
+    "command": [
+      "cmake",
+      "-S",
+      ".",
+      "-B",
+      "D:\\OrdWeave\\build\\preview1-release",
+      "-G",
+      "Ninja",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_C_COMPILER=gcc"
+    ],
+    "code": 0,
+    "log": "final-Release-0.log"
+  },
+  {
+    "config": "Release",
+    "command": [
+      "cmake",
+      "--build",
+      "D:\\OrdWeave\\build\\preview1-release",
+      "--parallel",
+      "4"
+    ],
+    "code": 0,
+    "log": "final-Release-1.log"
+  },
+  {
+    "config": "Release",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "D:\\OrdWeave\\build\\preview1-release",
+      "--output-on-failure"
+    ],
+    "code": 0,
+    "log": "final-Release-2.log"
+  },
+  {
+    "config": "Release",
+    "command": [
+      "python",
+      "tools/validate_docs.py",
+      "--examples",
+      "--generator",
+      "Ninja",
+      "--config",
+      "Release"
+    ],
+    "code": 0,
+    "log": "final-Release-3.log"
+  },
+  {
+    "config": "Debug",
+    "command": [
+      "cmake",
+      "-S",
+      ".",
+      "-B",
+      "D:\\OrdWeave\\build\\preview1-debug",
+      "-G",
+      "Ninja",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DCMAKE_C_COMPILER=gcc"
+    ],
+    "code": 0,
+    "log": "final-Debug-0.log"
+  },
+  {
+    "config": "Debug",
+    "command": [
+      "cmake",
+      "--build",
+      "D:\\OrdWeave\\build\\preview1-debug",
+      "--parallel",
+      "4"
+    ],
+    "code": 0,
+    "log": "final-Debug-1.log"
+  },
+  {
+    "config": "Debug",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "D:\\OrdWeave\\build\\preview1-debug",
+      "--output-on-failure"
+    ],
+    "code": 0,
+    "log": "final-Debug-2.log"
+  },
+  {
+    "config": "Debug",
+    "command": [
+      "python",
+      "tools/validate_docs.py",
+      "--examples",
+      "--generator",
+      "Ninja",
+      "--config",
+      "Debug"
+    ],
+    "code": 0,
+    "log": "final-Debug-3.log"
+  }
+]
