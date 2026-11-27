@@ -14,7 +14,7 @@ Both remotes were checked before changes and again before the implementation pus
 
 ## Exact implementation and ownership
 
-[Implementation commit](https://github.com/RXY712200/OrdWeave/commit/5ab01df34bcb62a9feb1c61a443a1f08c0a56a06) and [complete patch](implementation.patch) provide the actual change. Production still has six C translation units, now owning five implementation includes and five private headers. No build target, CMake definition, dependency or CI workflow changed.
+[Implementation commit](https://github.com/RXY712200/OrdWeave/commit/5ab01df34bcb62a9feb1c61a443a1f08c0a56a06) and [complete patch](implementation.patch.gz) provide the actual change. Production still has six C translation units, now owning five implementation includes and five private headers. No build target, CMake definition, dependency or CI workflow changed.
 
 - `src/field_index.inc`, owned by `ordweave.c`, implements one per-database advisory ManagedOrder and shared value/ID comparison. Each row owns an immutable OwValue copy (including String/Binary bytes); the field name is copied once. Row Record pointers and LKS container items are borrowed. A private Record backlink permits relevant maintenance without scanning the cache; it costs 8 bytes per Record on this platform even while disabled.
 - Enable prepares a complete new name/order/key set privately. Budget, allocation or upstream failure releases that unpublished set and preserves the old cache/backlinks. Only success clears the old cache and publishes new backlinks.
@@ -63,7 +63,7 @@ Environment: Windows11 x64, AMD Ryzen9 9955HX, MSYS2 GCC16.2.0, C17, Ninja; exac
 |Diff checks|git diff --check and staged diff check succeeded|commands below|
 |Bilateral Stable/candidate and Preview.3/candidate|all four directions plus reverse return reads pass; enabled candidate source backups|[results](compatibility.json)|
 |Canonical checkpoint bytes|386 bytes identical for Stable, Preview.3, disabled candidate, enabled candidate|[results](compatibility.json), four export .bin artifacts|
-|Exact implementation HEAD Windows MSVC Debug and Release CI|both12/12, successful dependency-pin checks, Debug10.63s/Release11.20s|[CI metadata](ci.json), [complete log](ci-full.log)|
+|Exact implementation HEAD Windows MSVC Debug and Release CI|both12/12, successful dependency-pin checks, Debug10.63s/Release11.20s|[CI metadata](ci.json), [complete log](ci-full.log.gz)|
 
 CI: [push run45950372644](https://github.com/RXY712200/OrdWeave/actions/runs/45950372644), exact HEAD `5ab01df34bcb62a9feb1c61a443a1f08c0a56a06`. Debug [job140344562457](https://github.com/RXY712200/OrdWeave/actions/runs/45950372644/job/140344562457) and Release [job140344562163](https://github.com/RXY712200/OrdWeave/actions/runs/45950372644/job/140344562163) are completed/success. The separate PR-event run's status is captured in [ci-pr.json](ci-pr.json). CI success is execution evidence, not independent acceptance.
 
@@ -92,7 +92,7 @@ Enabling8192 integer keys adds758,108 requested live bytes and16,559 allocations
 
 ## Reproduction commands
 
-Run from the implementation checkout, Windows x64 with GCC/Ninja/Python and recursive pinned dependency. Bench/compatibility scripts record the actual original project-local paths; to reuse the archived helpers, place these artifact files in build/step15, and place memory.c in build/preview2/memory.c (or change that helper path). Compatibility output destinations must be new; fixture create intentionally rejects existing databases. The historical extraction commands in the drivers use git archive and each exact gitlink, rather than trusting stale local builds. No binaries or database fixtures are uploaded.
+Run from the implementation checkout, Windows x64 with GCC/Ninja/Python and recursive pinned dependency. Bench/compatibility scripts record the actual original project-local paths; to reuse the archived helpers, place these artifact files in build/step15, and place memory.c in build/preview2/memory.c (or change that helper path). Compatibility output destinations must be new; fixture create intentionally rejects existing databases. The historical extraction commands in the drivers use git archive and each exact gitlink, rather than trusting stale local builds. No executables or database fixtures are uploaded; the four small canonical export .bin files are included. The raw unified patch and complete CI log are losslessly gzip-compressed because their natural context/blank lines trigger Git trailing-whitespace checks; decompress to inspect their original contents. Source/staged source diff checks passed.
 
 ```powershell
 cmake -S . -B build/step15-release -G Ninja -DCMAKE_BUILD_TYPE=Release
