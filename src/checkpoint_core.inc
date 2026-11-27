@@ -223,7 +223,7 @@ static uint64_t cp_get(CpReader *r, size_t n) {
 typedef struct {
   Collection *collection;
   const unsigned char *blob;
-  size_t size, count;
+  size_t size, count, actual;
 } CpCollection;
 typedef struct {
   OwDatabase *db;
@@ -365,20 +365,34 @@ OwStatus ow_core_import(OwDatabase *d, const unsigned char *bytes, size_t size,
   for (i = 0; i < no; i++) {
     uint64_t occurrence = cp_get(&rd, 8), collection = cp_get(&rd, 8),
              record = cp_get(&rd, 8);
-    OwOccurrenceId out;
+    Collection *c;
+    Record *r;
+    Occurrence *o;
+    OwOccPlan plan;
+    size_t lo=0,hi=(size_t)nc;
     if (rd.status != OW_OK || occurrence <= prev || occurrence > oid) {
-      status = OW_CORRUPT;
-      goto done;
+      status=OW_CORRUPT;goto done;
     }
-    prev = occurrence;
-    d->oid = occurrence - 1;
-    status = ow_checkpoint_oom()
-                 ? OW_NOMEM
-                 : ow_core_occurrence_insert(d, (OwCollectionId){collection},
-                                             (OwRecordId){record}, OW_BACK,
-                                             (OwOccurrenceId){0}, &out);
-    if (status != OW_OK)
-      goto done;
+    prev=occurrence;
+    c=ow_index_find(d->collections,collection);
+    r=ow_index_find(d->records,record);
+    if(!c || !r || r->refs==SIZE_MAX || d->revision==UINT64_MAX) {
+      status=OW_CORRUPT;goto done;
+    }
+    while(lo<hi){size_t mid=lo+(hi-lo)/2;if(collections[mid].collection->key.id<collection)lo=mid+1;else hi=mid;}
+    if(lo==(size_t)nc || collections[lo].collection!=c ||
+       collections[lo].actual==collections[lo].count){status=OW_CORRUPT;goto done;}
+    o=ow_checkpoint_oom()?NULL:calloc(1,sizeof(*o));
+    if(!o){status=OW_NOMEM;goto done;}
+    o->key.id=occurrence;o->collection=c;o->record=r;
+    status=ow_checkpoint_oom()?OW_NOMEM:occ_prepare(d->occurrences,occurrence,&plan);
+    if(status!=OW_OK){free(o);goto done;}
+    /* Unpublished core: native restore alone will create Order residences.
+     * Publication cannot allocate; each occurrence still contributes one to
+     * the original minimum state-changing-operation Revision check. */
+    occ_commit(d->occurrences,&plan,&o->key);
+    collections[lo].actual++;r->refs++;d->oid=occurrence;d->revision++;
+
   }
   if (rd.status != OW_OK || rd.n) {
     status = OW_CORRUPT;
@@ -402,7 +416,7 @@ OwStatus ow_core_import(OwDatabase *d, const unsigned char *bytes, size_t size,
     cp_namespace(expected, id, c->collection->key.id, rev, gen);
     if (lks_snapshot_namespace(snap, &ns, &nsn) != LKS_STATUS_OK || nsn != 40 ||
         memcmp(ns, expected, 40) || lks_snapshot_count(snap) != c->count ||
-        c->count != lks_order_size(c->collection->order)) {
+        c->count != c->actual) {
       lks_snapshot_destroy(snap);
       status = OW_CORRUPT;
       goto done;

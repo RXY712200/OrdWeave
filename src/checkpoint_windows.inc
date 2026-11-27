@@ -242,6 +242,12 @@ static OwStatus checkpoint_load(OwStore *s, OwDatabase *db, uint64_t segments) {
   count = (unsigned)ow_get(meta + 32, 4);
   /* Validate both candidate metadata ancestries, including backup, against WAL.
    */
+  /* Selection files commonly repeat identical anchors. Reuse only successful
+   * checks from this invocation, under the same locked store/root/chain. A
+   * different revision or digest is still independently checked. No cache
+   * survives checkpoint_load or replaces the separate semantic audit. */
+  struct { uint64_t revision; unsigned char digest[32]; } anchors[6];
+  unsigned anchors_count=0;
   for (i = 0; i < 2; i++) {
     unsigned char *m = i ? backup : current;
     OwStatus valid = i ? b : a;
@@ -251,9 +257,16 @@ static OwStatus checkpoint_load(OwStore *s, OwDatabase *db, uint64_t segments) {
     for (j = 0; j < (unsigned)ow_get(m + 32, 4); j++) {
       const unsigned char *e = m + 48 + 112 * j;
       if(ow_get(e+8,8)<s->earliest) continue;
+      unsigned k;
+      uint64_t revision=ow_get(e+8,8);
+      for(k=0;k<anchors_count;k++)
+        if(anchors[k].revision==revision && !memcmp(anchors[k].digest,e+48,32))break;
+      if(k<anchors_count)continue;
       status = cp_anchor(s, db, segments, ow_get(e + 8, 8), e + 48);
       if (status != OW_OK)
         return status;
+      anchors[anchors_count].revision=revision;
+      memcpy(anchors[anchors_count++].digest,e+48,32);
     }
   }
   for (i = 0; i < count; i++) {
