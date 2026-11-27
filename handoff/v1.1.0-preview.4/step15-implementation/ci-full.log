@@ -1,0 +1,534 @@
+windows-x64 (Release)	Set up job	﻿2026-11-27T06:12:31.3150002Z Current runner version: '2.338.2'
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3209031Z ##[group]Runner Image Provisioner
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3210300Z Hosted Compute Agent
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3211194Z Version: 20261111.635
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3212225Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3213398Z Build Date: 2026-11-11T01:49:01Z
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3214432Z Worker ID: {ad855042-4957-45a9-b8e6-09058d32d6ff}
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3215642Z Region: westus
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3216605Z Cloud: Azure
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3217513Z ##[endgroup]
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3219657Z ##[group]Operating System
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3220752Z Microsoft Windows Server 2025
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3222279Z 10.0.26100
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3223138Z Datacenter
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3224087Z ##[endgroup]
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3225217Z ##[group]Runner Image
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3226176Z Image: windows-2025-vs2026
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3227537Z Version: 20261123.321.1
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3229579Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261123.321/images/windows/Windows2025-VS2026-Readme.md
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3233865Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261123.321
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3235684Z ##[endgroup]
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3237632Z ##[group]GITHUB_TOKEN Permissions
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3240189Z Contents: read
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3241088Z Metadata: read
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3241908Z Packages: read
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3242757Z ##[endgroup]
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3245611Z Secret source: Actions
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3247031Z Cache mode: write
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3248081Z Prepare workflow directory
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3698077Z Prepare all required actions
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.3747154Z Getting action download info
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.6835329Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+windows-x64 (Release)	Set up job	2026-11-27T06:12:31.9396723Z Complete job name: windows-x64 (Release)
+windows-x64 (Release)	Run actions/checkout@v4	﻿2026-11-27T06:12:32.0902411Z ##[group]Run actions/checkout@v4
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0903577Z with:
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0903994Z   submodules: recursive
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0904464Z   repository: RXY712200/OrdWeave
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0908550Z   token: ***
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0908950Z   ssh-strict: true
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0909371Z   ssh-user: git
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0909794Z   persist-credentials: true
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0910258Z   clean: true
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0910670Z   sparse-checkout-cone-mode: true
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0911452Z   fetch-depth: 1
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0911856Z   fetch-tags: false
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0912267Z   show-progress: true
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0912683Z   lfs: false
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0913070Z   set-safe-directory: true
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0913550Z   allow-unsafe-pr-checkout: false
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.0914610Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.2388566Z Syncing repository: RXY712200/OrdWeave
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.2390468Z ##[group]Getting Git version info
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.2391104Z Working directory is 'D:\a\OrdWeave\OrdWeave'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.3359471Z [command]"C:\Program Files\Git\bin\git.exe" version
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.6289056Z git version 2.56.1.windows.1
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.6345381Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.6364401Z Temporarily overriding HOME='D:\a\_temp\82c8d1a9-8dbe-49b7-b5c4-481705e05163' before making global git config changes
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.6365743Z Adding repository directory to the temporary git global config as a safe directory
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.6374480Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\OrdWeave\OrdWeave
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.7114976Z Deleting the contents of 'D:\a\OrdWeave\OrdWeave'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.7120802Z ##[group]Initializing the repository
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.7129438Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\OrdWeave\OrdWeave
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.7922216Z Initialized empty Git repository in D:/a/OrdWeave/OrdWeave/.git/
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.7972944Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/RXY712200/OrdWeave
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.8638056Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.8639380Z ##[group]Disabling automatic garbage collection
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.8646733Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.9027856Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.9028743Z ##[group]Setting up auth
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.9040205Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:32.9437434Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:34.5930197Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:34.6460671Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:35.2619801Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:35.3031335Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:35.9120697Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:35.9545226Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:35.9545858Z ##[group]Fetching the repository
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:35.9557947Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5ab01df34bcb62a9feb1c61a443a1f08c0a56a06:refs/remotes/origin/dev/v1.1.0-preview.4
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.2777298Z From https://github.com/RXY712200/OrdWeave
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.2781847Z  * [new ref]         5ab01df34bcb62a9feb1c61a443a1f08c0a56a06 -> origin/dev/v1.1.0-preview.4
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.2842800Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.2843719Z ##[group]Determining the checkout info
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.2846480Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.2857533Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.3474072Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.3944809Z ##[group]Checking out the ref
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.3958894Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B dev/v1.1.0-preview.4 refs/remotes/origin/dev/v1.1.0-preview.4
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.5393457Z Switched to a new branch 'dev/v1.1.0-preview.4'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.5450371Z branch 'dev/v1.1.0-preview.4' set up to track 'origin/dev/v1.1.0-preview.4'.
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.5513809Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.5514505Z ##[group]Setting up auth for fetching submodules
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.5523079Z [command]"C:\Program Files\Git\bin\git.exe" config --global http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.6002756Z [command]"C:\Program Files\Git\bin\git.exe" config --global --unset-all url.https://github.com/.insteadOf
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.6528763Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add url.https://github.com/.insteadOf git@github.com:
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.6948075Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add url.https://github.com/.insteadOf org-118583582@github.com:
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.7424078Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.7424520Z ##[group]Fetching submodules
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:37.7439195Z [command]"C:\Program Files\Git\bin\git.exe" submodule sync --recursive
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:38.9244408Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:39.7216076Z Submodule 'third_party/LayerKeySort' (https://github.com/RXY712200/LayerKeySort.git) registered for path 'third_party/LayerKeySort'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:39.8326025Z Cloning into 'D:/a/OrdWeave/OrdWeave/third_party/LayerKeySort'...
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:41.7638722Z From https://github.com/RXY712200/LayerKeySort
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:41.7643746Z  * branch            f751e1ee2afd682874281d6dc495969f9eca49eb -> FETCH_HEAD
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:42.1012344Z Submodule path 'third_party/LayerKeySort': checked out 'f751e1ee2afd682874281d6dc495969f9eca49eb'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:42.1272171Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local gc.auto 0"
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:42.7241695Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:42.7960505Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:42.7960932Z ##[group]Persisting credentials for submodules
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:42.7973766Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :\""
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:43.3789351Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:43.4888903Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url\""
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:44.0682164Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:44.1523112Z file:D:/a/OrdWeave/OrdWeave/.git/modules/third_party/LayerKeySort/config	remote.origin.url
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:44.1830587Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'"
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:44.7223443Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:44.7879550Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --add 'url.https://github.com/.insteadOf' 'org-118583582@github.com:'"
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:45.3362137Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:45.4006242Z ##[endgroup]
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:45.4525814Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+windows-x64 (Release)	Run actions/checkout@v4	2026-11-27T06:12:45.4880957Z 5ab01df34bcb62a9feb1c61a443a1f08c0a56a06
+windows-x64 (Release)	Verify pinned dependency	﻿2026-11-27T06:12:45.5287632Z ##[group]Run $sha = git -C third_party/LayerKeySort rev-parse HEAD
+windows-x64 (Release)	Verify pinned dependency	2026-11-27T06:12:45.5288287Z ^[[36;1m$sha = git -C third_party/LayerKeySort rev-parse HEAD^[[0m
+windows-x64 (Release)	Verify pinned dependency	2026-11-27T06:12:45.5288868Z ^[[36;1mif ($sha -ne 'f751e1ee2afd682874281d6dc495969f9eca49eb') { throw "Unexpected LKS commit: $sha" }^[[0m
+windows-x64 (Release)	Verify pinned dependency	2026-11-27T06:12:45.5937921Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Release)	Verify pinned dependency	2026-11-27T06:12:45.5938400Z ##[endgroup]
+windows-x64 (Release)	Run cmake -S . -B build -A x64	﻿2026-11-27T06:12:46.1175427Z ##[group]Run cmake -S . -B build -A x64
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:46.1175852Z ^[[36;1mcmake -S . -B build -A x64^[[0m
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:46.1264684Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:46.1265310Z ##[endgroup]
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:58.5185162Z -- Building for: Visual Studio 18 2026
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:58.5185700Z -- The C compiler identification is MSVC 19.52.37029.0
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:58.6668128Z -- Detecting C compiler ABI info
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:59.7840722Z -- Detecting C compiler ABI info - done
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:59.8136971Z -- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Tools/MSVC/14.52.37025/bin/Hostx64/x64/cl.exe - skipped
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:59.8156054Z -- Detecting C compile features
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:12:59.8207536Z -- Detecting C compile features - done
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:13:01.1565865Z -- Found Python3: C:/hostedtoolcache/windows/Python/3.15.2/x64/python3.exe (found version "3.15.2") found components: Interpreter
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:13:01.1577510Z -- Configuring done (14.1s)
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:13:01.2917781Z -- Generating done (0.1s)
+windows-x64 (Release)	Run cmake -S . -B build -A x64	2026-11-27T06:13:01.2928820Z -- Build files have been written to: D:/a/OrdWeave/OrdWeave/build
+windows-x64 (Release)	Run cmake --build build --config Release	﻿2026-11-27T06:13:01.4201540Z ##[group]Run cmake --build build --config Release
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:01.4201987Z ^[[36;1mcmake --build build --config Release^[[0m
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:01.4277300Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:01.4277669Z ##[endgroup]
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:01.8298190Z MSBuild version 18.12.3-1.26559.12+8df097b6f for .NET Framework
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:01.8639241Z 
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.1654106Z   1>Checking Build System
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.3429572Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/third_party/LayerKeySort/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.4995721Z   lks_alloc.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.7642971Z   lks_base.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.7771124Z   path.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.8311957Z   path_text.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.8503886Z   path_order_key.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.8692760Z   slot_codec.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.8829552Z   path_compare.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.8963586Z   order.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.9219093Z   managed_order.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:02.9367237Z   snapshot.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.1398474Z   snapshot_key.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.1590574Z   snapshot_wire.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.1793575Z   snapshot_restore.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.1941292Z   order_bulk.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.2140465Z   immutable_group.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.2340466Z   sort.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.2525296Z   Generating Code...
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.9325985Z   layerkeysort.vcxproj -> D:\a\OrdWeave\OrdWeave\build\third_party\LayerKeySort\Release\layerkeysort.lib
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:03.9810370Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:04.0572355Z   ordweave.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:04.1083214Z   lks_adapter.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:04.1222650Z   persistence.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:04.1475964Z   wal_format.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:04.1757770Z   wal_windows.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:05.3171028Z   sha256.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:05.4710084Z   Generating Code...
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.2613367Z   ordweave.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave.lib
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.3474350Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.4317423Z   ordweave.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.4763783Z   lks_adapter.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.4903766Z   persistence.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.5157797Z   wal_format.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.5431224Z   wal_windows.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.7534033Z   sha256.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:06.9019863Z   Generating Code...
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:07.6605264Z   ordweave_test_storage.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_test_storage.lib
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:07.7021233Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:07.7752348Z   audit.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:08.4051811Z   ordweave_audit.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_audit.exe
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:08.4698495Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:08.5417684Z   checkpoint.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:08.9804158Z   ordweave_checkpoint.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_checkpoint.exe
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.0459703Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.1223648Z   core.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.5147894Z   ordweave_core.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_core.exe
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.5782127Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.6517090Z   failures.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.7182485Z   lks_adapter.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.7323048Z   wal_format.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.7616095Z   sha256.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:09.9214714Z   Generating Code...
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:11.4883716Z   ordweave_failures.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_failures.exe
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:11.5513455Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:11.6247851Z   history.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:12.1583706Z   ordweave_history.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_history.exe
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:12.2192341Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:12.2943341Z   persistence.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:12.8167202Z   ordweave_persistence.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_persistence.exe
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:12.8787130Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:12.9551328Z   smoke.c
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:13.1567600Z   ordweave_smoke.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Release\ordweave_smoke.exe
+windows-x64 (Release)	Run cmake --build build --config Release	2026-11-27T06:13:13.2073468Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	﻿2026-11-27T06:13:13.4332063Z ##[group]Run ctest --test-dir build -C Release --output-on-failure
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:13.4332626Z ^[[36;1mctest --test-dir build -C Release --output-on-failure^[[0m
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:13.4401406Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:13.4401762Z ##[endgroup]
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.1863070Z Test project D:/a/OrdWeave/OrdWeave/build
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.2175054Z       Start  1: ordweave_smoke
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.2328737Z  1/12 Test  #1: ordweave_smoke ...................   Passed    0.01 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.2427645Z       Start  2: ordweave_core
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.2872202Z  2/12 Test  #2: ordweave_core ....................   Passed    0.04 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.2878033Z       Start  3: ordweave_failures
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.2998086Z  3/12 Test  #3: ordweave_failures ................   Passed    0.01 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:14.3002697Z       Start  4: ordweave_persistence
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:15.4235635Z  4/12 Test  #4: ordweave_persistence .............   Passed    1.12 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:15.4240566Z       Start  5: ordweave_format
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:16.4171716Z  5/12 Test  #5: ordweave_format ..................   Passed    0.99 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:16.4179699Z       Start  6: ordweave_checkpoint
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:17.0684389Z  6/12 Test  #6: ordweave_checkpoint ..............   Passed    0.65 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:17.0689277Z       Start  7: ordweave_checkpoint_format
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:17.5181123Z  7/12 Test  #7: ordweave_checkpoint_format .......   Passed    0.45 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:17.5186254Z       Start  8: ordweave_history
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:18.7728615Z  8/12 Test  #8: ordweave_history .................   Passed    1.25 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:18.7733514Z       Start  9: ordweave_history_format
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:19.1841132Z  9/12 Test  #9: ordweave_history_format ..........   Passed    0.41 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:19.1846171Z       Start 10: ordweave_audit_format
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:19.3487063Z 10/12 Test #10: ordweave_audit_format ............   Passed    0.16 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:19.3492371Z       Start 11: ordweave_adversarial
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:19.8282031Z 11/12 Test #11: ordweave_adversarial .............   Passed    0.48 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:19.8287804Z       Start 12: ordweave_external_consumer
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:25.3843969Z 12/12 Test #12: ordweave_external_consumer .......   Passed    5.56 sec
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:25.3853669Z 
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:25.3853834Z 100% tests passed out of 12
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:25.3854303Z 
+windows-x64 (Release)	Run ctest --test-dir build -C Release --output-on-failure	2026-11-27T06:13:25.3854589Z Total Test time (real) =  11.20 sec
+windows-x64 (Release)	Post Run actions/checkout@v4	﻿2026-11-27T06:13:25.5172085Z Post job cleanup.
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:25.7269821Z [command]"C:\Program Files\Git\bin\git.exe" version
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:25.7639166Z git version 2.56.1.windows.1
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:25.7715596Z Temporarily overriding HOME='D:\a\_temp\b1661a00-810c-4377-9f3e-b25b7a694455' before making global git config changes
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:25.7716656Z Adding repository directory to the temporary git global config as a safe directory
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:25.7726738Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\OrdWeave\OrdWeave
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:25.8127276Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:25.8515218Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:26.3934724Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:26.4869392Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:26.5201989Z http.https://github.com/.extraheader
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:26.5247837Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:26.5618392Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:27.1184679Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:27.1812014Z http.https://github.com/.extraheader
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:27.2370859Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:27.2744398Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:27.8011542Z Entering 'third_party/LayerKeySort'
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:27.8374069Z file:D:/a/OrdWeave/OrdWeave/.git/modules/third_party/LayerKeySort/config	remote.origin.url
+windows-x64 (Release)	Post Run actions/checkout@v4	2026-11-27T06:13:27.8656721Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:/a/OrdWeave/OrdWeave/.git/modules/third_party/LayerKeySort/config --name-only --get-regexp ^includeIf\.gitdir:
+windows-x64 (Release)	Complete job	﻿2026-11-27T06:13:27.9239479Z Cleaning up orphan processes
+windows-x64 (Release)	Complete job	2026-11-27T06:13:27.9705763Z Terminate orphan process: pid (8304) (vctip)
+windows-x64 (Release)	Complete job	2026-11-27T06:13:27.9934558Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+windows-x64 (Debug)	Set up job	﻿2026-11-27T06:12:29.2673703Z Current runner version: '2.338.2'
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2720394Z ##[group]Runner Image Provisioner
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2721208Z Hosted Compute Agent
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2722092Z Version: 20261111.635
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2722736Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2723432Z Build Date: 2026-11-11T01:49:01Z
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2724089Z Worker ID: {936ec479-57e8-475f-9dc5-1e1a4c6ade29}
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2724749Z Region: westus
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2725287Z Cloud: Azure
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2725783Z ##[endgroup]
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2727105Z ##[group]Operating System
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2727815Z Microsoft Windows Server 2025
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2728605Z 10.0.26100
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2729116Z Datacenter
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2729602Z ##[endgroup]
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2730122Z ##[group]Runner Image
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2730676Z Image: windows-2025-vs2026
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2731219Z Version: 20261123.321.1
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2732445Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261123.321/images/windows/Windows2025-VS2026-Readme.md
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2734438Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261123.321
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2735393Z ##[endgroup]
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2736534Z ##[group]GITHUB_TOKEN Permissions
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2738904Z Contents: read
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2739772Z Metadata: read
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2740292Z Packages: read
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2740811Z ##[endgroup]
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2742749Z Secret source: Actions
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2743620Z Cache mode: write
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.2744259Z Prepare workflow directory
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.3086695Z Prepare all required actions
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.3151669Z Getting action download info
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.6620926Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+windows-x64 (Debug)	Set up job	2026-11-27T06:12:29.9153472Z Complete job name: windows-x64 (Debug)
+windows-x64 (Debug)	Run actions/checkout@v4	﻿2026-11-27T06:12:30.0752276Z ##[group]Run actions/checkout@v4
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0753396Z with:
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0753836Z   submodules: recursive
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0754335Z   repository: RXY712200/OrdWeave
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0758314Z   token: ***
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0758761Z   ssh-strict: true
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0759197Z   ssh-user: git
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0759647Z   persist-credentials: true
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0760148Z   clean: true
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0760593Z   sparse-checkout-cone-mode: true
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0761124Z   fetch-depth: 1
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0761549Z   fetch-tags: false
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0762002Z   show-progress: true
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0762467Z   lfs: false
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0762885Z   set-safe-directory: true
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0763405Z   allow-unsafe-pr-checkout: false
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.0764141Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.2265285Z Syncing repository: RXY712200/OrdWeave
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.2268230Z ##[group]Getting Git version info
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.2269440Z Working directory is 'D:\a\OrdWeave\OrdWeave'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.3396889Z [command]"C:\Program Files\Git\bin\git.exe" version
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6204897Z git version 2.56.1.windows.1
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6263550Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6284817Z Temporarily overriding HOME='D:\a\_temp\95510846-8782-4527-a4a1-b8beca301686' before making global git config changes
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6287238Z Adding repository directory to the temporary git global config as a safe directory
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6295859Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\OrdWeave\OrdWeave
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6951210Z Deleting the contents of 'D:\a\OrdWeave\OrdWeave'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6957689Z ##[group]Initializing the repository
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.6966623Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\OrdWeave\OrdWeave
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.7903192Z Initialized empty Git repository in D:/a/OrdWeave/OrdWeave/.git/
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.7968356Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/RXY712200/OrdWeave
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.8719168Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.8720559Z ##[group]Disabling automatic garbage collection
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.8729369Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.9121428Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.9122747Z ##[group]Setting up auth
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.9134147Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:30.9538427Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:32.4811295Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:32.5264217Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:33.1241288Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:33.1663059Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:33.7332648Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:33.7719857Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:33.7720510Z ##[group]Fetching the repository
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:33.7732386Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5ab01df34bcb62a9feb1c61a443a1f08c0a56a06:refs/remotes/origin/dev/v1.1.0-preview.4
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:34.9191830Z From https://github.com/RXY712200/OrdWeave
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:34.9196615Z  * [new ref]         5ab01df34bcb62a9feb1c61a443a1f08c0a56a06 -> origin/dev/v1.1.0-preview.4
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:34.9235886Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:34.9236323Z ##[group]Determining the checkout info
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:34.9238854Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:34.9253626Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:34.9778430Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.0176932Z ##[group]Checking out the ref
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.0186161Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B dev/v1.1.0-preview.4 refs/remotes/origin/dev/v1.1.0-preview.4
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.1168576Z Switched to a new branch 'dev/v1.1.0-preview.4'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.1221577Z branch 'dev/v1.1.0-preview.4' set up to track 'origin/dev/v1.1.0-preview.4'.
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.1277702Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.1278207Z ##[group]Setting up auth for fetching submodules
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.1290483Z [command]"C:\Program Files\Git\bin\git.exe" config --global http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.1688209Z [command]"C:\Program Files\Git\bin\git.exe" config --global --unset-all url.https://github.com/.insteadOf
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.2059089Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add url.https://github.com/.insteadOf git@github.com:
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.2428277Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add url.https://github.com/.insteadOf org-118583582@github.com:
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.2865444Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.2866156Z ##[group]Fetching submodules
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.2874933Z [command]"C:\Program Files\Git\bin\git.exe" submodule sync --recursive
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:35.8664738Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:36.3937809Z Submodule 'third_party/LayerKeySort' (https://github.com/RXY712200/LayerKeySort.git) registered for path 'third_party/LayerKeySort'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:36.4264294Z Cloning into 'D:/a/OrdWeave/OrdWeave/third_party/LayerKeySort'...
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:38.4081976Z From https://github.com/RXY712200/LayerKeySort
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:38.4082908Z  * branch            f751e1ee2afd682874281d6dc495969f9eca49eb -> FETCH_HEAD
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:38.7356097Z Submodule path 'third_party/LayerKeySort': checked out 'f751e1ee2afd682874281d6dc495969f9eca49eb'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:38.7614381Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local gc.auto 0"
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:39.3543461Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:39.4263141Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:39.4264035Z ##[group]Persisting credentials for submodules
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:39.4280762Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :\""
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:39.9529550Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:40.0444893Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url\""
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:40.5744472Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:40.6564260Z file:D:/a/OrdWeave/OrdWeave/.git/modules/third_party/LayerKeySort/config	remote.origin.url
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:40.6875531Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'"
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:41.2388670Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:41.3021193Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --add 'url.https://github.com/.insteadOf' 'org-118583582@github.com:'"
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:41.8415669Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:41.9051919Z ##[endgroup]
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:41.9530966Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+windows-x64 (Debug)	Run actions/checkout@v4	2026-11-27T06:12:41.9869661Z 5ab01df34bcb62a9feb1c61a443a1f08c0a56a06
+windows-x64 (Debug)	Verify pinned dependency	﻿2026-11-27T06:12:42.0321994Z ##[group]Run $sha = git -C third_party/LayerKeySort rev-parse HEAD
+windows-x64 (Debug)	Verify pinned dependency	2026-11-27T06:12:42.0322610Z ^[[36;1m$sha = git -C third_party/LayerKeySort rev-parse HEAD^[[0m
+windows-x64 (Debug)	Verify pinned dependency	2026-11-27T06:12:42.0323499Z ^[[36;1mif ($sha -ne 'f751e1ee2afd682874281d6dc495969f9eca49eb') { throw "Unexpected LKS commit: $sha" }^[[0m
+windows-x64 (Debug)	Verify pinned dependency	2026-11-27T06:12:42.1249397Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Debug)	Verify pinned dependency	2026-11-27T06:12:42.1250046Z ##[endgroup]
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	﻿2026-11-27T06:12:42.6641874Z ##[group]Run cmake -S . -B build -A x64
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:42.6642265Z ^[[36;1mcmake -S . -B build -A x64^[[0m
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:42.6711428Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:42.6711808Z ##[endgroup]
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:53.1302847Z -- Building for: Visual Studio 18 2026
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:53.1303699Z -- The C compiler identification is MSVC 19.52.37029.0
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:53.3678497Z -- Detecting C compiler ABI info
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:54.4675490Z -- Detecting C compiler ABI info - done
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:54.5002458Z -- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Tools/MSVC/14.52.37025/bin/Hostx64/x64/cl.exe - skipped
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:54.5024227Z -- Detecting C compile features
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:54.5072697Z -- Detecting C compile features - done
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:55.7643541Z -- Found Python3: C:/hostedtoolcache/windows/Python/3.15.2/x64/python3.exe (found version "3.15.2") found components: Interpreter
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:55.7654892Z -- Configuring done (12.2s)
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:55.8872224Z -- Generating done (0.1s)
+windows-x64 (Debug)	Run cmake -S . -B build -A x64	2026-11-27T06:12:55.8882497Z -- Build files have been written to: D:/a/OrdWeave/OrdWeave/build
+windows-x64 (Debug)	Run cmake --build build --config Debug	﻿2026-11-27T06:12:56.0150400Z ##[group]Run cmake --build build --config Debug
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:56.0151059Z ^[[36;1mcmake --build build --config Debug^[[0m
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:56.0255112Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:56.0255488Z ##[endgroup]
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:56.4222306Z MSBuild version 18.12.3-1.26559.12+8df097b6f for .NET Framework
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:56.4563594Z 
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:56.7689667Z   1>Checking Build System
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:56.9388678Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/third_party/LayerKeySort/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.0997797Z   lks_alloc.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.3742441Z   lks_base.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.3886047Z   path.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.4408728Z   path_text.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.4601033Z   path_order_key.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.4787250Z   slot_codec.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.4921297Z   path_compare.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.5055028Z   order.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.5313432Z   managed_order.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.5451982Z   snapshot.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.7265120Z   snapshot_key.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.7455773Z   snapshot_wire.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.7643495Z   snapshot_restore.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.7787237Z   order_bulk.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.7969383Z   immutable_group.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.8163448Z   sort.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:57.8350986Z   Generating Code...
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:58.0378109Z   layerkeysort.vcxproj -> D:\a\OrdWeave\OrdWeave\build\third_party\LayerKeySort\Debug\layerkeysort.lib
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:58.0843519Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:58.1566583Z   ordweave.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:58.2100122Z   lks_adapter.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:58.2246747Z   persistence.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:58.2497603Z   wal_format.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:58.2809806Z   wal_windows.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.4243251Z   sha256.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.5673572Z   Generating Code...
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.6965027Z   ordweave.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave.lib
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.7809835Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.8627268Z   ordweave.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.9098956Z   lks_adapter.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.9238555Z   persistence.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.9484286Z   wal_format.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:12:59.9760186Z   wal_windows.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:00.1961894Z   sha256.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:00.3407131Z   Generating Code...
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:00.4724165Z   ordweave_test_storage.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_test_storage.lib
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:00.5131230Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:00.5842758Z   audit.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:00.9841377Z   ordweave_audit.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_audit.exe
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:01.0485635Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:01.1196487Z   checkpoint.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:01.4850128Z   ordweave_checkpoint.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_checkpoint.exe
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:01.5630235Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:01.6422029Z   core.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:01.8727673Z   ordweave_core.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_core.exe
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:01.9368023Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.0117421Z   failures.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.0856997Z   lks_adapter.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.1007389Z   wal_format.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.1289107Z   sha256.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.2769243Z   Generating Code...
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.4673508Z   ordweave_failures.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_failures.exe
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.5295118Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.6055138Z   history.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:02.9677670Z   ordweave_history.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_history.exe
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:03.0308470Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:03.1069474Z   persistence.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:03.4803088Z   ordweave_persistence.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_persistence.exe
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:03.5591809Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:03.6345505Z   smoke.c
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:03.8416540Z   ordweave_smoke.vcxproj -> D:\a\OrdWeave\OrdWeave\build\Debug\ordweave_smoke.exe
+windows-x64 (Debug)	Run cmake --build build --config Debug	2026-11-27T06:13:03.8934207Z   Building Custom Rule D:/a/OrdWeave/OrdWeave/CMakeLists.txt
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	﻿2026-11-27T06:13:04.1194278Z ##[group]Run ctest --test-dir build -C Debug --output-on-failure
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:04.1194861Z ^[[36;1mctest --test-dir build -C Debug --output-on-failure^[[0m
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:04.1266511Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:04.1266920Z ##[endgroup]
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:04.8656923Z Test project D:/a/OrdWeave/OrdWeave/build
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:04.8927894Z       Start  1: ordweave_smoke
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:05.1219466Z  1/12 Test  #1: ordweave_smoke ...................   Passed    0.23 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:05.1305935Z       Start  2: ordweave_core
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:05.2715680Z  2/12 Test  #2: ordweave_core ....................   Passed    0.14 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:05.2721952Z       Start  3: ordweave_failures
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:05.2849160Z  3/12 Test  #3: ordweave_failures ................   Passed    0.01 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:05.2853696Z       Start  4: ordweave_persistence
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:06.5015589Z  4/12 Test  #4: ordweave_persistence .............   Passed    1.22 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:06.5020934Z       Start  5: ordweave_format
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:07.4911655Z  5/12 Test  #5: ordweave_format ..................   Passed    0.99 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:07.4918993Z       Start  6: ordweave_checkpoint
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:08.1580084Z  6/12 Test  #6: ordweave_checkpoint ..............   Passed    0.67 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:08.1584816Z       Start  7: ordweave_checkpoint_format
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:08.6058474Z  7/12 Test  #7: ordweave_checkpoint_format .......   Passed    0.45 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:08.6063776Z       Start  8: ordweave_history
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:09.9513157Z  8/12 Test  #8: ordweave_history .................   Passed    1.34 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:09.9518148Z       Start  9: ordweave_history_format
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:10.3936139Z  9/12 Test  #9: ordweave_history_format ..........   Passed    0.44 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:10.3941193Z       Start 10: ordweave_audit_format
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:10.5537924Z 10/12 Test #10: ordweave_audit_format ............   Passed    0.16 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:10.5544497Z       Start 11: ordweave_adversarial
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:11.0437255Z 11/12 Test #11: ordweave_adversarial .............   Passed    0.49 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:11.0442092Z       Start 12: ordweave_external_consumer
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:15.5011491Z 12/12 Test #12: ordweave_external_consumer .......   Passed    4.46 sec
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:15.5021335Z 
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:15.5021686Z 100% tests passed out of 12
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:15.5021995Z 
+windows-x64 (Debug)	Run ctest --test-dir build -C Debug --output-on-failure	2026-11-27T06:13:15.5022165Z Total Test time (real) =  10.63 sec
+windows-x64 (Debug)	Post Run actions/checkout@v4	﻿2026-11-27T06:13:15.6341852Z Post job cleanup.
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:15.8309111Z [command]"C:\Program Files\Git\bin\git.exe" version
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:15.8684860Z git version 2.56.1.windows.1
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:15.8764872Z Temporarily overriding HOME='D:\a\_temp\863e1eb2-946a-491d-9448-3e1dec775afc' before making global git config changes
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:15.8766189Z Adding repository directory to the temporary git global config as a safe directory
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:15.8778053Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\OrdWeave\OrdWeave
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:15.9228113Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:15.9616383Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:16.5365424Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:16.6347217Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:16.6746114Z http.https://github.com/.extraheader
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:16.6793442Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:16.7197721Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:17.2800328Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:17.3436986Z http.https://github.com/.extraheader
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:17.4016546Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:17.4394372Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:17.9791244Z Entering 'third_party/LayerKeySort'
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:18.0173273Z file:D:/a/OrdWeave/OrdWeave/.git/modules/third_party/LayerKeySort/config	remote.origin.url
+windows-x64 (Debug)	Post Run actions/checkout@v4	2026-11-27T06:13:18.0469342Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:/a/OrdWeave/OrdWeave/.git/modules/third_party/LayerKeySort/config --name-only --get-regexp ^includeIf\.gitdir:
+windows-x64 (Debug)	Complete job	﻿2026-11-27T06:13:18.1028002Z Cleaning up orphan processes
+windows-x64 (Debug)	Complete job	2026-11-27T06:13:18.1271561Z Terminate orphan process: pid (7304) (vctip)
+windows-x64 (Debug)	Complete job	2026-11-27T06:13:18.1388645Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

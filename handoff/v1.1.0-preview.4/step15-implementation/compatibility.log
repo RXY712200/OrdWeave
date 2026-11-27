@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "bytes": 386,
+    "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+  },
+  "candidate-enabled": {
+    "bytes": 386,
+    "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+  },
+  "stable": {
+    "bytes": 386,
+    "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+  },
+  "preview3": {
+    "bytes": 386,
+    "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+  }
+}
+Four bilateral pairs and enabled-source backups verified

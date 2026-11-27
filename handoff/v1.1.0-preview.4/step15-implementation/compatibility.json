@@ -1,0 +1,129 @@
+{
+  "baselines": {
+    "stable": {
+      "source": "32f853defc0a2e9f0ca809fb3535a90c977c7665",
+      "dependency": "70d7f0ef5857b54381b863d292a213909d87459f"
+    },
+    "preview3": {
+      "source": "edb9675b10125cecdf936e030bd9a54a90a84146",
+      "dependency": "f751e1ee2afd682874281d6dc495969f9eca49eb"
+    }
+  },
+  "roundtrips": [
+    {
+      "direction": "stable->candidate",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-candidate.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-stable-candidate\\data",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-stable-candidate\\backup",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-stable-candidate\\returned"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    },
+    {
+      "direction": "stable->candidate->stable",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-stable.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-stable-candidate\\returned",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-stable-candidate\\back-again",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-stable-candidate\\back-final"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    },
+    {
+      "direction": "candidate->stable",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-stable.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-stable\\prepared",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-stable\\backup",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-stable\\returned"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    },
+    {
+      "direction": "candidate->stable->candidate",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-candidate.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-stable\\returned",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-stable\\back-again",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-stable\\back-final"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    },
+    {
+      "direction": "preview3->candidate",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-candidate.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-preview3-candidate\\data",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-preview3-candidate\\backup",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-preview3-candidate\\returned"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    },
+    {
+      "direction": "preview3->candidate->preview3",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-preview3.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-preview3-candidate\\returned",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-preview3-candidate\\back-again",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-preview3-candidate\\back-final"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    },
+    {
+      "direction": "candidate->preview3",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-preview3.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-preview3\\prepared",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-preview3\\backup",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-preview3\\returned"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    },
+    {
+      "direction": "candidate->preview3->candidate",
+      "command": [
+        "D:\\OrdWeave\\build\\step15\\compat-candidate.exe",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-preview3\\returned",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-preview3\\back-again",
+        "D:\\OrdWeave\\build\\step15\\final-roundtrip-candidate-preview3\\back-final"
+      ],
+      "code": 0,
+      "stdout": "revision40, six ordered permanent occurrences, fields, retained views, checkpoint and independent backup verified\n",
+      "stderr": ""
+    }
+  ],
+  "canonical": {
+    "candidate": {
+      "bytes": 386,
+      "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+    },
+    "candidate-enabled": {
+      "bytes": 386,
+      "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+    },
+    "stable": {
+      "bytes": 386,
+      "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+    },
+    "preview3": {
+      "bytes": 386,
+      "sha256": "655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958"
+    }
+  },
+  "reopen_cache_absence": "Candidate range has exactly two malloc calls after each open; enabled path has exactly one. Public API only; diagnostic linker wrapper, no production hooks."
+}

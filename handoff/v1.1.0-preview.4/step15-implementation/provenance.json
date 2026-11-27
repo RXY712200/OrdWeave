@@ -1,0 +1,48 @@
+{
+  "base": "cf342dcf881bc9e3518ede042baeaed25f807da7",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "compiler": "gcc (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "binaries": {
+    "baseline-memory.exe": "12e9fc18f88917c7dc3b3c4796968dbc3e88f9652d1dabafdcc9e2da95771bf7",
+    "baseline.exe": "dd40fd9ebb39c1d4410dcab8c72b94e6af2a4201b2ae9cd6daa8250fa546fa79",
+    "candidate-memory.exe": "bcd6660821d1aaf8ce7619308d9e996fb096658e1abdc7bf54dbe5aa32f23688",
+    "candidate.exe": "595caaa56a89717e5237714979d09e952da5516fc74aa93dda77d2b1fa984b9b"
+  },
+  "implementation_head": "5ab01df34bcb62a9feb1c61a443a1f08c0a56a06",
+  "implementation_parent": "cf342dcf881bc9e3518ede042baeaed25f807da7",
+  "dependency": "f751e1ee2afd682874281d6dc495969f9eca49eb",
+  "versions": {
+    "cmake": "cmake version 4.4.3",
+    "ninja": "1.13.2",
+    "python": "Python 3.13.14"
+  },
+  "releases": {
+    "v1.0.0-rc.1": {
+      "release_id": 446640088,
+      "draft": false,
+      "prerelease": true,
+      "published_at": "2026-11-16T05:25:41Z",
+      "body_sha256": "54c7ce3603247dc8b99e5023eaeb0543fccfc8d84704a1ed8c82fd19930f205b",
+      "tag_object": "165b1a72f2c689c78d271d4ab61651e6eefc217e",
+      "peeled": "3f99029da73e3b4f0a75a538dd241cf94cda23d7"
+    },
+    "v1.0.0": {
+      "release_id": 459362640,
+      "draft": false,
+      "prerelease": false,
+      "published_at": "2026-11-26T12:08:34Z",
+      "body_sha256": "5c03212dbe1a13e634b76db304ff3f49396418efb3d700d8a86761b604e55050",
+      "tag_object": "1a4d62b2f53ed0d4525f71dfd46de2413177dbf8",
+      "peeled": "32f853defc0a2e9f0ca809fb3535a90c977c7665"
+    }
+  },
+  "source_status": "",
+  "pr": {
+    "baseRefName": "dev/v1.1.0-preview.3",
+    "headRefName": "dev/v1.1.0-preview.4",
+    "number": 4,
+    "state": "OPEN",
+    "url": "https://github.com/RXY712200/OrdWeave/pull/4"
+  },
+  "cpu": "AMD Ryzen 9 9955HX 16-Core Processor"
+}

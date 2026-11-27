@@ -1,0 +1,4 @@
+1a4d62b2f53ed0d4525f71dfd46de2413177dbf8	refs/tags/v1.0.0
+32f853defc0a2e9f0ca809fb3535a90c977c7665	refs/tags/v1.0.0^{}
+165b1a72f2c689c78d271d4ab61651e6eefc217e	refs/tags/v1.0.0-rc.1
+3f99029da73e3b4f0a75a538dd241cf94cda23d7	refs/tags/v1.0.0-rc.1^{}

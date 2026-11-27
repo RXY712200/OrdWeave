@@ -1,0 +1,44 @@
+-- The C compiler identification is GNU 16.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: D:/msys64/ucrt64/bin/cc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found Python3: C:/Users/rxy71/AppData/Local/Programs/Python/Python313/python.exe (found version "3.13.14") found components: Interpreter
+-- Configuring done (1.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: D:/OrdWeave/build/step15/baseline/build
+[1/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_base.c.obj
+[2/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_text.c.obj
+[3/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/lks_alloc.c.obj
+[4/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path.c.obj
+[5/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/slot_codec.c.obj
+[6/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_compare.c.obj
+[7/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/path_order_key.c.obj
+[8/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/managed_order.c.obj
+[9/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_key.c.obj
+[10/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot.c.obj
+[11/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order.c.obj
+[12/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_wire.c.obj
+[13/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/snapshot_restore.c.obj
+[14/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/order_bulk.c.obj
+[15/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/sort.c.obj
+[16/33] Building C object third_party/LayerKeySort/CMakeFiles/layerkeysort.dir/src/immutable_group.c.obj
+[17/33] Building C object CMakeFiles/ordweave_test_storage.dir/src/lks_adapter.c.obj
+[18/33] Building C object CMakeFiles/ordweave_test_storage.dir/src/wal_format.c.obj
+[19/33] Building C object CMakeFiles/ordweave_test_storage.dir/src/persistence.c.obj
+[20/33] Linking C static library third_party\LayerKeySort\liblayerkeysort.a
+[21/33] Building C object CMakeFiles/ordweave_test_storage.dir/src/ordweave.c.obj
+[22/33] Building C object CMakeFiles/ordweave.dir/src/lks_adapter.c.obj
+[23/33] Building C object CMakeFiles/ordweave_test_storage.dir/src/sha256.c.obj
+[24/33] Building C object CMakeFiles/ordweave.dir/src/persistence.c.obj
+[25/33] Building C object CMakeFiles/ordweave.dir/src/wal_format.c.obj
+[26/33] Building C object CMakeFiles/ordweave.dir/src/ordweave.c.obj
+[27/33] Building C object CMakeFiles/ordweave_test_storage.dir/src/wal_windows.c.obj
+[28/33] Building C object CMakeFiles/ordweave.dir/src/sha256.c.obj
+[29/33] Linking C static library libordweave_test_storage.a
+[30/33] Building C object CMakeFiles/ordweave_history.dir/tests/history.c.obj
+[31/33] Linking C executable ordweave_history.exe
+[32/33] Building C object CMakeFiles/ordweave.dir/src/wal_windows.c.obj
+[33/33] Linking C static library libordweave.a
+ninja: no work to do.

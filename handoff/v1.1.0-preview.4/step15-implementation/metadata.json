@@ -1,0 +1,11 @@
+{
+  "base": "cf342dcf881bc9e3518ede042baeaed25f807da7",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "compiler": "gcc (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "binaries": {
+    "baseline-memory.exe": "12e9fc18f88917c7dc3b3c4796968dbc3e88f9652d1dabafdcc9e2da95771bf7",
+    "baseline.exe": "dd40fd9ebb39c1d4410dcab8c72b94e6af2a4201b2ae9cd6daa8250fa546fa79",
+    "candidate-memory.exe": "bcd6660821d1aaf8ce7619308d9e996fb096658e1abdc7bf54dbe5aa32f23688",
+    "candidate.exe": "595caaa56a89717e5237714979d09e952da5516fc74aa93dda77d2b1fa984b9b"
+  }
+}
