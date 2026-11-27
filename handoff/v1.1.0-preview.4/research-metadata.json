@@ -1,0 +1,16 @@
+{
+  "base": "edb9675b10125cecdf936e030bd9a54a90a84146",
+  "pin": "f751e1ee2afd682874281d6dc495969f9eca49eb",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "compiler": "gcc (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "seed": 17,
+  "notes": "Query read span includes independent O(N) expected-result checking in both variants. Conservative end-to-end prototype cost, not pure lookup latency. Mixed maintenance is50 updates/50 deletions preceding reads, not interleaved traffic. Range correctness is outside timed reads.",
+  "binaries": {
+    "history.exe": "5cf04f828146aab0b822cb00ac7d8b077c775a0d1dab498cd5772ea081300b23",
+    "query-fault.exe": "c2c16a55037127b8df20e5e3c8bbb0c63d7a67f18c3f7125b0d50c6f74129a24",
+    "query-resource.exe": "aea84c4964126ce1d81b9b5469ddbcb55a6ae3d2db4b4a66877921cac254f222",
+    "query.exe": "5e23ef0786dfb6b4635e6117dce2d256e9d7a9d4dac243c288788f8939f7c5fe",
+    "sort-resource.exe": "aa61c14d8dfc38a4abf517d7890a64cd0b469aaa11dd6a4a0763f7e764b3d4b4",
+    "sort.exe": "8ca7aaad8ba6700b58d69f0da5168eb9ca0b1aace3e1ed5c9b25233e2dc8420c"
+  }
+}

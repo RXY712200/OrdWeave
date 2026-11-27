@@ -1,0 +1,9 @@
+# Prospective Preview.4 protocol
+
+Frozen before new results. Exact Preview.3 parent edb9675b10125cecdf936e030bd9a54a90a84146 and same Full4.2 pin, Windows x64 GCC Release/Ninja. Production behavior stays scanning unless simple compatible lifecycle plus measured total-workload gain justifies change; no public API approval is implied.
+
+Step13: fixed seed17, populations128/8192, selective257-value and nonselective1-value integer field distributions; read-heavy512 reads and mixed100 updates/512 reads. One warmup, three measured repetitions, setup/build/update/read separately, independent expected ascending IDs. Compare actual ow_query_equal with external derived public ManagedOrder prototype; include index build/update costs and requested peak allocation in separate diagnostics, not RSS. OOM policy for proposed cache is invalidation/fallback, never allocating rollback or stale publication. Private prototype may stop on unexpected failure; it is not production integration.
+
+Step14: one-shot copied result stable sort versus immutable Group/GroupBatch and repeated merge case; fixed generated keys with equal runs, independent stable insertion-sort expected IDs, borrowed-pointer ownership asserted before destruction. No external sorting library or performance-superiority claim. Step15: tiny actual immutable-history order/field diff using permanent IDs; inserted/deleted, field changed and relative-order change distinguished from shifted ranks; exercise public cursor invalidation and same/different snapshot-key domains where applicable. No full matrix or historical experiment rerun.
+
+Candidate materiality: total-workload savings after build/update/result-copy costs, not isolated lookup ratios. Retain scanning when automatic-maintenance/lifetime/OOM obligations are unjustified. At most two new public contracts proposed for owner review; no unapproved signatures/types/statuses or persisted indexes. No RC.1 transition.

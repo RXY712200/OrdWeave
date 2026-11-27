@@ -1,0 +1,42 @@
+[
+  {
+    "n": 128,
+    "mode": 0,
+    "output": "memory,built,5203,7251,10\nmemory,merged,5203,5203,0\nresult,128,0,0.000008000,0.000000000\n"
+  },
+  {
+    "n": 128,
+    "mode": 1,
+    "output": "memory,built,5235,6259,10\nmemory,merged,5235,5235,0\nresult,128,1,0.000008500,0.000000000\n"
+  },
+  {
+    "n": 128,
+    "mode": 2,
+    "output": "memory,built,6339,6339,14\nmemory,merged,6339,6339,0\nresult,128,2,0.000009800,0.000000000\n"
+  },
+  {
+    "n": 128,
+    "mode": 3,
+    "output": "memory,built,6323,6323,15\nmemory,merged,6323,7379,128\nresult,128,3,0.000009000,0.000017100\n"
+  },
+  {
+    "n": 8192,
+    "mode": 0,
+    "output": "memory,built,327764,458836,10\nmemory,merged,327764,327764,0\nresult,8192,0,0.000255100,0.000000000\n"
+  },
+  {
+    "n": 8192,
+    "mode": 1,
+    "output": "memory,built,327796,393332,10\nmemory,merged,327796,327796,0\nresult,8192,1,0.000246000,0.000000000\n"
+  },
+  {
+    "n": 8192,
+    "mode": 2,
+    "output": "memory,built,395932,461468,204\nmemory,merged,395932,395932,0\nresult,8192,2,0.000261000,0.000000000\n"
+  },
+  {
+    "n": 8192,
+    "mode": 3,
+    "output": "memory,built,393396,393396,15\nmemory,merged,393396,458964,128\nresult,8192,3,0.000251300,0.000659000\n"
+  }
+]

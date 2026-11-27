@@ -1,0 +1,146 @@
+[
+  {
+    "n": 128,
+    "buckets": 257,
+    "updates": 0,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 0.0,
+    "reads": 0.0004002
+  },
+  {
+    "n": 128,
+    "buckets": 257,
+    "updates": 0,
+    "indexed": 1,
+    "build": 1.34e-05,
+    "update": 0.0,
+    "reads": 6.91e-05
+  },
+  {
+    "n": 128,
+    "buckets": 257,
+    "updates": 100,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 1.25e-05,
+    "reads": 0.0003916
+  },
+  {
+    "n": 128,
+    "buckets": 257,
+    "updates": 100,
+    "indexed": 1,
+    "build": 1.31e-05,
+    "update": 2.47e-05,
+    "reads": 5.95e-05
+  },
+  {
+    "n": 128,
+    "buckets": 1,
+    "updates": 0,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 0.0,
+    "reads": 0.0005448
+  },
+  {
+    "n": 128,
+    "buckets": 1,
+    "updates": 0,
+    "indexed": 1,
+    "build": 5.9e-06,
+    "update": 0.0,
+    "reads": 0.000346
+  },
+  {
+    "n": 128,
+    "buckets": 1,
+    "updates": 100,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 1.23e-05,
+    "reads": 0.0005417
+  },
+  {
+    "n": 128,
+    "buckets": 1,
+    "updates": 100,
+    "indexed": 1,
+    "build": 5.8e-06,
+    "update": 2.81e-05,
+    "reads": 0.0003478
+  },
+  {
+    "n": 8192,
+    "buckets": 257,
+    "updates": 0,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 1e-07,
+    "reads": 0.0495622
+  },
+  {
+    "n": 8192,
+    "buckets": 257,
+    "updates": 0,
+    "indexed": 1,
+    "build": 0.0010392,
+    "update": 0.0,
+    "reads": 0.001449
+  },
+  {
+    "n": 8192,
+    "buckets": 257,
+    "updates": 100,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 2.09e-05,
+    "reads": 0.0473826
+  },
+  {
+    "n": 8192,
+    "buckets": 257,
+    "updates": 100,
+    "indexed": 1,
+    "build": 0.0009699,
+    "update": 4.58e-05,
+    "reads": 0.0015274
+  },
+  {
+    "n": 8192,
+    "buckets": 1,
+    "updates": 0,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 0.0,
+    "reads": 0.0498948
+  },
+  {
+    "n": 8192,
+    "buckets": 1,
+    "updates": 0,
+    "indexed": 1,
+    "build": 0.0003827,
+    "update": 0.0,
+    "reads": 0.0242379
+  },
+  {
+    "n": 8192,
+    "buckets": 1,
+    "updates": 100,
+    "indexed": 0,
+    "build": 0.0,
+    "update": 2.47e-05,
+    "reads": 0.0507204
+  },
+  {
+    "n": 8192,
+    "buckets": 1,
+    "updates": 100,
+    "indexed": 1,
+    "build": 0.0003791,
+    "update": 4.48e-05,
+    "reads": 0.0252107
+  }
+]

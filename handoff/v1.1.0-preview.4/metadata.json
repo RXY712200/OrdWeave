@@ -1,0 +1,40 @@
+{
+  "parent": "edb9675b10125cecdf936e030bd9a54a90a84146",
+  "candidate": "cf342dcf881bc9e3518ede042baeaed25f807da7",
+  "pin": "f751e1ee2afd682874281d6dc495969f9eca49eb",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "processor": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+  "compiler": "gcc (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+  "source_hashes": {
+    "checkpoint_core.inc": "bb7036a89fe14017701515257a3eda308ed24f05afac738079506ce586374ef4",
+    "checkpoint_internal.h": "4f882fe0d5097dcc8c6754481bab631ab747188f608288ececdb181b63123740",
+    "checkpoint_windows.inc": "d29369cb31378e796e691523bb87cd89e00c2e835b9974d36c26e1c0693599c1",
+    "core_internal.h": "307327cb922e2c1d73b49f0644ae377448149e26f64c9d4eb23681d085a8f6ad",
+    "core_names.h": "e7d1dec2198f18fba4c7ca497f6be2246b3cf3c7fefcaed43df3bd9cf7b66608",
+    "history_windows.inc": "189600f7d3f0f666572157a4aa5932bd1177f2cbf75f6c36022cf24dd3ded164",
+    "lks_adapter.c": "fe461622a9e7e828cf4897e9d60ebfa12c754a4865ca9ba73290d85799ec9132",
+    "lks_adapter.h": "aa8d3a807cacfad6aaf801bd0de58cc7356f3a66e7fc1a825019249f7f86a3ed",
+    "occurrence_index.inc": "444e30402f911e370b1d7034603b24352c735e3d408ec64a6fa760a296aa430b",
+    "ordweave.c": "12012261837e175abf99eb691776f31009fff8e10675ef86ddadcd7b2f1ea19e",
+    "persistence.c": "5890a4e0f9589f3abd1b4fb66a3216e65254522029a4fbaf9737b64f2a3d9d0a",
+    "sha256.c": "9fc8de238d658535508f578c100ea432aed2b6721340a8e554b9ba4827d7b98d",
+    "wal_format.c": "dff0ef79e4ab07edac3b719414814480bc45e3a8953e63916cb40168dd36cd25",
+    "wal_internal.h": "b421d48fd75e5b8ae357ad718f7d162071c0dd258909c3e045136589b4a50230",
+    "wal_windows.c": "f8ce2940e17a297637c0e28fcc51624cfc996c273d6c3eb2781195f0939affed"
+  },
+  "prototype_hashes": {
+    "history_prototype.c": "f7b3ff7917531eb97ead1ac837cfae65b7dbc87739308b6808397d67eda07e61",
+    "query_prototype.c": "eb680d979bc43458975a78c9bacee01a0045dbea2847f94f41f9390fd66dcc61",
+    "sort_prototype.c": "e400b3806455f20b34d917c1aad84acc44729d59030c6a5746c0df85b47336cd"
+  },
+  "binaries": {
+    "history.exe": "5cf04f828146aab0b822cb00ac7d8b077c775a0d1dab498cd5772ea081300b23",
+    "query-fault.exe": "5380cb723db75f9a4fa85ead1267123d88e6bea61c4596760a29327d732ddfd6",
+    "query-resource.exe": "aea84c4964126ce1d81b9b5469ddbcb55a6ae3d2db4b4a66877921cac254f222",
+    "query.exe": "5e23ef0786dfb6b4635e6117dce2d256e9d7a9d4dac243c288788f8939f7c5fe",
+    "sort-resource.exe": "aa61c14d8dfc38a4abf517d7890a64cd0b469aaa11dd6a4a0763f7e764b3d4b4",
+    "sort.exe": "8ca7aaad8ba6700b58d69f0da5168eb9ca0b1aace3e1ed5c9b25233e2dc8420c"
+  },
+  "notes": "Prototype timing links exact accepted Preview.3 library. Final production differs only by version. Conditional FAULT declarations and pruned-history CLI do not change timed default query/sort code paths; executable fingerprints are recorded separately."
+}
