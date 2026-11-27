@@ -1,8 +1,8 @@
-# RC.1 内部实现：结构、调用依赖、发布与失败分支
+# v1.1.0 内部实现：结构、调用依赖、发布与失败分支
 
 [总导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [公开API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [验证](IMPLEMENTATION_VALIDATION.zh-CN.md) · [维护规则](DEVELOPMENT.zh-CN.md)
 
-固定代码：`3f99029da73e3b4f0a75a538dd241cf94cda23d7`。下面的函数是私有实现，不是新公开接口；本次只写文档，不调整生产结构。磁盘偏移仍集中在 [PERSISTENCE.md](PERSISTENCE.md)、[CHECKPOINTS.md](CHECKPOINTS.md)、[HISTORY.md](HISTORY.md)，这里解释这些字段如何被处理，避免产生另一个竞争规范。
+本文按 **OrdWeave v1.1.0** 的实际源码组织，依赖 LayerKeySort Full4.2 `f751e1ee2afd682874281d6dc495969f9eca49eb`。技术契约不依赖候选发布名称；实际发布状态、版本字面量和准确来源见 [HANDOFF](HANDOFF.md)。 私有函数不是公开接口；磁盘布局集中在三份格式规范。
 
 ## 1. 全部生产文件及编译归属
 
@@ -14,6 +14,8 @@
 |[wal_format.c](../src/wal_format.c)|生产TU 4|大端整数、确定性payload、严格decode、ow_apply单一模型派发|
 |[wal_windows.c](../src/wal_windows.c)|生产TU 5|OwStore、路径、文件、OS锁、append/flush、rotation、段扫描、open|
 |[sha256.c](../src/sha256.c)|生产TU 6|BCrypt双段SHA helper及句柄清理|
+|[occurrence_index.inc](../src/occurrence_index.inc)|由ordweave.c包含|压缩nibble radix、prepare/commit/abort、删除折叠及升序iterator|
+|[field_index.inc](../src/field_index.inc)|由ordweave.c包含|不可变键ManagedOrder、预算/维护失效、范围扫描/Stable Sort|
 |[checkpoint_core.inc](../src/checkpoint_core.inc)|由ordweave.c文本包含|访问私有对象布局；export/import、namespace、resolver|
 |[checkpoint_windows.inc](../src/checkpoint_windows.inc)|由wal_windows.c包含|文件重读验证、选择元数据、代数、候选恢复、代清理|
 |[history_windows.inc](../src/history_windows.inc)|同一Windows TU中随后包含|历史视图、语义审计、策略/root、WAL前缀、backup/verify|
@@ -29,12 +31,12 @@
 
 | 结构 | 字段与含义 | 不变量 |
 |---|---|---|
-|OwIndexed|id、index_handle、teardown_next|嵌入Record/Collection/Occurrence首部；比较只读id；teardown_next只用于析构临时链|
+|OwIndexed|id、index_handle、teardown_next|嵌入Record/Collection/Occurrence首部；Record/Collection比较只读id；Occurrence不使用index_handle；teardown_next只用于析构临时链|
 |Field|name、OwValue value、next|拥有NUL结尾名字及bytes副本；同Record中名唯一；链顺序不是字段语义|
-|Record|key、fields、budget、refs|预算是逻辑编码成本；refs等于活Occurrence总数，不能因重复成员去重|
+|Record|key、fields、budget、refs、indexed|预算是逻辑编码成本；refs等于活Occurrence总数，不能因重复成员去重|
 |Collection|key、order|拥有独立LksOrder；Order借用Occurrence，数量与所属项一致|
 |Occurrence|key、record、collection、handle、checkpoint_seen|关联不可变；每个活对象恰有一个Order residence；seen仅导入去重|
-|OwDatabase|三个ManagedOrder、rid/cid/oid/revision、store|counter为已成功消耗ID高水位；store=NULL是内存/未发布core|
+|OwDatabase|Record/Collection ManagedOrder、Occurrence radix、field_index、rid/cid/oid/revision、store|counter为已成功消耗ID高水位；store=NULL是内存/未发布core|
 |OwHistory|db|独占一个独立core；不暴露其指针给写API|
 |OwCommand|op、id/collection/record/anchor、place、name/value|输入借用；创建时id可先0，落盘前必须补成功分配ID|
 
@@ -73,21 +75,21 @@
 |find_field|set/get/remove/query/same_state|返回Field**槽位，既可替换/断链，也可在尾部插入|
 |capacity|真正变化的core mutation|ID/Revision不能wrap；no-op先识别，饱和Revision仍可成功无变化|
 |anchor_get|Occurrence insert/move|端点anchor=0，相对anchor同Collection且活，输出a先NULL|
-|stage_occurrences|insert/remove|完整替代ManagedOrder借用旧对象；临时新Handle不覆盖已发布index_handle|
-|publish_occurrences|对应Order操作成功后|销毁旧索引，安装新索引，遍历刷新index_handle；无分配|
+|occ_prepare / occ_abort|insert、直接import|最多准备新叶和分叉；失败只释放自有页，旧树不变|
+|occ_commit / occ_remove|Order成功后、未发布import|提交指针/计数或删除折叠；无分配、不调用LKS mutation|
 |detach_index|database_destroy|先串对象临时链，再销毁容器；不需要LKS删除mutation|
-|ow_core_exchange|checkpoint_load|交换完整core但保留各自store归属；旧构造core由tmp析构|
+|ow_core_exchange|checkpoint_load|先清除双方字段缓存，再交换完整core且保留各自store归属；旧构造core由tmp析构|
 |ow_core_same_state|history_same_state|不分配checkpoint buffer，比较逻辑内容/预算/refs/计数器和顺序，忽略跨实例Handle地址|
 
 `ow_core_same_state`按两个ID索引并行遍历Record，按名字在另一个Record里找字段，因此字段插入链顺序不同仍可相等。它随后比较Collection ID与Order中Occurrence ID序列，最后比较每个Occurrence的两个关联。早期发现不符返回0；不是一个hash碰撞概率比较，也没有256MiB总数据库限制。其字段查找可有额外线性成本，不宣称整个函数恒为O(N)。
 
 ## 5. Record/Collection与Occurrence的原子性差别
 
-Record create准备对象后只需要一次唯一索引插入；Collection create还准备空Order，失败销毁它。两者在索引成功前都不消费counter。Record delete先检查refs；Collection delete先检查order size；经过容量检查再移除索引，释放已不被借用的对象。
+Record create准备对象后单次唯一 ManagedOrder 插入；Collection还准备空Order，失败销毁。删除检查refs/order size、容量，成功移除索引才释放对象。Record删除还必须先去掉借用该Record的字段缓存行。
 
-Occurrence insert/remove要维持两处LKS结构，采用prepare-then-publish替代全局索引。准备阶段失败直接销毁替代索引，不需要恢复旧Handle或回滚旧索引的内部Revision。Order操作成功才切换索引和引用数。若改成“先删索引再插Order失败就反向insert”，就必须处理恢复分配失败和不同Handle，不能称等价重构。
+Occurrence insert先准备radix页，LKS Order插入成功才无分配commit并发布计数；失败abort，不改旧树。remove先成功删Order，再删radix槽并折叠空叶/单子分叉，没有恢复分配。move保持原residence，先判self/端点/邻接no-op；跨Collection不支持。radix路径深度最多16，不按高水位配置数组，也不重建全部活Occurrence。
 
-move预判a==o、端点及lks_order_next/previous邻接后再检查Revision容量，真正move交给LKS公开API；不触及global ID索引。跨Collection没有此原子路径。
+可选字段索引不参与逻辑提交成败：成功core改动之后才维护拥有的不可变键。维护失败立即释放缓存及配置；后续查询不得看旧键。guard在公开入口隔离COMMIT_UNKNOWN后的访问。
 
 ## 6. 值准备、编码准备与磁盘提交
 
@@ -128,7 +130,7 @@ move预判a==o、端点及lks_order_next/previous邻接后再检查Revision容�
 5. 更新scan_revision、指定checkpoint/root的anchor_found与当前digest，释放frame。
 6. 失败统一关闭本次非转移句柄、free(frame)。最终成功把最后段句柄/offset交回store。tail分支根据last/readonly/allow flags决定拒绝或截断；完整坏帧不进入可恢复分支。
 
-结构扫描不等于语义重放。Phase6修正通过 `history_semantic_state` 分配独立core从基线验证全部操作，再比较主结果；其控制路径见总导读。此修正已在 `15d14dc85187a1ee18b252c281511e1059e49b55` 提交，与本次纯文档工作不同。
+结构扫描不等于语义重放。Phase6修正通过 `history_semantic_state` 分配独立core从基线验证全部操作，再比较主结果；其控制路径见总导读。此修正已在 `15d14dc85187a1ee18b252c281511e1059e49b55` 提交，属于已保留的历史正确性修正。
 
 ## 9. Checkpoint core缓冲与恢复
 
@@ -136,9 +138,9 @@ move预判a==o、端点及lks_order_next/previous邻接后再检查Revision容�
 
 `CpReader`持p/n/status；cp_read只在n足够时推进，否则锁住CORRUPT状态。固定header校验总长/ID/SHA/计数、高水位总和不得超过Revision；逐Record ID递增，逐字段名递增；逐Collection记录blob借用原输入；逐Occurrence验证id与关联。
 
-导入为了复用core，临时把counter设为要导入ID减一，用普通core create生成该ID。导入中Revision是构造活动计数，结束前确认不超过记录Revision，然后覆盖为真实已提交值；不能把中途Revision公开。所有对象建完后 `cp_resolve` 才有完整索引可查，seen去重防止同对象重复出现在一张或别的集合快照中。
+导入Record/Collection时临时把counter设为目标ID减一，复用普通core create；Occurrence直接构造到未发布radix，并按一次最低状态修改计入构造Revision，不执行临时Order插入。导入中Revision是构造活动计数，结束前确认不超过记录Revision，然后覆盖为真实已提交值；不能把中途Revision公开。所有对象建完后 `cp_resolve` 才有完整索引可查，seen去重防止同对象重复出现在一张或别的集合快照中。
 
-每个collection的native restore成功后替换它的构造Order。此时旧构造Handle全部失效，但紧接着仅遍历新Order装回handle，不读取旧地址。若后一个集合restore失败，统一core destroy仍能销毁已换与未换的两种Order。blob视图只在导入调用内借用，不带到成功core里。
+每个Collection的native restore成功后替换原空Order，仅在完整对象表上解析永久ID，随后遍历装回新handle；未发布Occurrence在此之前没有临时residence。若后一个集合restore失败，统一core destroy仍能销毁已换与未换的两种Order。blob视图只在导入调用内借用，不带到成功core里。
 
 ## 10. Checkpoint Windows帮助函数族
 
@@ -149,7 +151,7 @@ move预判a==o、端点及lks_order_next/previous邻接后再检查Revision容�
 |cp_verify_file|cp_publish|先字节完全相等；checkpoint再建tmp core导入，selection做meta_validate；统一free/tmp destroy|
 |cp_publish|checkpoint/root selection|metadata临时名加随机数；写/刷/重开验证，rename后再验证；published决定能否删除临时及是否poison|
 |cp_anchor|checkpoint_load|重置到正确genesis/root起点，完整扫描并捕获目标Revision digest，不能仅信selection里写了某个anchor|
-|checkpoint_load|open/history|两候选版本/硬错误分类，校验各anchor；按代序试可用且不晚于through的候选；tmp import成功才exchange|
+|checkpoint_load|open/history|两候选版本/硬错误分类，调用内复用至多6个已成功 `(revision,digest)` 校验结果，仍验证各不同anchor；按代序试可用且不晚于through的候选；tmp import成功才exchange|
 |cp_next_generation|checkpoint/cleanup|扫描规范最终与pending名字、比较选择高水位，max+1并检查wrap；不是恢复选择算法|
 |cp_cleanup|发布后|只处理旧selection引用且新selection不再引用的代；保护root baseline；缺失文件可容忍|
 |cp_sweep|发布后补扫|要求current/bak相同；验证旧未引用文件能import后再删；损坏/unsupported孤儿保留|
@@ -192,16 +194,20 @@ move预判a==o、端点及lks_order_next/previous邻接后再检查Revision容�
 | 分类 | 例子 | 怎么处理 |
 |---|---|---|
 |必须正确|引用数、ID不复用、已确认提交恢复、root前缀删除边界|错误要复现并独立审查，不能登记为可接受性能债|
-|已接受成本|global index重建、多遍语义审计、完整checkpoint buffer、每次BCrypt provider|记录触发条件与证据，见TECHNICAL_DEBT.md|
+|已接受成本|多遍语义审计、完整checkpoint buffer、每次BCrypt provider|记录触发条件与证据，见TECHNICAL_DEBT.md|
 |证据缺口|实际设备power-loss、完整系统IO错误组合|明示未验证，不能从TerminateProcess推导|
 |产品范围外|SQL、多写者、Last Days、Linux/macOS支持|不是自动必还的债务|
 
-本次仅文档化现有机制。对动机中未由提交/注释明确陈述的解释，应理解为根据准备/发布结构得出的工程解读，不冒充作者过去作过的设计决议。继续定位每条行为的断言见[验证指南](IMPLEMENTATION_VALIDATION.zh-CN.md)，后续修改规约见[开发指南](DEVELOPMENT.zh-CN.md)。
+本指南按v1.1.0当前实现解释机制。对动机中未由提交/注释明确陈述的解释，应理解为根据准备/发布结构得出的工程解读，不冒充作者过去作过的设计决议。继续定位每条行为的断言见[验证指南](IMPLEMENTATION_VALIDATION.zh-CN.md)，后续修改规约见[开发指南](DEVELOPMENT.zh-CN.md)。
 
-## Preview.2 owned index include
+## 15. 压缩永久ID索引及资源复杂度
 
-[src/occurrence_index.inc](../src/occurrence_index.inc) is included only by ordweave.c. It replaces the global Occurrence ManagedOrder with a compressed nibble-radix ID index. Record/Collection ManagedOrders and LKS explicit Collection ordering remain. See [Preview.2 decisions](PREVIEW_2.md) for preparation/publication and sparse resource proofs. Historical RC descriptions above remain source-bound.
+[occurrence_index.inc](../src/occurrence_index.inc) 仅由ordweave.c包含。节点16槽、prefix/shift/used；叶槽借用OwIndexed对象，分支槽拥有子页。occ_find最多16层；occ_prepare只为缺失叶/分叉分配，occ_commit无分配发布；occ_remove按固定16层栈定位、清槽并折叠。occ_first/next按ID升序遍历，不把高水位当数组长度。OccPlan abort不能递归释放借用的旧子树。Record/Collection保留LKS ManagedOrder，Collection顺序保留显式Order。
 
-## Preview.4 Step15 索引扩展
+## 16. 有界字段索引及范围查询
 
-[field_index.inc](../src/field_index.inc) 由ordweave.c包含，是第五个owner include，不是新TU。负责独立拥有键的单字段ManagedOrder、预算、原子enable替换、非失败式失效及范围扫描/Stable Sort。Record只借用自己的cache row指针；缓存必须在Record释放前清理。持久化wrapper处理guard，历史wrapper调用独立core范围扫描。原RC源码说明仍是历史基线，当前合同见 [API扩展](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
+[field_index.inc](../src/field_index.inc) 为第五个owner include，不是新TU。OwFieldRow拥有值副本，借用Record和Order residence；OwFieldIndex拥有名称、ManagedOrder和计数/预算，Record.indexed是借用的反向指针。整数比较不用相减，浮点只接受有限值且正负零等价，String/Binary用memcmp字节跨度后比较长度。
+
+fi_dispose先串出行、destroy容器使handle失效，再按身份清Record反向指针并释放值/行/名称。失败的私建enable不会误清旧缓存的反向指针。fi_update先准备新键，删旧不可变键再插新行；任一步失败清完整cache/config而不推翻core成功。fi_collect定位边界后两遍枚举并一次分配复制ID；fallback分配匹配Record指针、lks_sort并复制ID，所有错误统一清输出/释放临时数组。
+
+没有缓存时范围查询要扫描字段链并排序匹配项；按比较次数描述为O(M log M)排序，另加Record/字段扫描和LKS实现资源。启用会增加每行固定元数据及上游树，键字节限制不约束这部分；禁用时每Record仍有8字节反向指针成本。不要将一个基准的加速或预算转写为最坏延迟/总RSS保证。

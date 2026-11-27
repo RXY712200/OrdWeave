@@ -1,6 +1,6 @@
 # Persistence format 3
 
-RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+Technical baseline: **OrdWeave v1.1.0**, Windows x64 C17, LayerKeySort Full4.2 pinned at `f751e1ee2afd682874281d6dc495969f9eca49eb`. Actual release/version status and exact source provenance are recorded in [HANDOFF](HANDOFF.md).
 
 [中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
 
@@ -101,3 +101,7 @@ WAL/manifest bytes remain v3. Without recovery roots, genesis recovery is unchan
 ## Phase 6 semantic validation hardening
 
 Every retained WAL operation is independently applied to the core, including operations before the chosen checkpoint; ID gaps, failed operations and no-op frames are corruption even with valid checksums. See [the architecture audit](ARCHITECTURE.md#phase-6-semantic-validation-hardening), [execution walkthrough](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) and resolved TD-101 in [the register](TECHNICAL_DEBT.md).
+
+## Session-only query structures
+
+The v1.1.0 compressed Occurrence lookup and optional field cache add no WAL opcodes or persisted configuration. Enable/disable and all queries consume no data Revision. The nine mutation opcodes remain unchanged. Replay creates uncached private cores; logical data/public IDs remain authoritative. Cache maintenance failure after core success cannot change mutation status; a later persistence failure still quarantines through COMMIT_UNKNOWN. No optimization removes retained-chain semantic audit.

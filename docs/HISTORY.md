@@ -1,6 +1,6 @@
 # Retained history, recovery roots, backup and verification
 
-RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+Technical baseline: **OrdWeave v1.1.0**, Windows x64 C17, LayerKeySort Full4.2 pinned at `f751e1ee2afd682874281d6dc495969f9eca49eb`. Actual release/version status and exact source provenance are recorded in [HANDOFF](HANDOFF.md).
 
 [中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
 
@@ -88,3 +88,9 @@ Performance debt includes repeated full suffix scans, complete historical recons
 ## Phase 6 semantic validation hardening
 
 Historical targets are compared with direct target replay after auditing the complete retained chain, including later operations. An explicit root baseline is the only authority replacing deleted genesis history. See [the architecture audit](ARCHITECTURE.md#phase-6-semantic-validation-hardening), [history internals](IMPLEMENTATION_INTERNALS.zh-CN.md) and TD-101 in [the register](TECHNICAL_DEBT.md).
+
+## v1.1.0 historical range and derived state
+
+OwHistory owns an independent immutable reconstructed core. ow_history_query_range uses the same six-type validation, optional bounds and value/ID order as live range, using scan plus public LKS Stable Sort; it shares no live cache or mutable keys. Copied arrays outlive view closure. Opening a view still performs required audit/reconstruction; range establishes no new retention rule.
+
+Direct import and call-local successful anchor reuse reduce redundant work without weakening root agreement, mandatory baseline, semantic audit or backup completion. Cache configuration is absent from reopened baselines/backups. EG-003 remains an open checkpoint OOM observation; query evidence does not resolve it.

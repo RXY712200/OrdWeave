@@ -1,4 +1,18 @@
-# 1.0.0-rc.1 review package
+# v1.1.0 candidate validation and historical release evidence
+
+## Current release-specific state
+
+Candidate is unreleased `1.1.0-rc.1`, CMake1.1.0, parent accepted Preview.4 `5ab01df34bcb62a9feb1c61a443a1f08c0a56a06`, Full4.2 `f751e1ee2afd682874281d6dc495969f9eca49eb`. Only Steps16–18 is authorized. No v1.1.0 tag/Release, merge or Stable preparation/publication. Final SHA/gates/cumulative CSV are in the separate immutable RC evidence report.
+
+Technical documents are final v1.1.0-facing48-function contracts. Runtime/test literals remain1.1.0-rc.1 until authorized transition; minimal expected paths/checks are in [HANDOFF](HANDOFF.md). Existing formats and44 old contracts remain. Runtime delta from accepted Preview.4 is version-only; four historical facades receive additive direct assertions; accepted fault/compatibility evidence is reusable, with current local/remote execution separately recorded.
+
+[VALIDATION](IMPLEMENTATION_VALIDATION.zh-CN.md) maps actual assertions and limitations. No hardware durability certification or blanket upstream retest. One finite campaign compares exact Stable4.1 A, identical runtime Full4.2 B, current C with index disabled, plus separate opt-in indexing. No old-ratio multiplication or universal speed claim.
+
+## Historical v1.0.0-rc.1 package (preserved record)
+
+The following package describes the historical1.0 candidate, fixed evidence and then-current authorization. It is not current1.1 implementation or standing publication permission.
+
+### Original package
 
 All six development phases, including Phase 6, passed independent review. [v1.0.0-rc.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is published as a GitHub Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. The separately authorized first Stable target is [v1.0.0](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0); consult that Release for publication status. This package preserves historical RC evidence.
 
@@ -69,3 +83,5 @@ The metadata-only release commit was validated by [Windows Debug/Release CI 4380
 The published candidate remains `v1.0.0-rc.1`, a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Preserve its existing annotated tag and published Release. All six implementation phases are complete. The separate v1.0.0 task authorizes the minimal Stable release; this historical document grants no further release or development authority.
 
 Later documentation maintenance changes main without changing the immutable RC source. The actual API, format versions, dependency pin, provenance, supported platform and evidence above remain the project's compatibility baseline. New production/API/format/dependency changes and publication require a specific project task. Contributor build and verification instructions are in [AGENTS.md](../AGENTS.md), [DEVELOPMENT.zh-CN.md](DEVELOPMENT.zh-CN.md) and [IMPLEMENTATION_VALIDATION.zh-CN.md](IMPLEMENTATION_VALIDATION.zh-CN.md).
+
+历史包装补充：RC coverage map发现history_collection_count、occurrence_get、occurrence_compare、query_equal没有直接测试调用；history.c仅追加已知Revision40的计数6、所属ID、首末比较和counter29等值断言。原测试内容完整保留，validator核对精确插入块；只重跑受影响history，不重复本地全矩阵。

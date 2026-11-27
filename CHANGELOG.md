@@ -64,3 +64,9 @@
 - Added four approved functions: explicit bounded session field-index enable/disable, typed live and historical range queries (48 public functions total).
 - Owned immutable keys, dynamic advisory maintenance, deterministic scan/sort fallback, no persisted configuration or format change. Existing equality may use a matching index without changing its contract.
 - Added focused contracts, fault/lifetime/guard tests and exact historical44-plus4 documentation validation. Independent acceptance pending.
+
+## Unreleased 1.1.0-rc.1 — convergence
+
+- Frozen48 functions; accepted Preview.4 semantics, formats and Full4.2 pin unchanged. Runtime/tests change only candidate version literals.
+- Rebuilt v1.1.0 technical documentation: compressed radix/publication, direct native import, call-local anchor reuse, advisory field cache and typed live/history ranges.
+- Version-aware historical/source/format/API protections and bounded matched cumulative validation; actual results in separate RC evidence. Debts/EG-003 remain; no publication or independent acceptance claim.

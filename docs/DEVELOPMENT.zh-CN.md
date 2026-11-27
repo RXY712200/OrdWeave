@@ -2,14 +2,14 @@
 
 [交接入口](HANDOFF.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
 
-本指南提供公开的技术维护方法；仓库边界和验证入口见 [AGENTS](../AGENTS.md)。本指南描述 `3f99029da73e3b4f0a75a538dd241cf94cda23d7`（RC.1）的组织及今后的维护约束。产品行为、兼容性和恢复契约不能因文档维护而改变；发布状态与实际证据见 [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md)。
+本文按 **OrdWeave v1.1.0** 当前源码说明；48个公开函数以 [ordweave.h](../include/ordweave.h) 为准，Full4.2 固定 `f751e1ee2afd682874281d6dc495969f9eca49eb`。实际发布状态与准确来源集中在 [HANDOFF](HANDOFF.md)，这里不把技术基线当成发布声明。 本指南提供公开技术维护方法，仓库范围见[AGENTS](../AGENTS.md)。
 
 ## 1. 先定位正确层次
 
 | 目录/文件 | 用途 | 修改入口 |
 |---|---|---|
 |include/ordweave.h|唯一公开C契约|所有签名、status数值、结构布局变更先做兼容评审|
-|src/ordweave.c + checkpoint_core.inc|纯core、对象所有权和图导入导出|不把Windows IO或WAL递归写入core|
+|src/ordweave.c + checkpoint_core.inc + occurrence_index.inc + field_index.inc|纯core、对象所有权和图导入导出|不把Windows IO或WAL递归写入core|
 |src/persistence.c|公开wrapper与mutate|入口guard、输出安全、准备/执行/持久确认顺序|
 |src/lks_adapter.c/.h|LKS公共API边界|集中status翻译、ID唯一性、handle规则|
 |src/wal_format.c + wal_internal.h|确定性命令编码、decode、apply|写/读canonical规则必须一致；oracle独立|
@@ -54,7 +54,7 @@ WAL/manifest/segment/frame保持v3，checkpoint/selection/root/policy各v1，LKS
 
 ID比较只比较不可变uint64值，不用可能溢出的相减。ManagedOrder locate的pred/equal/succ必须是三个独立输出；插入前保证ID唯一。容器借用的对象先活于容器，析构先detach/destroy容器再free对象。一个Occurrence只能属于一个Collection，其永久ID、所属Record与Collection不可在移动时改写。移动只改变本Collection顺序。
 
-runtime Handle不持久化，不把指针或Handle伪装成数据库ID。restore必须通过Occurrence ID resolver校验所属Collection、唯一出现和namespace，并重建每个新Handle。任何container replacement都必须更新对象保存的index_handle。全局Occurrence index重建目前有成本但服务于失败原子性，优化前须保留失败/handle证据，见TD-001。
+runtime Handle不持久化，不把指针或Handle伪装成数据库ID。restore必须通过Occurrence ID resolver校验所属Collection、唯一出现和namespace，并重建每个新Handle。Record/Collection ManagedOrder保存其索引handle；Occurrence的永久ID用压缩radix查找，handle仅指向所属Collection显式Order。radix准备失败不发布，Order成功后commit不分配；直接导入对象齐备后才native restore，不使用临时逐项Order构造。字段缓存键不可驻留时修改，相关成功mutation维护失败清cache/config，不得改变数据提交结果。
 
 所有文件、锁、BCrypt句柄、临时core、数组和buffer应有单一所有者及所有出口的清理策略。输出先安全初始化，失败不暴露半成对象；IO确认前不发布成功ID；不确定提交要poison会话。跨函数返回缓冲区须说明谁free、何时失效。不要对借用输入调用ow_value_release。
 
@@ -72,12 +72,8 @@ runtime Handle不持久化，不把指针或Handle伪装成数据库ID。restore
 
 [TECHNICAL_DEBT.md](TECHNICAL_DEBT.md) 的ID永久稳定。引入、显著改变、偿还或明确接受真实债务时更新对应项，附源码、理由、触发条件及验证；解决后移入历史区但保留ID和提交SHA。功能范围之外的SQL、多写者、其他平台不自动成为欠账；测试证据缺口单独EG编号。未经证实的缺陷标为待复核，不能把正确性bug包装成可接受性能成本。
 
-## 8. 发布基线与维护边界
+## 8. 技术基线与变更边界
 
-历史候选版本为 `v1.0.0-rc.1` Prerelease，源码基线为 `3f99029da73e3b4f0a75a538dd241cf94cda23d7`；本次获准的首个Stable发布目标为 [v1.0.0](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0)，实际发布状态以Release为准；运行库版本字面量同步为1.0.0，其他实现行为保持RC.1基线。保留现有tag和Release，新的文档提交不进入历史标签。当前项目的格式、依赖、调用方串行化和资源所有权约束继续适用，具体证据见 [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md)。
+v1.1.0 的48函数、Full4.2、压缩Occurrence radix、直接checkpoint导入、调用内anchor复用及可选字段缓存均属于当前实现；技术文档应按真实结构维护，不能继续把历史全局index重建描述为当前行为。旧版本、各Preview取舍和实际发布状态集中到[交接](HANDOFF.md)、[历史证据](RELEASE_CANDIDATE.md)和技术债记录，既有标签不移动。
 
-原六个实现阶段已完成，见 [ROADMAP](ROADMAP.md)。普通维护不会自动开启新产品阶段、改上游或创建版本。维护时核对实际remote与 [HANDOFF](HANDOFF.md) 中的固定基线，使用本指南的源码/格式/测试地图，不将旧文档的任务上下文当作当前修改权限。
-
-## Preview.1 开发分支增量
-
-已发布Stable为 `32f853defc0a2e9f0ca809fb3535a90c977c7665`；上述RC说明属于历史基线。当前未发布版本为 `1.1.0-preview.1`，CMake数值版本为1.1.0，Full4.2固定在 `f751e1ee2afd682874281d6dc495969f9eca49eb`。仅增加cleanup在恢复根重建之前执行既有会话guard及针对性回归，不改变44个API或磁盘格式。文档validator分别验证不可变RC→Stable版本差异和明确的Preview增量，保留API、wire表、源码inventory和导航检查。[完整能力及架构决策](PREVIEW_1.md)与单独证据分支记录本次验证，不将历史CI当作当前结果。
+源码与测试相同的证据可以复用；行为变化须更新受影响的API/调用链/格式/验证说明。仅版本状态切换不需要重写整套技术文档；具体最小版本路径与检查在交接。任何新功能、格式、上游或发布操作仍需相应任务授权。

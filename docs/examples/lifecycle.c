@@ -56,12 +56,26 @@ int main(int argc, char **argv) {
     TRY(ow_query_equal(db, "counter", &v, &matches, &count));
     CHECK(count == 1 && matches[0].value == record.value);
     ow_array_release(matches); matches = NULL;
+    /* Only present entries and copied variable key bytes are budgeted here;
+     * fixed rows and LKS allocations are outside max_key_bytes. */
+    TRY(ow_field_index_enable(db, "counter", 16, 1024));
+    TRY(ow_query_range(db, "counter", OW_INT, &v, 1, &v, 1, &matches, &count));
+    CHECK(count == 1 && matches[0].value == record.value);
     TRY(ow_checkpoint_create(db));
     TRY(ow_checkpoint_info(db, &generation, &checkpoint_revision)); CHECK(generation != 0);
     v.as.integer = 43; TRY(ow_field_set(db, record, "counter", &v));
+    CHECK(count == 1 && matches[0].value == record.value); /* Independent copy. */
+    ow_array_release(matches); matches = NULL;
     TRY(ow_history_open(db, checkpoint_revision, &history));
     TRY(ow_history_field_get(history, record, "counter", &result)); CHECK(result.as.integer == 42);
+    TRY(ow_history_query_range(history, "counter", OW_INT, NULL, 0, NULL, 1,
+                               &matches, &count));
     ow_history_close(history); history = NULL;
+    CHECK(count == 1 && matches[0].value == record.value);
+    ow_array_release(matches); matches = NULL;
+    TRY(ow_revision(db, &before));
+    TRY(ow_field_index_disable(db));
+    TRY(ow_revision(db, &after)); CHECK(before == after);
     CHECK(result.as.integer == 42); ow_value_release(&result);
     TRY(ow_history_policy(db, OW_RETAIN_MANUAL, 0));
     TRY(ow_history_policy(db, OW_RETAIN_FOREVER, 0));

@@ -1,8 +1,8 @@
-# RC.1 公共 API 源码参考：44 个函数
+# OrdWeave v1.1.0 公共 API 源码参考：48 个函数
 
 [使用指南](USAGE.zh-CN.md) · [实现导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部详解](IMPLEMENTATION_INTERNALS.zh-CN.md)
 
-依据 [include/ordweave.h](../include/ordweave.h) 在 RC.1 `3f99029da73e3b4f0a75a538dd241cf94cda23d7` 的**实际44条函数声明**整理。本文加入发布后的 main，不改变标签。每个签名直接从头文件核对；[文档校验脚本](../tools/validate_docs.py)检查清单集合及签名一致，避免凭印象猜数量。头文件仍是权威声明，不是本手册生成一个替代API。
+本文按 **OrdWeave v1.1.0** 当前源码说明；48个公开函数以 [ordweave.h](../include/ordweave.h) 为准，Full4.2 固定 `f751e1ee2afd682874281d6dc495969f9eca49eb`。实际发布状态与准确来源集中在 [HANDOFF](HANDOFF.md)，这里不把技术基线当成发布声明。 [校验器](../tools/validate_docs.py)精确比较历史44项与批准新增4项，检查每个声明和唯一条目；原类型/状态值保持。
 
 ## 1. 共同调用契约
 
@@ -750,7 +750,7 @@ OwStatus ow_query_equal(OwDatabase *db, const char *name, const OwValue *value,
                         OwRecordId **out, size_t *count);
 ```
 
-- **用途与参数**：按字段严格相等扫描Records。名称和值有效；两次按Record ID索引扫描，先计数后分配填充。缺失字段不匹配Null。
+- **用途与参数**：按字段严格相等选择Records。名称和值有效；有匹配有效字段缓存时走ManagedOrder定位，否则两次按Record ID扫描、计数后分配。结果仍为ID升序，缺失字段不匹配Null。
 - **输出、所有权**：out先NULL/count先0，空结果OK；数组按RecordId递增，用array_release。
 - **可观察变化/无操作**：读取；不是二级索引、SQL或类型自动转换。
 - **关键失败**：非法db/name/value/输出为INVALID，数组容量CAPACITY或分配NOMEM；没有匹配是OK/NULL/0，不是NOT_FOUND。
@@ -789,9 +789,9 @@ void ow_array_release(void *array);
 
 <a id="preview4-step15"></a>
 
-## Preview.4 Step15：已实现的会话索引与范围查询
+## 7. 会话字段索引与范围查询
 
-当前未发布版本包含历史44个函数和本节4个新增函数，共48个；RC.1/Stable 的44函数历史基线不变。头文件是声明权威。
+v1.1.0 包含48个函数；v1.0.0及其历史候选的44函数保持兼容。以下四函数使用原有类型、状态与释放接口，不引入持久化配置。
 
 每个数据库最多一个显式启用的字段索引，覆盖该字段所有六类现存值；缺失字段不入索引，Null 入索引。max_records 是有该字段的条目数上限，不是数据库总记录数。max_key_bytes 包含一份字段名（含末尾 NUL）及 String/Binary 键复制的有效字节数；固定行、ID、值元数据和 LKS 分配不计入此预算，因此它不是总内存上限。两个限制必须为正；超预算返回 OW_CAPACITY，分配失败返回 OW_NOMEM。enable 私下构建，成功才替换；失败保留旧索引。disable 幂等释放。配置不占 Revision/永久 ID，不写 WAL，重开后不存在。
 
@@ -810,7 +810,9 @@ OwStatus ow_field_index_enable(OwDatabase *db, const char *field,
                               size_t max_records, size_t max_key_bytes);
 ```
 
-遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
+- **参数/预算**：db是健康内存或持久实例；field遵循原名称规则；两个size_t限制均须为正。先完整私建后替换；预算不足CAPACITY，分配失败NOMEM，非法输入INVALID，guard可先返回BUSY/RECOVERY_REQUIRED。
+- **成功/失败**：成功建立当前所有present值缓存，不增Revision/ID、不写WAL；失败旧cache/config/反向指针不变。反复enable可以显式重建或换字段，调用方不得预期它无成本。
+- **实现/断言**：persistence wrapper → core enable → fi_row/ManagedOrder insert；range_cases与index_failures检查精确预算、一超、OOM和旧缓存保留。
 
 <a id="api-ow-field-index-disable"></a>
 
@@ -820,7 +822,8 @@ OwStatus ow_field_index_enable(OwDatabase *db, const char *field,
 OwStatus ow_field_index_disable(OwDatabase *db);
 ```
 
-遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
+- **参数/结果**：有效db，guard优先；禁用或已经禁用均OK；不增Revision，不改磁盘。NULL为INVALID；busy/隔离实例不能先触碰缓存。
+- **释放**：先destroy容器再释放拥有的行/值/名称，清Record借用指针。返回的查询数组是独立副本，禁用不影响它们。
 
 <a id="api-ow-query-range"></a>
 
@@ -833,7 +836,9 @@ OwStatus ow_query_range(OwDatabase *db, const char *field, OwType type,
                        OwRecordId **out, size_t *count);
 ```
 
-遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
+- **参数/输出**：db、field、type、out/count必须有效；非空lo/hi是匹配type的借用OwValue，仅调用期间使用。两个inclusive必须0或1。输出先NULL/0，空结果OK。上文完整比较规则同样适用于没有数据的DB。
+- **失败**：guard返回BUSY/RECOVERY_REQUIRED；非法名称/类型/值/界限顺序/标志为INVALID；结果或fallback分配失败NOMEM，安全长度容量超限CAPACITY。不会把部分结果当成功。无数据Revision或永久ID消耗。
+- **路径/所有权**：匹配cache经fi_collect，其他字段/失效cache扫描再lks_sort；按值及ID排序，与只按ID的equality结果契约有区别。ow_array_release释放；数组不借用cache/DB。
 
 <a id="api-ow-history-query-range"></a>
 
@@ -846,4 +851,6 @@ OwStatus ow_history_query_range(const OwHistory *view, const char *field,
                        OwRecordId **out, size_t *count);
 ```
 
-遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
+- **参数/结果**：view为活的独立不可变历史视图，其他参数、比较、空/错误输出与live range一致；没有历史写入/缓存enable接口，源DB后续修改或关闭不改变视图。
+- **实现/资源**：history wrapper调用view自己的core范围扫描/Stable Sort，不从live缓存借键或共享配置。返回ID副本可跨view关闭使用；NULL view为INVALID。重建视图成本发生在history_open，不包含在这个函数的扫描成本内。
+- **证据**：history.c区分历史counter=0与当前值并验证关闭视图后结果；consumer独立链接调用；其余值类型/边界复用同一已测试core。不能将一个历史Int断言描述为独立历史六类全组合实测。

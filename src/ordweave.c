@@ -40,7 +40,7 @@ struct OwDatabase {
   OwStore *store;
   OwFieldIndex *field_index;
 };
-const char *ordweave_version(void) { return "1.1.0-preview.4"; }
+const char *ordweave_version(void) { return "1.1.0-rc.1"; }
 static int utf8(const unsigned char *s, size_t n) {
   size_t i = 0;
   while (i < n) {

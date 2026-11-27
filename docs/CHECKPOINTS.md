@@ -1,6 +1,6 @@
 # Checkpoints and selection metadata — format 1
 
-RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+Technical baseline: **OrdWeave v1.1.0**, Windows x64 C17, LayerKeySort Full4.2 pinned at `f751e1ee2afd682874281d6dc495969f9eca49eb`. Actual release/version status and exact source provenance are recorded in [HANDOFF](HANDOFF.md).
 
 [中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
 
@@ -128,3 +128,9 @@ A versioned recovery root can retain a mandatory native baseline after WAL-prefi
 ## Semantic audit requirement (hardened in Phase 6)
 
 A checkpoint only initializes the ordinary result-construction path. Independent semantic replay and logical comparison prevent it from hiding earlier invalid operations. See [the architecture audit](ARCHITECTURE.md#phase-6-semantic-validation-hardening), [checkpoint internals](IMPLEMENTATION_INTERNALS.zh-CN.md) and TD-002/TD-101 in [the register](TECHNICAL_DEBT.md).
+
+## v1.1.0 importer and call-local verification
+
+Occurrence objects are constructed directly in the unpublished compressed radix after validating IDs, associations, counts and minimum mutation Revision. No temporary per-Occurrence Order insertion occurs; native restore alone creates residences. Resolver membership/uniqueness/namespace/all-seen checks and recorded high-water/Revision publication remain mandatory. Failure destroys the whole unpublished core.
+
+Within one checkpoint_load call, at most six successful identical (revision,digest) anchor checks can be reused. Failed checks are not cached; hard errors/complete bad frames are not swallowed. This is not cross-call trust and does not skip semantic audit or final comparison. Field-cache rows/configuration are not exported/imported; exchange drops cache before replacing borrowed Records. All format tables and canonical bytes above remain unchanged.

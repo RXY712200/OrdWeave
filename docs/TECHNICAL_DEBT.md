@@ -2,7 +2,7 @@
 
 [Maintainer handoff](HANDOFF.md) · [Development rules](DEVELOPMENT.zh-CN.md) · [Internals](IMPLEMENTATION_INTERNALS.zh-CN.md) · [Validation evidence](IMPLEMENTATION_VALIDATION.zh-CN.md)
 
-本登记在RC文档稳定化时首次建立，按 `3f99029da73e3b4f0a75a538dd241cf94cda23d7` 的源码核验，不声称这些ID或历史取舍此前已被跟踪。性能/资源成本、已解决正确性问题和验证缺口分别列出。SQL、多写者、Linux/macOS、Last Days等产品范围之外能力不自动记债。本页不授权优化或发布。
+v1.1.0 当前登记保留全部稳定ID及历史。首次建立时按 `3f99029da73e3b4f0a75a538dd241cf94cda23d7` 的源码核验，不声称这些ID或历史取舍此前已被跟踪。性能/资源成本、已解决正确性问题和验证缺口分别列出。SQL、多写者、Linux/macOS、Last Days等产品范围之外能力不自动记债。本页不授权优化或发布。
 
 ## Record and status rules
 
@@ -14,14 +14,14 @@
 
 ### TD-001 — insertion/removal rebuilds the global Occurrence index
 
-- **Category / status:** performance and temporary memory / Resolved in Preview.2 development; independent acceptance pending.
+- **Category / status:** performance and temporary memory / Resolved in accepted Preview.2.
 - **History:** Open through accepted Preview.1. The original implementation/cost rationale below is preserved as the historical baseline, not the current implementation. Compressed nibble-radix preparation/publication removes global reconstruction; measured core and resource results and proofs are in [Preview.2](PREVIEW_2.md). LKS explicit Collection ordering remains. Reopen if a mutation again scans/rebuilds all Occurrences, sparse resources become unacceptable, or failure atomicity regresses.
 - **Module:** [ordweave.c](../src/ordweave.c), `stage_occurrences`, `publish_occurrences`, occurrence insert/remove; [lks_adapter.c](../src/lks_adapter.c).
-- **Current implementation:** 为插入或删除建立另一个ManagedOrder，借用全部仍存活对象（加入新项或排除待删项）。临时handles不覆盖live handles。Collection操作成功后销毁旧index并无分配地发布新handles。
-- **Cost / risk:** 规模越大全局重建与临时索引内存越昂贵；一次局部成员改变可能遍历所有Occurrence。没有基准数据，不给吞吐数字或服务级别保证。
+- **Historical implementation (v1.0.0):** 为插入或删除建立另一个ManagedOrder，借用全部仍存活对象（加入新项或排除待删项）。临时handles不覆盖live handles。Collection操作成功后销毁旧index并无分配地发布新handles。
+- **Historical cost / risk:** 规模越大全局重建与临时索引内存越昂贵；一次局部成员改变可能遍历所有Occurrence。没有基准数据，不给吞吐数字或服务级别保证。
 - **Why retained:** 源码体现prepare-before-publication和避免旧index内部计数回滚耗尽的正确性需要；本次没有获准性能重构，不推断更早决策记录。
 - **Reconsider when:** 实测插入/删除热点和内存占用成为瓶颈，且替代方案能证明多结构失败原子性、handle和计数容量不变量。
-- **Evidence / resolution:** [core.c](../tests/core.c)、[failures.c](../tests/failures.c) 对顺序、失败、容量断言；尚无resolution commit。
+- **Evidence / resolution:** [core.c](../tests/core.c)、[failures.c](../tests/failures.c) 对顺序、失败、容量断言；已接受Preview.2 `2bbf7640711e6561a5d5979f0de53a7f6ee0a1e8` 及其独立证据记录压缩radix替换，不再重建全局索引。
 
 ### TD-002 — repeated semantic replay and retained-WAL scans
 
@@ -131,3 +131,7 @@ The original source-bound entries above and their status history are retained. T
 ## Preview.4 Step15 Technical Debt Impact
 
 No change to existing IDs, priorities or status. The bounded optional index/range implementation does not resolve EG-003 checkpoint OOM evidence, hardware durability limits or existing deferred work. The API addition and its owned-memory costs are explicit in [the contract](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15); full detailed-guide reconstruction remains the planned RC task, not silently completed here.
+
+## v1.1.0 convergence Technical Debt Impact
+
+No new debt ID or status/priority change. Corrected obsolete TD-001 current wording to historical; existing resolved status/rationale remain. TD-002/003 retain open costs despite anchor reuse/direct-import partial improvements. TD-004/005/006, resolved TD-101/102/103 and EG-001/002/003 retain their records. Reusing unchanged evidence does not certify power loss or close EG-003. Prior1024/17 stride17 query fixture has one initial bucket, not uniform; corrected occupancy is measured separately, preserving old raw data.
