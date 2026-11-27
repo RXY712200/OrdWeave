@@ -1,0 +1,37 @@
+[
+  {
+    "kind": "focused-checkpoint-suite",
+    "repeat": 2,
+    "code": 0
+  },
+  {
+    "kind": "focused-checkpoint-suite",
+    "repeat": 3,
+    "code": 0
+  },
+  {
+    "kind": "preserved-fixture-copy",
+    "boundary": 124,
+    "code": 0
+  },
+  {
+    "kind": "preserved-fixture-copy",
+    "boundary": 125,
+    "code": 0
+  },
+  {
+    "kind": "preserved-fixture-copy",
+    "boundary": 126,
+    "code": 0
+  },
+  {
+    "kind": "preserved-fixture-copy",
+    "boundary": 127,
+    "code": 0
+  },
+  {
+    "kind": "preserved-fixture-copy",
+    "boundary": 128,
+    "code": 0
+  }
+]

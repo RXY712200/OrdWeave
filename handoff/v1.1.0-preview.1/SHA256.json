@@ -39,6 +39,78 @@
     "bytes": 4069,
     "sha256": "7e82719e982d0350f144142c7195b59b250eff43c47a45a1029a8e002473100e"
   },
+  "eg003/boundaries-124-128.log": {
+    "bytes": 1280,
+    "sha256": "fe36da216b5ba461614ecc04f4848953ebd440b037ac53be6dc4ccac2f720705"
+  },
+  "eg003/checkpoint-run-1.log.gz": {
+    "bytes": 2008,
+    "sha256": "9f0254c5a8dffdbba2864f24837026fb98a6fb7f9ef6f0d6f523d58b85322a29"
+  },
+  "eg003/checkpoint-run-2.log.gz": {
+    "bytes": 1307,
+    "sha256": "9718a8f08bf99a7be3e8f5e357a609282ec961eabce5b595a8b1a81bf33f6ccc"
+  },
+  "eg003/checkpoint-run-3.log.gz": {
+    "bytes": 1307,
+    "sha256": "e16c78e4fda57a65e3a6f5e36aa702010842187217b342598f3f126666a74af8"
+  },
+  "eg003/diagnostic.patch": {
+    "bytes": 10317,
+    "sha256": "c025233f3f8b110fc89c19cfb9710b9f3e9716527bfce3784d1dfaad3b2888ef"
+  },
+  "eg003/fixture-124.log": {
+    "bytes": 152,
+    "sha256": "ba1a075a0b19b6d1530464378fa10b9bbd14e731b5d2c31df6c0488c058d2c5b"
+  },
+  "eg003/fixture-125.log": {
+    "bytes": 152,
+    "sha256": "05ca2badfdf8b123e7fe83f4bcb76f22710a15a4e0b57272a76ec04456507486"
+  },
+  "eg003/fixture-126.log": {
+    "bytes": 152,
+    "sha256": "075a6fb68fc7017fe9ded81644ddc02c9e17d9ec7635913d2012ff7ea6e00a4d"
+  },
+  "eg003/fixture-127.log": {
+    "bytes": 152,
+    "sha256": "c755e948ce5fd87a64f2e54b0eaeab59bbf08a8590cb6e2c5f888e21b389ba26"
+  },
+  "eg003/fixture-128.log": {
+    "bytes": 152,
+    "sha256": "2e4eb6f2c2b6fcfe0a5ca8fc5407be3da02a23feb1969b529ff3b049ab140210"
+  },
+  "eg003/fixture-inspection.json": {
+    "bytes": 8437,
+    "sha256": "942a37194dc40f1528feafb07b3191676b79964a34620d95e39dfbc995de89e5"
+  },
+  "eg003/fixture-inventory.json": {
+    "bytes": 4179,
+    "sha256": "195819c75664d55a4e529f7d19817215521819ea5b72f0ddcc037c20040d0557"
+  },
+  "eg003/focused-results.json": {
+    "bytes": 573,
+    "sha256": "ab966c7e3ba27c29a6a743d479da82c7e04d2ad1bbf916b67316a83a754fd726"
+  },
+  "eg003/inspect_checkpoint.c": {
+    "bytes": 1796,
+    "sha256": "8e893b666d9064599e8083875e6d54119a5e96b42ff9ea506610987f045deed9"
+  },
+  "eg003/inspect_fixture.py": {
+    "bytes": 1807,
+    "sha256": "b02878e2d90c06f0d34403484723c814292a528257ab851a8868a76db1e7ac30"
+  },
+  "eg003/prepare_diagnostics.py": {
+    "bytes": 2837,
+    "sha256": "3d70025efafee922ca824693d1f5cadbdde12df37aed79d35f7dd21643001821"
+  },
+  "eg003/REPORT.md": {
+    "bytes": 11102,
+    "sha256": "50b3d298db3efd1fc53b317771e6dc2f96651f2cda3343328aa350d9bbd50107"
+  },
+  "eg003/run_focused_diagnostics.py": {
+    "bytes": 3170,
+    "sha256": "bbbc42be950ad6b6983777a729a37ef4bdadc3c7f9e799d93338fe2305cbc5a7"
+  },
   "failed-fixture-reopen.log": {
     "bytes": 8,
     "sha256": "ed5b39ff7b8e4b68485c389bec307c1f54a13e4a0a77e5b0fe3517a440890f12"

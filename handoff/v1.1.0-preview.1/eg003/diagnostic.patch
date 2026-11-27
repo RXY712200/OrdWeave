@@ -1,0 +1,206 @@
+--- a/src/checkpoint_core.inc
++++ b/src/checkpoint_core.inc
+@@ -0,0 +1 @@
++#include <stdio.h>
+@@ -16,0 +18,5 @@
++static int eg003_oom_at(const char *file,int line) {
++  int result=ow_checkpoint_oom();
++  if(result) fprintf(stderr,"OOM %s:%d\n",file,line);
++  return result;
++}
+@@ -39 +45 @@
+-    q = ow_checkpoint_oom() ? NULL : realloc(w->p, cap);
++    q = eg003_oom_at(__FILE__,__LINE__) ? NULL : realloc(w->p, cap);
+@@ -106 +112 @@
+-      fields = ow_checkpoint_oom() ? NULL : malloc(n * sizeof(*fields));
++      fields = eg003_oom_at(__FILE__,__LINE__) ? NULL : malloc(n * sizeof(*fields));
+@@ -123 +129 @@
+-      if (ow_checkpoint_oom())
++      if (eg003_oom_at(__FILE__,__LINE__))
+@@ -148 +154 @@
+-        ow_checkpoint_oom()
++        eg003_oom_at(__FILE__,__LINE__)
+@@ -161 +167 @@
+-    blob = ow_checkpoint_oom() ? NULL : malloc(n);
++    blob = eg003_oom_at(__FILE__,__LINE__) ? NULL : malloc(n);
+@@ -211 +217 @@
+-    r->status = OW_CORRUPT;
++    r->status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -254 +260 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -259 +265 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -264 +270 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -276 +282 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -279 +285 @@
+-        ow_checkpoint_oom() ? NULL : calloc((size_t)nc, sizeof(*collections));
++        eg003_oom_at(__FILE__,__LINE__) ? NULL : calloc((size_t)nc, sizeof(*collections));
+@@ -293 +299 @@
+-      status = OW_CORRUPT;
++      status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -298 +304 @@
+-    if (ow_checkpoint_oom()) {
++    if (eg003_oom_at(__FILE__,__LINE__)) {
+@@ -315 +321 @@
+-        status = OW_CORRUPT;
++        status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -318 +324 @@
+-      payload = ow_checkpoint_oom() ? NULL : malloc(n + 8);
++      payload = eg003_oom_at(__FILE__,__LINE__) ? NULL : malloc(n + 8);
+@@ -328 +334 @@
+-        status = OW_CORRUPT;
++        status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -330 +336 @@
+-        status = ow_checkpoint_oom() ? OW_NOMEM
++        status = eg003_oom_at(__FILE__,__LINE__) ? OW_NOMEM
+@@ -349 +355 @@
+-      status = OW_CORRUPT;
++      status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -355 +361 @@
+-        ow_checkpoint_oom() ? OW_NOMEM : ow_core_collection_create(d, &out);
++        eg003_oom_at(__FILE__,__LINE__) ? OW_NOMEM : ow_core_collection_create(d, &out);
+@@ -369 +375 @@
+-      status = OW_CORRUPT;
++      status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -374 +380 @@
+-    status = ow_checkpoint_oom()
++    status = eg003_oom_at(__FILE__,__LINE__)
+@@ -383 +389 @@
+-    status = OW_CORRUPT;
++    status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -396 +402 @@
+-        ow_checkpoint_oom()
++        eg003_oom_at(__FILE__,__LINE__)
+@@ -406,4 +412,4 @@
+-      status = OW_CORRUPT;
+-      goto done;
+-    }
+-    status = ow_checkpoint_oom() ? OW_NOMEM
++      status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
++      goto done;
++    }
++    status = eg003_oom_at(__FILE__,__LINE__) ? OW_NOMEM
+@@ -424 +430 @@
+-        status = OW_CORRUPT;
++        status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -438 +444 @@
+-    status = OW_CORRUPT;
++    status = (fprintf(stderr,"SET_CORRUPT checkpoint_core.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+--- a/src/checkpoint_windows.inc
++++ b/src/checkpoint_windows.inc
+@@ -0,0 +1,4 @@
++#include <stdio.h>
++static int eg003_windows_oom_at(const char *file,int line) {
++ int result=ow_checkpoint_oom();if(result)fprintf(stderr,"OOM %s:%d\n",file,line);return result;
++}
+@@ -23,3 +27,3 @@
+-    return OW_CORRUPT;
+-  }
+-  unsigned char *p = ow_checkpoint_oom() ? NULL : malloc((size_t)n);
++    { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
++  }
++  unsigned char *p = eg003_windows_oom_at(__FILE__,__LINE__) ? NULL : malloc((size_t)n);
+@@ -46 +50 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -51 +55 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -58 +62 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -65 +69 @@
+-          return OW_CORRUPT;
++          { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -70 +74 @@
+-      return OW_CORRUPT;
++      { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -87 +91 @@
+-    status = OW_CORRUPT;
++    status = (fprintf(stderr,"SET_CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -179 +183 @@
+-    return OW_CORRUPT;
++    { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -229 +233 @@
+-        return OW_CORRUPT;
++        { fprintf(stderr,"CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -345 +349 @@
+-      status = OW_CORRUPT;
++      status = (fprintf(stderr,"SET_CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -357 +361 @@
+-      status = OW_CORRUPT;
++      status = (fprintf(stderr,"SET_CORRUPT checkpoint_windows.inc:%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc), OW_CORRUPT);
+@@ -528 +532 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -531 +535 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -535 +539 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -540 +544 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -563 +567 @@
+-      goto done;
++      do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -576 +580 @@
+-      goto done;
++      do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -583 +587 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -590 +594 @@
+-      goto done;
++      do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -594 +598 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -599 +603 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -603 +607 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -610 +614 @@
+-    goto done;
++    do { if(status != OW_OK) fprintf(stderr,"CP_EXIT line=%d status=%d alloc=%ld\n",__LINE__,status,ow_test_checkpoint_alloc); goto done; } while(0);
+@@ -618,0 +623 @@
++  if (ow_test_checkpoint_alloc >= 0) fprintf(stderr,"CREATE_DONE status=%d alloc=%ld gen=%llu\n",status,ow_test_checkpoint_alloc,(unsigned long long)gen);
+--- a/src/wal_windows.c
++++ b/src/wal_windows.c
+@@ -0,0 +1 @@
++#include <stdio.h>
+@@ -183 +184 @@
+-      return OW_CORRUPT;
++      { fprintf(stderr,"WAL_CORRUPT line=%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+@@ -615 +616 @@
+-      return OW_CORRUPT;
++      { fprintf(stderr,"WAL_CORRUPT line=%d alloc=%ld\n",__LINE__,ow_test_checkpoint_alloc); return OW_CORRUPT; }
+--- a/tests/checkpoint.c
++++ b/tests/checkpoint.c
+@@ -92,0 +93,13 @@
++  if (argc == 4 && !strcmp(argv[1],"eg003")) {
++    OK(ow_database_open(argv[2],&d));
++    before=revision(d);
++    ow_test_checkpoint_alloc=strtol(argv[3],NULL,10);
++    OwStatus status=ow_checkpoint_create(d);
++    ow_test_checkpoint_alloc=-1;
++    printf("fixture boundary=%s status=%d revision=%llu\n",argv[3],status,(unsigned long long)revision(d));
++    T(revision(d)==before);
++    OwStatus closed=ow_database_close(d);
++    T(closed==OW_OK||closed==OW_RECOVERY_REQUIRED);
++    OK(ow_database_open(argv[2],&d));T(revision(d)==before);OK(ow_database_close(d));
++    return status==OW_OK||status==OW_NOMEM||status==OW_RECOVERY_REQUIRED?0:status;
++  }
+@@ -214,0 +228 @@
++    fprintf(stderr,"BOUNDARY %u\n",i);
+@@ -232,0 +247 @@
++    fprintf(stderr,"BOUNDARY %u\n",i);

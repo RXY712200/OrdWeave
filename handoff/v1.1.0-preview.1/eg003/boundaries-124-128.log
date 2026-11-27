@@ -1,0 +1,32 @@
+REFINED CHECKPOINT RUN 2
+BOUNDARY 124
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:324
+CREATE_DONE status=5 alloc=0 gen=88
+BOUNDARY 125
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:336
+CREATE_DONE status=5 alloc=0 gen=89
+BOUNDARY 126
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:324
+CREATE_DONE status=5 alloc=0 gen=90
+BOUNDARY 127
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:336
+CREATE_DONE status=5 alloc=0 gen=91
+BOUNDARY 128
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:324
+CREATE_DONE status=5 alloc=0 gen=92
+REFINED CHECKPOINT RUN 3
+BOUNDARY 124
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:324
+CREATE_DONE status=5 alloc=0 gen=88
+BOUNDARY 125
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:336
+CREATE_DONE status=5 alloc=0 gen=89
+BOUNDARY 126
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:324
+CREATE_DONE status=5 alloc=0 gen=90
+BOUNDARY 127
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:336
+CREATE_DONE status=5 alloc=0 gen=91
+BOUNDARY 128
+OOM D:/OrdWeave/build/eg003/diagnostic-source/src/checkpoint_core.inc:324
+CREATE_DONE status=5 alloc=0 gen=92
