@@ -106,7 +106,36 @@ static void upstream_failures(void) {
   T(0);
 }
 #endif
+static void import_preparation_failures(void) {
+  OwDatabase *source,*copy;OwRecordId r;OwCollectionId c;OwOccurrenceId o;
+  unsigned char id[16]={0},anchor[32]={0},*bytes;size_t size;
+  OK(ow_database_create(&source));OK(ow_record_create(source,&r));
+  OK(ow_collection_create(source,&c));
+  OwValue v={.type=OW_INT,.as.integer=17};
+  OK(ow_field_set(source,r,"a",&v));OK(ow_field_set(source,r,"b",&v));
+  OK(ow_occurrence_insert(source,c,r,OW_BACK,(OwOccurrenceId){0},&o));
+  OK(ow_core_export(source,id,1,anchor,&bytes,&size));
+  size_t ordinal;
+  for(ordinal=0;ordinal<64;ordinal++) {
+    OK(ow_database_create(&copy));arm(ordinal);
+    OwStatus status=ow_core_import(copy,bytes,size,id);disarm();
+    if(status!=OW_OK && status!=OW_NOMEM) {
+      fprintf(stderr,"first import failure: ordinal=%zu status=%d\n",ordinal,status);
+      FILE *f=fopen("first-import-failure.cp","wb");
+      if(f){fwrite(bytes,1,size,f);fclose(f);}T(0);
+    }
+    if(status==OW_OK)T(ow_core_same_state(source,copy));
+    ow_database_destroy(copy);if(status==OW_OK)break;
+  }
+  T(ordinal<64);
+  /* High waters sum to3, but the actual state requires5 mutations. */
+  ow_put(bytes+48,4,8);
+  OK(ow_sha256(bytes,size-32,NULL,0,bytes+size-32));
+  OK(ow_database_create(&copy));T(ow_core_import(copy,bytes,size,id)==OW_CORRUPT);
+  ow_database_destroy(copy);free(bytes);ow_database_destroy(source);
+}
 int main(void) {
+  import_preparation_failures();
   radix_contracts();
 #ifdef OW_UPSTREAM_ALLOC_TEST
   upstream_failures();

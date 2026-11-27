@@ -46,3 +46,9 @@
 - Replace global Occurrence index reconstruction with bounded compressed nibble-radix preparation/publication; preserve LKS Collection order and all public/storage contracts.
 - Adapt deterministic checkpoint/state/teardown consumers and add boundary, capacity and allocation-failure tests.
 - Retain Record/Collection/field/query design based on the core review; preserve TD-103 and Open EG-003.
+
+## 1.1.0-preview.3 — unreleased development
+
+- Build unpublished checkpoint Occurrences without temporary explicit-order residences; retain strict counts, refs, native associations and minimum Revision.
+- Reuse identical successful anchors only within a single checkpoint_load; retain full semantic audit and all durability/backup guarantees.
+- Preserve SHA ownership, full-buffer and conservative orphan-cleanup limitations with measured decision evidence.

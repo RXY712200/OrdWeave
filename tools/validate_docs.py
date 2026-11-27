@@ -126,14 +126,21 @@ def check() -> None:
     assert (ROOT / ".github/workflows/windows.yml").read_text(encoding="utf-8") == workflow_before.replace("70d7f0ef5857b54381b863d292a213909d87459f", pin)
     preview2_paths = {"src/ordweave.c", "src/checkpoint_core.inc", "src/occurrence_index.inc",
                       "tests/failures.c", "tests/smoke.c", "tests/consumer/main.c"}
-    delta = set(command("git", "diff", "--name-only", accepted, "--", *protected, capture=True).splitlines())
+    delta = set(command("git", "diff", "--name-only", accepted, "2bbf7640711e6561a5d5979f0de53a7f6ee0a1e8", "--", *protected, capture=True).splitlines())
     # Include the newly introduced owned implementation before it is staged.
     delta |= {"src/occurrence_index.inc"} if (ROOT / "src/occurrence_index.inc").exists() else set()
     assert delta <= preview2_paths, f"unexpected Preview.2 protected delta: {delta - preview2_paths}"
     for path in ("tests/smoke.c", "tests/consumer/main.c"):
         old = subprocess.check_output(["git", "show", f"{accepted}:{path}"], cwd=ROOT).decode()
-        assert (ROOT / path).read_text(encoding="utf-8") == old.replace("1.1.0-preview.1", "1.1.0-preview.2")
-    assert 'return "1.1.0-preview.2"' in (ROOT / "src/ordweave.c").read_text(encoding="utf-8")
+        assert subprocess.check_output(["git", "show", f"2bbf7640711e6561a5d5979f0de53a7f6ee0a1e8:{path}"], cwd=ROOT).decode() == old.replace("1.1.0-preview.1", "1.1.0-preview.2")
+    preview2 = "2bbf7640711e6561a5d5979f0de53a7f6ee0a1e8"
+    preview3_paths = {"src/ordweave.c", "src/checkpoint_core.inc", "src/checkpoint_windows.inc",
+                      "tests/failures.c", "tests/checkpoint_oracle.py", "tests/smoke.c", "tests/consumer/main.c"}
+    current_delta = set(command("git", "diff", "--name-only", preview2, "--", *protected, capture=True).splitlines())
+    assert current_delta <= preview3_paths, f"unexpected Preview.3 delta: {current_delta - preview3_paths}"
+    for path in ("src/ordweave.c", "tests/smoke.c", "tests/consumer/main.c"):
+        old = subprocess.check_output(["git", "show", f"{preview2}:{path}"], cwd=ROOT).decode()
+        assert (ROOT / path).read_text(encoding="utf-8") == old.replace("1.1.0-preview.2", "1.1.0-preview.3")
     for name in GUIDES:
         assert BASELINE in (ROOT / "docs" / name).read_text(encoding="utf-8"), name
     for name in ("PERSISTENCE.md", "CHECKPOINTS.md", "HISTORY.md"):

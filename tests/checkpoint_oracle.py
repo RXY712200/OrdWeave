@@ -84,4 +84,11 @@ with tempfile.TemporaryDirectory(prefix='ow-checkpoint-',dir='.') as temp:
  for filename in ['checkpoint.current','checkpoint.current.bak']:
   p=target/filename;b=bytearray(p.read_bytes());b[96:128]=bytes(32);b[-32:]=sha(b[:-32]);p.write_bytes(b)
  probe(target,8);cases+=1
+ # Same revision does not authorize reuse when the backup digest differs.
+ for label,bad in [('duplicate-revision-valid-anchor',False),('duplicate-revision-wrong-anchor',True)]:
+  target=root/label;shutil.copytree(fixture,target)
+  p=target/'checkpoint.current.bak';b=bytearray(p.read_bytes());b[48:56]=be(2,8)
+  if bad:b[96:128]=bytes(32)
+  b[-32:]=sha(b[:-32]);p.write_bytes(b)
+  probe(target,8 if bad else 0,None if bad else 0,None if bad else 5);cases+=1
 print(f'{cases} checkpoint corruption/fallback cases and independent native-byte grammar verified')
