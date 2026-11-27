@@ -4,7 +4,7 @@
 
 OrdWeave 是面向 **Windows x64 的 C17 嵌入式静态数据库**，使用独立维护的 LayerKeySort Full 管理顺序和ID索引。它把“共享的数据”和“某次出现的位置”分开，适合需要重复成员、独立移动和历史恢复的有序清单、图层成员或编排数据。
 
-当前分支为 **1.1.0-preview.3 开发版**，尚未发布。[v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) 保持在 `32f853defc0a2e9f0ca809fb3535a90c977c7665`，使用Full4.1。本分支集成Full4.2及经回归验证的cleanup入口guard修复；见 [Preview.1决策](docs/PREVIEW_1.md)。历史RC.1和Stable标签、Release均不改变，详细旧指南保留准确RC源码基线。
+当前分支为 **1.1.0-preview.4 开发版**，尚未发布。[v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) 保持在 `32f853defc0a2e9f0ca809fb3535a90c977c7665`，使用Full4.1。本分支集成Full4.2及经回归验证的cleanup入口guard修复；见 [Preview.1决策](docs/PREVIEW_1.md)。历史RC.1和Stable标签、Release均不改变，详细旧指南保留准确RC源码基线。
 
 ## 数据模型与能力
 
@@ -17,7 +17,7 @@ Record拥有具名字段：null、bool、int64、有限double、UTF-8字符串�
 需要Windows x64、Git递归子模块、CMake 3.21+、C17编译器；启用测试还需Python 3。Visual Studio：
 
 ```powershell
-git clone --recurse-submodules --branch dev/v1.1.0-preview.3 https://github.com/RXY712200/OrdWeave.git
+git clone --recurse-submodules --branch dev/v1.1.0-preview.4 https://github.com/RXY712200/OrdWeave.git
 cd OrdWeave
 cmake -S . -B build -A x64
 cmake --build build --config Release
@@ -60,7 +60,7 @@ int main(void) {
 | 目标 | 文档 |
 |---|---|
 |开始使用|[使用指南](docs/USAGE.zh-CN.md)，[完整C示例](docs/examples/)|
-|查询某个函数|[44个公开API及类型/错误契约](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md)，[英文概览](docs/API.md)，[权威头文件](include/ordweave.h)|
+|查询某个函数|[48个公开API（历史44及当前4项扩展）](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md)，[英文概览](docs/API.md)，[权威头文件](include/ordweave.h)|
 |理解整个执行过程|[源码执行导读](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md)，[英文架构概要](docs/ARCHITECTURE.md)|
 |修改或调试内部模块|[内部结构与函数依赖](docs/IMPLEMENTATION_INTERNALS.zh-CN.md)，[开发维护规则](docs/DEVELOPMENT.zh-CN.md)|
 |重现测试与查看证据|[验证地图](docs/IMPLEMENTATION_VALIDATION.zh-CN.md)，[RC评审记录](docs/RELEASE_CANDIDATE.md)|
@@ -70,10 +70,29 @@ int main(void) {
 
 ## 边界与许可
 
-不支持SQL、二级字段索引、网络服务、多写者/并发调用保证、跨Collection原子转移、Linux/macOS、Last Days或增量备份。checkpoint恢复减少普通构造路径的tail，但整体open还会独立语义审计保留WAL，不承诺整体启动加速。索引重建、多轮重放、完整缓冲/复制、SHA provider初始化等真实成本见技术债登记。进程终止测试不等于物理掉电认证。
+不支持SQL、持久化/自动二级字段索引、网络服务、多写者/并发调用保证、跨Collection原子转移、Linux/macOS、Last Days或增量备份。checkpoint恢复减少普通构造路径的tail，但整体open还会独立语义审计保留WAL，不承诺整体启动加速。索引重建、多轮重放、完整缓冲/复制、SHA provider初始化等真实成本见技术债登记。进程终止测试不等于物理掉电认证。
 
 OrdWeave使用 [MIT License](LICENSE)；LayerKeySort和Obscura64适配来源与SHA见 [第三方声明](THIRD_PARTY_NOTICES.md)。没有引入ProbSpan代码。
 
-Current authorized work is Preview.3 Steps9–12: unpublished checkpoint import, local anchor reuse and persistence/recovery validation. See [Preview.2 decisions](docs/PREVIEW_2.md). Earlier Preview.1 task prose is historical; no Preview.4 or release is authorized.
 
-Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No Preview.4 is authorized.
+Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
+
+
+## Preview.4 Step15 扩展（未发布）
+
+当前48函数保留历史44函数，新增显式有界索引启停及 live/history 类型范围查询。索引是会话级可选缓存；维护失败释放配置，显式再次启用前一直扫描。结果为按值及永久ID排序的独立数组。条目和复制键字节预算不是总内存上限。详见[完整契约](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
+
+```c
+OwRecordId *ids = NULL;
+size_t count = 0;
+OwValue lower = {.type = OW_INT, .as.integer = 10};
+OwValue upper = {.type = OW_INT, .as.integer = 20};
+OwStatus status = ow_field_index_enable(db, "score", 10000, 1024 * 1024);
+if (status == OW_OK) {
+    status = ow_query_range(db, "score", OW_INT, &lower, 1, &upper, 0,
+                            &ids, &count);
+    /* Consume ids only when status == OW_OK. */
+    ow_array_release(ids);
+    ow_field_index_disable(db);
+}
+```

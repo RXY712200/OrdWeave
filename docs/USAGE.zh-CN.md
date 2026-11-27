@@ -143,3 +143,22 @@ target_link_libraries(myapp PRIVATE OrdWeave::ordweave)
 | Last Days 不可用 | WAL 无持久时间戳 | 从文件 mtime 编造提交时间 |
 
 完整示例可以复现 API 用法，不替代系统故障处理策略。继续阅读[验证与证据](IMPLEMENTATION_VALIDATION.zh-CN.md)、[内部机制](IMPLEMENTATION_INTERNALS.zh-CN.md)或[交接入口](HANDOFF.md)。
+
+## Preview.4 Step15 扩展（未发布）
+
+当前48函数保留历史44函数，新增显式有界索引启停及 live/history 类型范围查询。索引是会话级可选缓存；维护失败释放配置，显式再次启用前一直扫描。结果为按值及永久ID排序的独立数组。条目和复制键字节预算不是总内存上限。详见[完整契约](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
+
+```c
+OwRecordId *ids = NULL;
+size_t count = 0;
+OwValue lower = {.type = OW_INT, .as.integer = 10};
+OwValue upper = {.type = OW_INT, .as.integer = 20};
+OwStatus status = ow_field_index_enable(db, "score", 10000, 1024 * 1024);
+if (status == OW_OK) {
+    status = ow_query_range(db, "score", OW_INT, &lower, 1, &upper, 0,
+                            &ids, &count);
+    /* Consume ids only when status == OW_OK. */
+    ow_array_release(ids);
+    ow_field_index_disable(db);
+}
+```

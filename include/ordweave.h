@@ -116,6 +116,27 @@ OwStatus ow_query_equal(OwDatabase *db, const char *name, const OwValue *value,
 /* Arrays are immutable independent copies. Only this function may release them.
  */
 void ow_array_release(void *array);
+/* Session-local advisory index. Positive limits bound present-field entries
+ * and copied field-name (including NUL) + String/Binary payload bytes only.
+ * Fixed metadata/LKS storage is outside the byte budget. Failed enable keeps
+ * the prior index. Maintenance failure discards index AND configuration;
+ * no automatic rebuild. No data Revision, IDs, or persisted bytes change.
+ * Range returns independent IDs sorted by value then ID; use ow_array_release.
+ * Bounds must match type; NULL is unbounded (not an OW_NULL value). Inclusivity
+ * flags must always be 0/1. Missing excluded; typed Null included, no coercion,
+ * finite numeric/unsigned byte-span order. Invalid/inverted bounds rejected.
+ * Historical range scans/sorts its own immutable core, never the live cache. */
+OwStatus ow_field_index_enable(OwDatabase *db, const char *field,
+                              size_t max_records, size_t max_key_bytes);
+OwStatus ow_field_index_disable(OwDatabase *db);
+OwStatus ow_query_range(OwDatabase *db, const char *field, OwType type,
+                       const OwValue *lower, int lower_inclusive,
+                       const OwValue *upper, int upper_inclusive,
+                       OwRecordId **out, size_t *count);
+OwStatus ow_history_query_range(const OwHistory *view, const char *field,
+                       OwType type, const OwValue *lower, int lower_inclusive,
+                       const OwValue *upper, int upper_inclusive,
+                       OwRecordId **out, size_t *count);
 #ifdef __cplusplus
 }
 #endif

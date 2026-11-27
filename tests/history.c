@@ -176,6 +176,7 @@ int main(int argc, char **argv) {
   T(rev == 0);
   ow_history_close(view);
   populate(db, &record, &collection);
+  OK(ow_field_index_enable(db,"counter",4,8));
   latest = revision(db);
   before = segments(path);
   T(before > 3);
@@ -183,6 +184,13 @@ int main(int argc, char **argv) {
   OK(ow_history_field_get(view, record, "counter", &out));
   T(out.as.integer == 0);
   ow_value_release(&out);
+  {
+    OwValue zero={.type=OW_INT};OwRecordId *ids=NULL,*live=NULL;size_t n=0,ln=0;
+    OK(ow_history_query_range(view,"counter",OW_INT,&zero,1,&zero,1,&ids,&n));
+    OK(ow_query_range(db,"counter",OW_INT,&zero,1,&zero,1,&live,&ln));
+    T(n==1&&ids[0].value==record.value&&!live&&!ln);
+    ow_array_release(ids);
+  }
   value.type = OW_INT;
   value.as.integer = 100;
   OK(ow_field_set(db, record, "counter", &value));
@@ -190,7 +198,11 @@ int main(int argc, char **argv) {
   OK(ow_history_field_get(view, record, "counter", &out));
   T(out.as.integer == 0);
   ow_value_release(&out);
-  ow_history_close(view);
+  {
+    OwRecordId *ids=NULL;size_t n=0;OwValue zero={.type=OW_INT};
+    OK(ow_history_query_range(view,"counter",OW_INT,&zero,1,&zero,1,&ids,&n));
+    ow_history_close(view);view=NULL;T(n==1&&ids[0].value==record.value);ow_array_release(ids);
+  }
   T(ow_history_open(db, latest + 1, &view) == OW_HISTORY_UNAVAILABLE && !view);
   T(revision(db) == latest);
   before = segments(path);
@@ -225,12 +237,19 @@ int main(int argc, char **argv) {
          after, (unsigned long long)range.earliest_revision,
          (unsigned long long)range.current_revision);
   uint64_t oldest = range.earliest_revision;
+  OK(ow_field_index_enable(db, "counter", 4, 8));
   /* Rejected sessions must not repair roots, even when a replica is missing. */
   {
     char replica[MAX_PATH];
     checked_format(replica, sizeof(replica), "%s\\recovery.current.bak", path);
     T(DeleteFileA(replica));
     ow_store_enter(ow_core_store(db));
+    {
+      OwRecordId *ids=(void*)1;size_t count=99;
+      T(ow_query_range(db,"counter",OW_INT,NULL,1,NULL,1,&ids,&count)==OW_BUSY&&!ids&&!count);
+      T(ow_field_index_enable(db,"counter",4,8)==OW_BUSY);
+      T(ow_field_index_disable(db)==OW_BUSY);
+    }
     T(ow_history_cleanup(db, &range) == OW_BUSY);
     T(GetFileAttributesA(replica) == INVALID_FILE_ATTRIBUTES);
     T(GetLastError() == ERROR_FILE_NOT_FOUND);
@@ -246,6 +265,12 @@ int main(int argc, char **argv) {
     ow_test_fault = 0;
     T(DeleteFileA(replica));
     T(ow_history_cleanup(db, &range) == OW_RECOVERY_REQUIRED);
+    {
+      OwRecordId *ids=(void*)1;size_t count=99;
+      T(ow_query_range(db,"counter",OW_INT,NULL,1,NULL,1,&ids,&count)==OW_RECOVERY_REQUIRED&&!ids&&!count);
+      T(ow_field_index_enable(db,"counter",4,8)==OW_RECOVERY_REQUIRED);
+      T(ow_field_index_disable(db)==OW_RECOVERY_REQUIRED);
+    }
     T(GetFileAttributesA(replica) == INVALID_FILE_ATTRIBUTES);
     T(GetLastError() == ERROR_FILE_NOT_FOUND);
     T(range.earliest_revision == 0 && range.current_revision == 0);

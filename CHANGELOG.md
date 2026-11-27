@@ -52,3 +52,15 @@
 - Build unpublished checkpoint Occurrences without temporary explicit-order residences; retain strict counts, refs, native associations and minimum Revision.
 - Reuse identical successful anchors only within a single checkpoint_load; retain full semantic audit and all durability/backup guarantees.
 - Preserve SHA ownership, full-buffer and conservative orphan-cleanup limitations with measured decision evidence.
+
+## 1.1.0-preview.4 — unreleased development
+
+- Complete private LKS query/index, stable-sort/group/batch and historical-order capability research with one pending public-contract proposal.
+- Retain existing equality scanning, canonical sort and persistence behavior; no new public API is introduced.
+- Update version and exact historical/current documentation gates; no automatic RC transition.
+
+## Unreleased Preview.4 Step15 continuation
+
+- Added four approved functions: explicit bounded session field-index enable/disable, typed live and historical range queries (48 public functions total).
+- Owned immutable keys, dynamic advisory maintenance, deterministic scan/sort fallback, no persisted configuration or format change. Existing equality may use a matching index without changing its contract.
+- Added focused contracts, fault/lifetime/guard tests and exact historical44-plus4 documentation validation. Independent acceptance pending.

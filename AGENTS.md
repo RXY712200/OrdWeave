@@ -9,7 +9,7 @@ OrdWeave is a Windows x64 C17 embedded static database. Read [the technical hand
 - WAL/manifest/segment/frame remain v3; checkpoint/selection/root/policy remain v1; native order snapshots use LKS4SNP1. Exact layouts stay in [PERSISTENCE](docs/PERSISTENCE.md), [CHECKPOINTS](docs/CHECKPOINTS.md) and [HISTORY](docs/HISTORY.md). Do not change public API, storage formats or production behavior outside the requested task.
 - LayerKeySort Full is pinned at `f751e1ee2afd682874281d6dc495969f9eca49eb`. Use its public APIs; do not modify upstream or change the pin without a specific reviewed task. Runtime LKS Handles are not permanent OrdWeave IDs and must be rebuilt after restore.
 - Keep object ownership, borrowed container items, reference counts and cleanup explicit. Preserve staged mutation publication and failure atomicity. COMMIT_UNKNOWN requires stop/close/validated reopen, not blind retry. Preserve semantic WAL auditing, mandatory retained baselines, root agreement before prefix deletion and independently verified backup completion.
-- Production has six C translation units; four implementation includes belong to their owning translation units, not separate objects. See [internals](docs/IMPLEMENTATION_INTERNALS.zh-CN.md). Do not perform unrelated refactors or add features in documentation/test-only work. Record credible data-integrity or memory-safety defects precisely before expanding scope.
+- Production has six C translation units; five implementation includes belong to their owning translation units, not separate objects. See [internals](docs/IMPLEMENTATION_INTERNALS.zh-CN.md). Do not perform unrelated refactors or add features in documentation/test-only work. Record credible data-integrity or memory-safety defects precisely before expanding scope.
 
 ## Build and verification
 
@@ -38,8 +38,12 @@ Select checks appropriate to the changed behavior. Keep source inspection, local
 
 ## Release and maintenance safeguards
 
-The six implementation phases are complete. Published `v1.0.0-rc.1` is a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; preserve its tag and Release. `v1.0.0` is published Stable at `32f853defc0a2e9f0ca809fb3535a90c977c7665`. This branch is unreleased `1.1.0-preview.3` development, limited to the authorized persistence/recovery optimization and validation; see [Preview.3](docs/PREVIEW_3.md). Further development or releases require a separate task. Documentation maintenance does not authorize production/API/format/dependency changes, upstream edits, new tags or Releases. Actual release evidence and compatibility constraints remain in [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md).
+The six implementation phases are complete. Published `v1.0.0-rc.1` is a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; preserve its tag and Release. `v1.0.0` is published Stable at `32f853defc0a2e9f0ca809fb3535a90c977c7665`. This branch is unreleased `1.1.0-preview.4` development, limited to the approved Step15 field-index/range implementation and validation; see [Preview.4](docs/PREVIEW_4.md). Further development or releases require a separate task. Documentation maintenance does not authorize production/API/format/dependency changes, upstream edits, new tags or Releases. Actual release evidence and compatibility constraints remain in [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md).
 
-Current authorized work is Preview.3 Steps9–12: unpublished checkpoint import, local anchor reuse and persistence/recovery validation. See [Preview.3 decisions](docs/PREVIEW_3.md). Earlier Preview.1 task prose is historical; no Preview.4 or release is authorized.
 
-Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No Preview.4 is authorized.
+Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
+
+
+## Approved Step15 implementation state
+
+The approved Preview.4 Step15 continuation adds exactly four public functions (48 total), an advisory session-local field index and live/history typed range queries. See [implemented contract](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15). Earlier research-only restrictions describe the research snapshot, not this explicitly approved continuation. Six production translation units own five implementation includes. Independent acceptance is pending; no merge, RC, tag or Release is authorized. Preserve all old API/status types and persistent bytes.

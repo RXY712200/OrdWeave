@@ -246,3 +246,19 @@ OwStatus ow_query_equal(OwDatabase *db, const char *name, const OwValue *v,
     return s;
   return ow_core_query_equal(db, name, v, out, count);
 }
+
+OwStatus ow_field_index_enable(OwDatabase *db,const char *field,size_t max_records,size_t max_key_bytes) {
+  OwStatus s=ow_store_guard(ow_core_store(db));if(s!=OW_OK)return s;
+  return ow_core_field_index_enable(db,field,max_records,max_key_bytes);
+}
+OwStatus ow_field_index_disable(OwDatabase *db) {
+  OwStatus s=ow_store_guard(ow_core_store(db));if(s!=OW_OK)return s;
+  return ow_core_field_index_disable(db);
+}
+OwStatus ow_query_range(OwDatabase *db,const char *field,OwType type,
+    const OwValue *lower,int lower_inclusive,const OwValue *upper,int upper_inclusive,
+    OwRecordId **out,size_t *count) {
+  if(out)*out=NULL;if(count)*count=0;
+  OwStatus s=ow_store_guard(ow_core_store(db));if(s!=OW_OK)return s;
+  return ow_core_query_range(db,field,type,lower,lower_inclusive,upper,upper_inclusive,out,count);
+}

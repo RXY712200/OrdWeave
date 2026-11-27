@@ -4,7 +4,7 @@
 
 OrdWeave is a **Windows x64 C17 embedded static database** built on independently maintained LayerKeySort Full. It stores typed Records and ordered Collections in which the same Record can occur multiple times, with each Occurrence independently identified and movable. This separates shared data from its placement in lists, layers or arrangements.
 
-Current branch: **1.1.0-preview.3 development**, not a published release. The published [v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) remains at `32f853defc0a2e9f0ca809fb3535a90c977c7665` with Full4.1. This development branch integrates Full4.2 and a narrowly tested cleanup guard correction; see [Preview.1 decisions](docs/PREVIEW_1.md). Existing RC.1 and Stable tags/Releases are unchanged. Historical guides retain their exact RC source baseline.
+Current branch: **1.1.0-preview.4 development**, not a published release. The published [v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) remains at `32f853defc0a2e9f0ca809fb3535a90c977c7665` with Full4.1. This development branch integrates Full4.2 and a narrowly tested cleanup guard correction; see [Preview.1 decisions](docs/PREVIEW_1.md). Existing RC.1 and Stable tags/Releases are unchanged. Historical guides retain their exact RC source baseline.
 
 ## Model and capabilities
 
@@ -17,7 +17,7 @@ Use a disk-free in-memory instance or a persistent directory with a lifetime sin
 Requires Windows x64, Git with submodules, CMake 3.21+, a C17 compiler, and Python 3 when tests are enabled. For Visual Studio:
 
 ```powershell
-git clone --recurse-submodules --branch dev/v1.1.0-preview.3 https://github.com/RXY712200/OrdWeave.git
+git clone --recurse-submodules --branch dev/v1.1.0-preview.4 https://github.com/RXY712200/OrdWeave.git
 cd OrdWeave
 cmake -S . -B build -A x64
 cmake --build build --config Release
@@ -62,7 +62,7 @@ Persistent paths must be new absolute UTF-8 Windows drive paths with existing pa
 | Need | Read |
 |---|---|
 | Start using the database | [Practical usage](docs/USAGE.zh-CN.md), [complete examples](docs/examples/) |
-| Find a public contract | [All 44 functions](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md), [English API](docs/API.md), [public header](include/ordweave.h) |
+| Find a public contract | [48 functions (44 historical + 4 current)](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md), [English API](docs/API.md), [public header](include/ordweave.h) |
 | Understand execution | [Implementation walkthrough](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md), [architecture summary](docs/ARCHITECTURE.md) |
 | Modify or debug | [Private internals](docs/IMPLEMENTATION_INTERNALS.zh-CN.md), [development guide](docs/DEVELOPMENT.zh-CN.md) |
 | Reproduce evidence | [Validation map](docs/IMPLEMENTATION_VALIDATION.zh-CN.md), [RC review](docs/RELEASE_CANDIDATE.md) |
@@ -72,10 +72,29 @@ Persistent paths must be new absolute UTF-8 Windows drive paths with existing pa
 
 ## Limits and licensing
 
-No SQL, field secondary indexes, network service, multi-writer/concurrent-access guarantees, cross-collection atomic transfer, Linux/macOS, Last Days or incremental backup. Checkpoints can reduce the ordinary result's replay tail, but startup still audits the retained WAL semantically; no whole-open speedup is promised. Index rebuilds, repeated scans, full buffers/copies and provider setup are tracked with evidence in the [debt register](docs/TECHNICAL_DEBT.md). Process-crash tests do not certify physical power-loss durability.
+No SQL, persisted/automatic secondary indexes, network service, multi-writer/concurrent-access guarantees, cross-collection atomic transfer, Linux/macOS, Last Days or incremental backup. Checkpoints can reduce the ordinary result's replay tail, but startup still audits the retained WAL semantically; no whole-open speedup is promised. Index rebuilds, repeated scans, full buffers/copies and provider setup are tracked with evidence in the [debt register](docs/TECHNICAL_DEBT.md). Process-crash tests do not certify physical power-loss durability.
 
 OrdWeave is [MIT licensed](LICENSE). LayerKeySort and adapted Obscura64 provenance and notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No ProbSpan code is included.
 
-Current authorized work is Preview.3 Steps9–12: unpublished checkpoint import, local anchor reuse and persistence/recovery validation. See [Preview.2 decisions](docs/PREVIEW_2.md). Earlier Preview.1 task prose is historical; no Preview.4 or release is authorized.
 
-Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No Preview.4 is authorized.
+Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
+
+
+## Preview.4 Step15 extension (unreleased)
+
+The current header has 48 functions: the historical 44 plus explicit bounded field-index enable/disable and live/history typed range queries. Indexing is optional, session-local and advisory; maintenance failure discards configuration, with scan fallback until explicit re-enable. Results are copied IDs sorted by typed value then permanent ID. Limits bound present entries and owned variable key bytes, not total memory. No persistent-format change. See the [complete contract](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15).
+
+```c
+OwRecordId *ids = NULL;
+size_t count = 0;
+OwValue lower = {.type = OW_INT, .as.integer = 10};
+OwValue upper = {.type = OW_INT, .as.integer = 20};
+OwStatus status = ow_field_index_enable(db, "score", 10000, 1024 * 1024);
+if (status == OW_OK) {
+    status = ow_query_range(db, "score", OW_INT, &lower, 1, &upper, 0,
+                            &ids, &count);
+    /* Consume ids only when status == OW_OK. */
+    ow_array_release(ids);
+    ow_field_index_disable(db);
+}
+```

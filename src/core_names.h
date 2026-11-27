@@ -18,3 +18,7 @@
 #define ow_occurrence_get ow_core_occurrence_get
 #define ow_occurrence_compare ow_core_occurrence_compare
 #define ow_query_equal ow_core_query_equal
+
+#define ow_field_index_enable ow_core_field_index_enable
+#define ow_field_index_disable ow_core_field_index_disable
+#define ow_query_range ow_core_query_range

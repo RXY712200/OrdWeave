@@ -786,3 +786,64 @@ void ow_array_release(void *array);
 不要释放借用的输入bytes；不要复制拥有结果后双重释放；不要因close返回RECOVERY_REQUIRED而再次close同一指针；不要在UNKNOWN后自动重试create；不要把checkpoint_retention当Last N；不要把历史视图强转为OwDatabase；不要因当前无SQL就把原生顺序等同于按字段排序。
 
 使用层完整实例见[使用指南](USAGE.zh-CN.md)。追踪分配和发布点见[实现导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md)及[内部详解](IMPLEMENTATION_INTERNALS.zh-CN.md)。
+
+<a id="preview4-step15"></a>
+
+## Preview.4 Step15：已实现的会话索引与范围查询
+
+当前未发布版本包含历史44个函数和本节4个新增函数，共48个；RC.1/Stable 的44函数历史基线不变。头文件是声明权威。
+
+每个数据库最多一个显式启用的字段索引，覆盖该字段所有六类现存值；缺失字段不入索引，Null 入索引。max_records 是有该字段的条目数上限，不是数据库总记录数。max_key_bytes 包含一份字段名（含末尾 NUL）及 String/Binary 键复制的有效字节数；固定行、ID、值元数据和 LKS 分配不计入此预算，因此它不是总内存上限。两个限制必须为正；超预算返回 OW_CAPACITY，分配失败返回 OW_NOMEM。enable 私下构建，成功才替换；失败保留旧索引。disable 幂等释放。配置不占 Revision/永久 ID，不写 WAL，重开后不存在。
+
+成功的数据修改后动态维护相关键；维护分配、插入、删除或预算失败会释放**索引和配置**，不改变已成功修改的结果。随后查询扫描；只有再次显式 enable 才重建。失败、无操作和无关字段修改保留已证实有效的索引。关闭、销毁和 core exchange 在旧对象释放前清除缓存；历史重建、导入和回放不自动建立缓存。busy/隔离会话沿用原 guard，COMMIT_UNKNOWN 后关闭并验证重开，不能盲目重试。
+
+范围查询只选择指定类型，不转换类型。两个界限可各自为 NULL（无界，不是 Null 值）；非空界限须匹配 type 并通过原值校验，Float 必须有限。两个 inclusive 即使对应界限缺省也必须为0或1。下界大于上界返回 OW_INVALID；相等且任一侧排除返回空成功。排序为值升序、相同值按永久 Record ID 升序：Null 单值、Bool false 在前、Int 有符号数值、Float 数值（正负零相等）、String/Binary 无符号字节词典序后比较长度，支持嵌入 NUL 和空跨度，不使用语言区域排序。缺失字段排除。
+
+有匹配索引时查询使用公共 ManagedOrder；否则范围查询扫描后使用公共 LKS Stable Sort。原等值查询可利用匹配索引，结果仍按 ID 升序。历史范围查询在视图自己的不可变 core 中扫描排序，不共享 live 缓存。所有结果为独立 ID 数组，使用 ow_array_release；空/错误为 NULL/0，分配失败不返回部分成功。调用方仍须串行化访问。查询结果可在修改、禁用、关闭源或关闭历史视图后使用，直到调用方释放。
+
+<a id="api-ow-field-index-enable"></a>
+
+### ow_field_index_enable
+
+```c
+OwStatus ow_field_index_enable(OwDatabase *db, const char *field,
+                              size_t max_records, size_t max_key_bytes);
+```
+
+遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
+
+<a id="api-ow-field-index-disable"></a>
+
+### ow_field_index_disable
+
+```c
+OwStatus ow_field_index_disable(OwDatabase *db);
+```
+
+遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
+
+<a id="api-ow-query-range"></a>
+
+### ow_query_range
+
+```c
+OwStatus ow_query_range(OwDatabase *db, const char *field, OwType type,
+                       const OwValue *lower, int lower_inclusive,
+                       const OwValue *upper, int upper_inclusive,
+                       OwRecordId **out, size_t *count);
+```
+
+遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
+
+<a id="api-ow-history-query-range"></a>
+
+### ow_history_query_range
+
+```c
+OwStatus ow_history_query_range(const OwHistory *view, const char *field,
+                       OwType type, const OwValue *lower, int lower_inclusive,
+                       const OwValue *upper, int upper_inclusive,
+                       OwRecordId **out, size_t *count);
+```
+
+遵循本节共同契约；live 函数先通过会话 guard，history 函数使用独立视图。
