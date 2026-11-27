@@ -1,6 +1,6 @@
-# Preview.4 — capability research and proposed contract
+# Preview.4 — accepted research and approved Step15 implementation
 
-Unreleased `1.1.0-preview.4`, exact accepted parent `edb9675b10125cecdf936e030bd9a54a90a84146`, Full4.2 `f751e1ee2afd682874281d6dc495969f9eca49eb`. Steps13–15 of the approved six-stage/twenty-step plan are research-complete. **No public capability is implemented by this stage.** Public API remains44 functions. No production data-path change is selected; only version/guidance/validator changes enter the development branch. Prototypes live only on the separate evidence branch. No RC.1 is started.
+Unreleased `1.1.0-preview.4`. Research Steps13–14 are accepted; the approved Step15 continuation implements exactly four additive functions (48 total). Independent implementation acceptance remains pending. No RC, merge or release is authorized. The following research sections preserve their original research-time scope; the implemented contract below supersedes proposal-only wording.
 
 ## Decision matrix
 
@@ -60,7 +60,7 @@ Proposed precise behavior:
 - Immutable history query uses the view's own reconstructed state and copied temporary results; no live index is shared and no historical audit is bypassed. A view unavailable through pruning must be obtained through existing `ow_history_open` and remains unavailable. No new view-source/cursor lifetime guarantee is implied.
 - First implementation may scan and use public LKS Stable Sort, then add the explicit ManagedOrder optimization with bounded failure/lifecycle tests. Equivalent cached/uncached results and fallback are mandatory. Approximate prototype break-even is not an API latency promise.
 
-This family is not approved or implemented. If owner approval follows, integration belongs within Step15 before RC.1, not a new roadmap step. No extra enable/read semantics are silently grafted onto existing `ow_query_equal` now.
+At research HEAD cf342dcf this family was unapproved and unimplemented. The owner subsequently approved this exact family within Step15; the implemented contract below governs the current extension. This does not authorize RC.1.
 
 ## Step14: stable sorted results and immutable groups
 
@@ -81,3 +81,35 @@ Public LKS cursor invalidation is asserted after an actual move, before accessin
 All prototype files and raw/resource/failure/history results are on `evidence/v1.1.0-preview.4` under `handoff/v1.1.0-preview.4/`; no unused prototype enters production. Only runtime version and matching smoke/consumer literals change, so no new persistence compatibility campaign is needed. Existing suites/docs and exact-head Windows CI are reported at handoff. Historical RC/Stable and accepted Preview.1–3 validator gates remain; current production bytes must exactly equal accepted Preview.3 apart from version literal. No API or data-path gate is relaxed.
 
 Technical Debt Impact: no existing TD status changes. TD-001's index improvement, TD-002/003 partial mitigations, TD-004 deferred, TD-005/006 open and TD-103 resolved history remain. EG-001/002/003 remain; no EG-003 standalone reproduction campaign. The proposed features are pending product decisions, not automatically technical debt. Research completion is distinct from public capability implementation and independent acceptance.
+
+
+## Preview.4 Step15：已实现的会话索引与范围查询
+
+当前未发布版本包含历史44个函数和本节4个新增函数，共48个；RC.1/Stable 的44函数历史基线不变。头文件是声明权威。
+
+每个数据库最多一个显式启用的字段索引，覆盖该字段所有六类现存值；缺失字段不入索引，Null 入索引。max_records 是有该字段的条目数上限，不是数据库总记录数。max_key_bytes 包含一份字段名（含末尾 NUL）及 String/Binary 键复制的有效字节数；固定行、ID、值元数据和 LKS 分配不计入此预算，因此它不是总内存上限。两个限制必须为正；超预算返回 OW_CAPACITY，分配失败返回 OW_NOMEM。enable 私下构建，成功才替换；失败保留旧索引。disable 幂等释放。配置不占 Revision/永久 ID，不写 WAL，重开后不存在。
+
+成功的数据修改后动态维护相关键；维护分配、插入、删除或预算失败会释放**索引和配置**，不改变已成功修改的结果。随后查询扫描；只有再次显式 enable 才重建。失败、无操作和无关字段修改保留已证实有效的索引。关闭、销毁和 core exchange 在旧对象释放前清除缓存；历史重建、导入和回放不自动建立缓存。busy/隔离会话沿用原 guard，COMMIT_UNKNOWN 后关闭并验证重开，不能盲目重试。
+
+范围查询只选择指定类型，不转换类型。两个界限可各自为 NULL（无界，不是 Null 值）；非空界限须匹配 type 并通过原值校验，Float 必须有限。两个 inclusive 即使对应界限缺省也必须为0或1。下界大于上界返回 OW_INVALID；相等且任一侧排除返回空成功。排序为值升序、相同值按永久 Record ID 升序：Null 单值、Bool false 在前、Int 有符号数值、Float 数值（正负零相等）、String/Binary 无符号字节词典序后比较长度，支持嵌入 NUL 和空跨度，不使用语言区域排序。缺失字段排除。
+
+有匹配索引时查询使用公共 ManagedOrder；否则范围查询扫描后使用公共 LKS Stable Sort。原等值查询可利用匹配索引，结果仍按 ID 升序。历史范围查询在视图自己的不可变 core 中扫描排序，不共享 live 缓存。所有结果为独立 ID 数组，使用 ow_array_release；空/错误为 NULL/0，分配失败不返回部分成功。调用方仍须串行化访问。查询结果可在修改、禁用、关闭源或关闭历史视图后使用，直到调用方释放。
+
+实现位于 [field_index.inc](../src/field_index.inc)，由 ordweave.c 拥有；仍为六个生产翻译单元，现有五个实现 include。四个声明及所有旧类型/状态由文档校验器与精确研究 HEAD 比较。Step15 实现和验证完成不代表独立验收；后续 RC 工作尚未授权。
+
+## Step15 production verification summary
+
+Windows x64 MinGW/GCC Release, exact research HEAD cf342dcf scan versus actual candidate APIs; one warmup plus three measured repetitions, same deterministic model, 512 reads each. Independent expected-result scans and result release are outside query timing. Totals include enable/build and successful update/delete API time, excluding initial fixture setup. Range benchmark uses equal inclusive bounds so its result has the same model as equality; broader range contracts are independently tested, not performance-characterized by this matrix.
+
+|Fixture|Old equality scan ms|Candidate equality disabled ms|Equality enabled ms|Range disabled ms|Range enabled ms|
+|---|---:|---:|---:|---:|---:|
+|8192 records / 257 values / 0 changes phased|46.9603|47.1584|1.6973|73.4728|1.8123|
+|8192 records / 257 values / 100 changes phased|48.0178|48.9073|1.7796|73.7159|1.8263|
+|1024 records / 17 values / 64 changes interleaved|4.5935|4.3278|3.3089|26.5601|3.2529|
+|128 records / 1 values / 0 changes phased|0.5205|0.5340|0.4307|2.6160|0.4293|
+
+Selective read-only equality is about 27.67x faster including construction. Component-median estimated build amortization is 15.4 reads versus disabled equality; this is an estimate, not a measured single-query guarantee. Disabled equality total deltas in this bounded matrix are +0.42%, +1.85%, -5.78%, +2.59%; none meets the predeclared material threshold (>10% and >1ms). Small/nonselective construction costs may outweigh benefits for one-shot use; no general speedup guarantee.
+
+Separate requested-byte accounting (not RSS): 8192 integer records, disabled candidate setup 1,365,813 bytes versus old 1,300,268 (+65,545, principally an 8-byte private Record backlink and one DB pointer). Allocation counts are identical (33,037); disabled mode constructs no index. Enabling adds 758,108 requested bytes and 16,559 allocations, including owned rows and public ManagedOrder. Integer keys consume only the copied field name's 4-byte variable-key budget; fixed metadata/LKS memory lies outside that budget. Post-destroy wrapper residual is 117 bytes in both enabled and disabled candidate, versus 116 baseline; no additional index residual. These are wrapper-observed process allocations, not a whole-process leak or resident-memory certification.
+
+Local full CTest Debug and Release:12/12 each. Isolated upstream failures:4 enable and2 maintenance allocation ordinals; existing2 insert ordinals also pass with zero upstream live blocks. Stable and accepted Preview.3 bilateral checkpoint/history/backup round trips pass, including enabled candidate source, and diagnostic public query allocation counts prove cache absence on reopen. Canonical checkpoint fixture:386 bytes, SHA-256 `655f001cf7f3b790c2df7775f2cd04c19be0bce67eb15a48ab246ef42f836958` in Stable, Preview.3, candidate disabled/enabled. No persistent encoding or dependency change. Exact-head MSVC CI and immutable raw evidence are recorded in the Step15 completion report on the existing evidence branch. EG-003 remains Open; this bounded suite did not reproduce its checkpoint OOM boundary and is not a repeated OOM campaign.

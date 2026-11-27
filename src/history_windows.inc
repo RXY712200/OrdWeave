@@ -1118,3 +1118,9 @@ done:
   free(path);
   return status;
 }
+
+OwStatus ow_history_query_range(const OwHistory *view,const char *field,OwType type,
+    const OwValue *lower,int lower_inclusive,const OwValue *upper,int upper_inclusive,
+    OwRecordId **out,size_t *count) {
+  return ow_core_query_range(view?view->db:NULL,field,type,lower,lower_inclusive,upper,upper_inclusive,out,count);
+}

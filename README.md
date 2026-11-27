@@ -62,7 +62,7 @@ Persistent paths must be new absolute UTF-8 Windows drive paths with existing pa
 | Need | Read |
 |---|---|
 | Start using the database | [Practical usage](docs/USAGE.zh-CN.md), [complete examples](docs/examples/) |
-| Find a public contract | [All 44 functions](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md), [English API](docs/API.md), [public header](include/ordweave.h) |
+| Find a public contract | [48 functions (44 historical + 4 current)](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md), [English API](docs/API.md), [public header](include/ordweave.h) |
 | Understand execution | [Implementation walkthrough](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md), [architecture summary](docs/ARCHITECTURE.md) |
 | Modify or debug | [Private internals](docs/IMPLEMENTATION_INTERNALS.zh-CN.md), [development guide](docs/DEVELOPMENT.zh-CN.md) |
 | Reproduce evidence | [Validation map](docs/IMPLEMENTATION_VALIDATION.zh-CN.md), [RC review](docs/RELEASE_CANDIDATE.md) |
@@ -72,12 +72,29 @@ Persistent paths must be new absolute UTF-8 Windows drive paths with existing pa
 
 ## Limits and licensing
 
-No SQL, field secondary indexes, network service, multi-writer/concurrent-access guarantees, cross-collection atomic transfer, Linux/macOS, Last Days or incremental backup. Checkpoints can reduce the ordinary result's replay tail, but startup still audits the retained WAL semantically; no whole-open speedup is promised. Index rebuilds, repeated scans, full buffers/copies and provider setup are tracked with evidence in the [debt register](docs/TECHNICAL_DEBT.md). Process-crash tests do not certify physical power-loss durability.
+No SQL, persisted/automatic secondary indexes, network service, multi-writer/concurrent-access guarantees, cross-collection atomic transfer, Linux/macOS, Last Days or incremental backup. Checkpoints can reduce the ordinary result's replay tail, but startup still audits the retained WAL semantically; no whole-open speedup is promised. Index rebuilds, repeated scans, full buffers/copies and provider setup are tracked with evidence in the [debt register](docs/TECHNICAL_DEBT.md). Process-crash tests do not certify physical power-loss durability.
 
 OrdWeave is [MIT licensed](LICENSE). LayerKeySort and adapted Obscura64 provenance and notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No ProbSpan code is included.
 
-Current authorized work is Preview.4 Steps13–15: private capability prototypes, proposed contracts and version/documentation validation. See [Preview.2 decisions](docs/PREVIEW_2.md). Earlier Preview.1 task prose is historical; no RC.1 or release is authorized.
 
 Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
 
-Current Preview.4 is research-complete with no new public API or production data-path change. See [capability decisions and pending contract](docs/PREVIEW_4.md). Earlier stage-scope paragraphs are historical. RC.1 requires a separate task.
+
+## Preview.4 Step15 extension (unreleased)
+
+The current header has 48 functions: the historical 44 plus explicit bounded field-index enable/disable and live/history typed range queries. Indexing is optional, session-local and advisory; maintenance failure discards configuration, with scan fallback until explicit re-enable. Results are copied IDs sorted by typed value then permanent ID. Limits bound present entries and owned variable key bytes, not total memory. No persistent-format change. See the [complete contract](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15).
+
+```c
+OwRecordId *ids = NULL;
+size_t count = 0;
+OwValue lower = {.type = OW_INT, .as.integer = 10};
+OwValue upper = {.type = OW_INT, .as.integer = 20};
+OwStatus status = ow_field_index_enable(db, "score", 10000, 1024 * 1024);
+if (status == OW_OK) {
+    status = ow_query_range(db, "score", OW_INT, &lower, 1, &upper, 0,
+                            &ids, &count);
+    /* Consume ids only when status == OW_OK. */
+    ow_array_release(ids);
+    ow_field_index_disable(db);
+}
+```

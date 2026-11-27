@@ -1,5 +1,6 @@
 #include "ordweave.h"
 #include <math.h>
+#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +35,9 @@ static void members(OwDatabase *d, OwCollectionId c, OwOccurrenceId *model,
   }
   ow_array_release(a);
 }
+#include "range_cases.inc"
 int main(void) {
+  range_contracts();
   OwDatabase *d = NULL;
   OwRecordId r, s;
   OwCollectionId c, c2, gotc;

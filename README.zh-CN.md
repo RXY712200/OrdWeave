@@ -60,7 +60,7 @@ int main(void) {
 | 目标 | 文档 |
 |---|---|
 |开始使用|[使用指南](docs/USAGE.zh-CN.md)，[完整C示例](docs/examples/)|
-|查询某个函数|[44个公开API及类型/错误契约](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md)，[英文概览](docs/API.md)，[权威头文件](include/ordweave.h)|
+|查询某个函数|[48个公开API（历史44及当前4项扩展）](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md)，[英文概览](docs/API.md)，[权威头文件](include/ordweave.h)|
 |理解整个执行过程|[源码执行导读](docs/IMPLEMENTATION_WALKTHROUGH.zh-CN.md)，[英文架构概要](docs/ARCHITECTURE.md)|
 |修改或调试内部模块|[内部结构与函数依赖](docs/IMPLEMENTATION_INTERNALS.zh-CN.md)，[开发维护规则](docs/DEVELOPMENT.zh-CN.md)|
 |重现测试与查看证据|[验证地图](docs/IMPLEMENTATION_VALIDATION.zh-CN.md)，[RC评审记录](docs/RELEASE_CANDIDATE.md)|
@@ -70,12 +70,29 @@ int main(void) {
 
 ## 边界与许可
 
-不支持SQL、二级字段索引、网络服务、多写者/并发调用保证、跨Collection原子转移、Linux/macOS、Last Days或增量备份。checkpoint恢复减少普通构造路径的tail，但整体open还会独立语义审计保留WAL，不承诺整体启动加速。索引重建、多轮重放、完整缓冲/复制、SHA provider初始化等真实成本见技术债登记。进程终止测试不等于物理掉电认证。
+不支持SQL、持久化/自动二级字段索引、网络服务、多写者/并发调用保证、跨Collection原子转移、Linux/macOS、Last Days或增量备份。checkpoint恢复减少普通构造路径的tail，但整体open还会独立语义审计保留WAL，不承诺整体启动加速。索引重建、多轮重放、完整缓冲/复制、SHA provider初始化等真实成本见技术债登记。进程终止测试不等于物理掉电认证。
 
 OrdWeave使用 [MIT License](LICENSE)；LayerKeySort和Obscura64适配来源与SHA见 [第三方声明](THIRD_PARTY_NOTICES.md)。没有引入ProbSpan代码。
 
-Current authorized work is Preview.4 Steps13–15: private capability prototypes, proposed contracts and version/documentation validation. See [Preview.2 decisions](docs/PREVIEW_2.md). Earlier Preview.1 task prose is historical; no RC.1 or release is authorized.
 
 Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
 
-Current Preview.4 is research-complete with no new public API or production data-path change. See [capability decisions and pending contract](docs/PREVIEW_4.md). Earlier stage-scope paragraphs are historical. RC.1 requires a separate task.
+
+## Preview.4 Step15 扩展（未发布）
+
+当前48函数保留历史44函数，新增显式有界索引启停及 live/history 类型范围查询。索引是会话级可选缓存；维护失败释放配置，显式再次启用前一直扫描。结果为按值及永久ID排序的独立数组。条目和复制键字节预算不是总内存上限。详见[完整契约](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
+
+```c
+OwRecordId *ids = NULL;
+size_t count = 0;
+OwValue lower = {.type = OW_INT, .as.integer = 10};
+OwValue upper = {.type = OW_INT, .as.integer = 20};
+OwStatus status = ow_field_index_enable(db, "score", 10000, 1024 * 1024);
+if (status == OW_OK) {
+    status = ow_query_range(db, "score", OW_INT, &lower, 1, &upper, 0,
+                            &ids, &count);
+    /* Consume ids only when status == OW_OK. */
+    ow_array_release(ids);
+    ow_field_index_disable(db);
+}
+```

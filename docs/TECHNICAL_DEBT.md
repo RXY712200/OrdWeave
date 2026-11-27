@@ -127,3 +127,7 @@ The original source-bound entries above and their status history are retained. T
 ## Preview.4 research follow-up
 
 [Capability decisions](PREVIEW_4.md) retain all existing production paths and debt statuses. Repeated-query indexing is a pending opt-in product contract, not an unimplemented promised feature or automatically new technical debt. TD-001/103 resolved history, partial TD-002/003 mitigations, TD-004 Deferred, TD-005/006 Open and EG-001/002/003 remain. No EG-003 standalone campaign or root-cause claim.
+
+## Preview.4 Step15 Technical Debt Impact
+
+No change to existing IDs, priorities or status. The bounded optional index/range implementation does not resolve EG-003 checkpoint OOM evidence, hardware durability limits or existing deferred work. The API addition and its owned-memory costs are explicit in [the contract](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15); full detailed-guide reconstruction remains the planned RC task, not silently completed here.

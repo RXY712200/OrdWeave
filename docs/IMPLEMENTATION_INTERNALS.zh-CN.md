@@ -201,3 +201,7 @@ move预判a==o、端点及lks_order_next/previous邻接后再检查Revision容�
 ## Preview.2 owned index include
 
 [src/occurrence_index.inc](../src/occurrence_index.inc) is included only by ordweave.c. It replaces the global Occurrence ManagedOrder with a compressed nibble-radix ID index. Record/Collection ManagedOrders and LKS explicit Collection ordering remain. See [Preview.2 decisions](PREVIEW_2.md) for preparation/publication and sparse resource proofs. Historical RC descriptions above remain source-bound.
+
+## Preview.4 Step15 索引扩展
+
+[field_index.inc](../src/field_index.inc) 由ordweave.c包含，是第五个owner include，不是新TU。负责独立拥有键的单字段ManagedOrder、预算、原子enable替换、非失败式失效及范围扫描/Stable Sort。Record只借用自己的cache row指针；缓存必须在Record释放前清理。持久化wrapper处理guard，历史wrapper调用独立core范围扫描。原RC源码说明仍是历史基线，当前合同见 [API扩展](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。

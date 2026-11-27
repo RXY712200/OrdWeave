@@ -22,7 +22,7 @@ GUIDES = ["USAGE.zh-CN.md", "IMPLEMENTATION_WALKTHROUGH.zh-CN.md",
           "HANDOFF.md", "TECHNICAL_DEBT.md"]
 PRODUCTION = ["ordweave.c", "lks_adapter.c", "persistence.c", "wal_format.c",
               "wal_windows.c", "sha256.c"]
-INCLUDES = ["checkpoint_core.inc", "checkpoint_windows.inc", "history_windows.inc", "occurrence_index.inc"]
+INCLUDES = ["checkpoint_core.inc", "checkpoint_windows.inc", "history_windows.inc", "occurrence_index.inc", "field_index.inc"]
 HEADERS = ["core_names.h", "core_internal.h", "lks_adapter.h", "wal_internal.h",
            "checkpoint_internal.h"]
 DECL = re.compile(r"(?:const\s+char\s*\*|OwStatus\s+|void\s+)"
@@ -67,6 +67,18 @@ def check() -> None:
         assert (ROOT / name).is_file(), name
     header = (ROOT / "include/ordweave.h").read_text(encoding="utf-8")
     api = (ROOT / "docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md").read_text(encoding="utf-8")
+    research = "cf342dcf881bc9e3518ede042baeaed25f807da7"
+    historical_header = subprocess.check_output(["git", "show", f"{research}:include/ordweave.h"], cwd=ROOT).decode()
+    historical_api = declarations(historical_header)
+    approved_additions = declarations('OwStatus ow_field_index_enable(OwDatabase *db, const char *field,\n                              size_t max_records, size_t max_key_bytes);\nOwStatus ow_field_index_disable(OwDatabase *db);\nOwStatus ow_query_range(OwDatabase *db, const char *field, OwType type,\n                       const OwValue *lower, int lower_inclusive,\n                       const OwValue *upper, int upper_inclusive,\n                       OwRecordId **out, size_t *count);\nOwStatus ow_history_query_range(const OwHistory *view, const char *field,\n                       OwType type, const OwValue *lower, int lower_inclusive,\n                       const OwValue *upper, int upper_inclusive,\n                       OwRecordId **out, size_t *count);\n')
+    assert len(historical_api) == 44 and len(approved_additions) == 4
+    assert declarations(header) == historical_api | approved_additions, "48 APIs must be exact historical44 plus approved4"
+    # Removing only the approved declarations must leave every historical
+    # type, numeric status, field and preprocessor token unchanged.
+    stripped = re.sub(r"/\*.*?\*/", "", header, flags=re.S)
+    stripped = DECL.sub(lambda m: "" if m.group(1) in approved_additions else m.group(), stripped)
+    old_tokens = re.sub(r"/\*.*?\*/", "", historical_header, flags=re.S)
+    assert normalize(stripped) == normalize(old_tokens), "historical public types/statuses changed"
     expected = declarations(header)
     blocks = "\n".join(re.findall(r"```c\n(.*?)```", api, re.S))
     actual = declarations(blocks)
@@ -81,11 +93,11 @@ def check() -> None:
     for name in PRODUCTION + INCLUDES + HEADERS:
         assert f"../src/{name}" in internal, name
         assert (ROOT / "src" / name).is_file(), name
-    for owner, includes in {"ordweave.c": [INCLUDES[0], INCLUDES[3]], "wal_windows.c": INCLUDES[1:3]}.items():
+    for owner, includes in {"ordweave.c": [INCLUDES[0], INCLUDES[3], INCLUDES[4]], "wal_windows.c": INCLUDES[1:3]}.items():
         s = (ROOT / "src" / owner).read_text(encoding="utf-8")
         for inc in includes:
             assert f'#include "{inc}"' in s, (owner, inc)
-    print("Production coverage: 6 C translation units, 4 owned implementation includes, 5 private headers")
+    print("Production coverage: 6 C translation units, 5 owned implementation includes, 5 private headers")
     assert command("git", "rev-parse", "v1.0.0-rc.1^{}", capture=True) == BASELINE
     assert command("git", "rev-parse", "v1.0.0-rc.1", capture=True) == TAG_OBJECT
     stable = "32f853defc0a2e9f0ca809fb3535a90c977c7665"
@@ -117,7 +129,10 @@ def check() -> None:
              "  status = ow_store_guard(s);\n  if (status != OW_OK)\n    return status;\n")
     expected_body = body.replace(needle, guard + needle, 1)
     assert subprocess.check_output(["git", "show", f"{accepted}:src/history_windows.inc"], cwd=ROOT).decode() == prefix + marker + expected_body
-    assert (ROOT / "src/history_windows.inc").read_text(encoding="utf-8") == prefix + marker + expected_body
+    history_text = (ROOT / "src/history_windows.inc").read_text(encoding="utf-8")
+    assert history_text.startswith(prefix + marker + expected_body)
+    suffix = history_text[len(prefix + marker + expected_body):]
+    assert re.findall(r"OwStatus\s+(ow_\w+)\s*\(", suffix) == ["ow_history_query_range"]
     cmake_before = subprocess.check_output(["git", "show", f"{stable}:CMakeLists.txt"], cwd=ROOT).decode()
     assert cmake == cmake_before.replace("project(OrdWeave VERSION 1.0.0", "project(OrdWeave VERSION 1.1.0")
     pin = "f751e1ee2afd682874281d6dc495969f9eca49eb"
@@ -143,11 +158,18 @@ def check() -> None:
         assert subprocess.check_output(["git", "show", f"edb9675b10125cecdf936e030bd9a54a90a84146:{path}"], cwd=ROOT).decode() == old.replace("1.1.0-preview.2", "1.1.0-preview.3")
     preview3 = "edb9675b10125cecdf936e030bd9a54a90a84146"
     preview4_paths = {"src/ordweave.c", "tests/smoke.c", "tests/consumer/main.c"}
-    current_delta = set(command("git", "diff", "--name-only", preview3, "--", *protected, capture=True).splitlines())
+    current_delta = set(command("git", "diff", "--name-only", preview3, research, "--", *protected, capture=True).splitlines())
     assert current_delta <= preview4_paths, f"unexpected Preview.4 delta: {current_delta - preview4_paths}"
     for path in preview4_paths:
         old = subprocess.check_output(["git", "show", f"{preview3}:{path}"], cwd=ROOT).decode()
-        assert (ROOT / path).read_text(encoding="utf-8") == old.replace("1.1.0-preview.3", "1.1.0-preview.4")
+        assert subprocess.check_output(["git", "show", f"{research}:{path}"], cwd=ROOT).decode() == old.replace("1.1.0-preview.3", "1.1.0-preview.4")
+    step15_paths = {"include/ordweave.h", "src/ordweave.c", "src/field_index.inc",
+                    "src/core_names.h", "src/core_internal.h", "src/persistence.c", "src/history_windows.inc",
+                    "tests/core.c", "tests/range_cases.inc", "tests/failures.c", "tests/index_failures.inc",
+                    "tests/history.c", "tests/consumer/main.c"}
+    step15_delta = set(command("git", "diff", "--name-only", research, "--", *protected, capture=True).splitlines())
+    assert step15_delta <= step15_paths, f"unexpected approved Step15 delta: {step15_delta-step15_paths}"
+    assert 'return "1.1.0-preview.4"' in (ROOT / "src/ordweave.c").read_text(encoding="utf-8")
     for name in GUIDES:
         assert BASELINE in (ROOT / "docs" / name).read_text(encoding="utf-8"), name
     for name in ("PERSISTENCE.md", "CHECKPOINTS.md", "HISTORY.md"):

@@ -9,6 +9,8 @@
 _Static_assert(sizeof(double) == 8 && DBL_MANT_DIG == 53 && DBL_MAX_EXP == 1024,
                "binary64 required");
 #include "occurrence_index.inc"
+typedef struct OwFieldRow OwFieldRow;
+typedef struct OwFieldIndex OwFieldIndex;
 typedef struct Field {
   char *name;
   OwValue value;
@@ -18,6 +20,7 @@ typedef struct {
   OwIndexed key;
   Field *fields;
   size_t budget, refs;
+  OwFieldRow *indexed;
 } Record;
 typedef struct {
   OwIndexed key;
@@ -35,6 +38,7 @@ struct OwDatabase {
   OwOccIndex *occurrences;
   uint64_t rid, cid, oid, revision;
   OwStore *store;
+  OwFieldIndex *field_index;
 };
 const char *ordweave_version(void) { return "1.1.0-preview.4"; }
 static int utf8(const unsigned char *s, size_t n) {
@@ -171,6 +175,7 @@ static OwStatus capacity(OwDatabase *d, uint64_t counter) {
   return d->revision == UINT64_MAX || counter == UINT64_MAX ? OW_CAPACITY
                                                             : OW_OK;
 }
+#include "field_index.inc"
 OwStatus ow_database_create(OwDatabase **out) {
   OwDatabase *d;
   if (!out)
@@ -208,6 +213,7 @@ void ow_database_destroy(OwDatabase *d) {
   OwIndexed *item, *next;
   if (!d)
     return;
+  fi_clear(d);
   /* Destroy all explicit residences before detaching occurrence index items. */
   for (h = lks_managed_order_first(d->collections); h; h = lks_order_next(h)) {
     Collection *c = lks_order_item(h);
@@ -294,6 +300,7 @@ OwStatus ow_record_delete(OwDatabase *d, OwRecordId id) {
     return s;
   if ((s = ow_index_remove(d->records, &r->key)) != OW_OK)
     return s;
+  fi_update(d,r,1);
   free_fields(r->fields);
   free(r);
   ++d->revision;
@@ -344,6 +351,7 @@ OwStatus ow_field_set(OwDatabase *d, OwRecordId id, const char *name,
     ow_value_release(&f->value);
   f->value = copy;
   r->budget = r->budget - old + cost;
+  if(d->field_index&&!strcmp(d->field_index->name,name))fi_update(d,r,0);
   ++d->revision;
   return OW_OK;
 }
@@ -385,6 +393,7 @@ OwStatus ow_field_remove(OwDatabase *d, OwRecordId id, const char *name) {
   r->budget -= 17 + strlen(name) + payload(&f->value);
   f->next = NULL;
   free_fields(f);
+  if(d->field_index&&!strcmp(d->field_index->name,name))fi_update(d,r,0);
   ++d->revision;
   return OW_OK;
 }
@@ -626,6 +635,11 @@ OwStatus ow_query_equal(OwDatabase *d, const char *name, const OwValue *v,
     return OW_INVALID;
   if ((s = name_valid(name)) != OW_OK || (s = value_valid(v)) != OW_OK)
     return s;
+  if(d->field_index&&!strcmp(d->field_index->name,name)) {
+    s=fi_collect(d->field_index,v->type,v,1,v,1,out,count);
+    if(s==OW_OK||s==OW_NOMEM||s==OW_CAPACITY)return s;
+    fi_clear(d);
+  }
   for (h = lks_managed_order_first(d->records); h; h = lks_order_next(h)) {
     Field *f = *find_field(lks_order_item(h), name);
     if (f && equal(&f->value, v))
@@ -665,6 +679,7 @@ OwStatus ow_core_validate(const char *name, const OwValue *value) {
 
 /* Narrow unpublished-state exchange; session ownership stays with its caller. */
 void ow_core_exchange(OwDatabase *a,OwDatabase *b) {
+ fi_clear(a);fi_clear(b);
  OwStore *as=a->store,*bs=b->store;OwDatabase tmp=*a;*a=*b;*b=tmp;a->store=as;b->store=bs;
 }
 #include "checkpoint_core.inc"

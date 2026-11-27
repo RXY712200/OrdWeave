@@ -6,6 +6,15 @@
 #include "../src/lks_adapter.h"
 static OwStatus order_insert_failure = OW_OK;
 static LksStatus order_remove_failure = LKS_STATUS_OK;
+static LksStatus managed_insert_failure=LKS_STATUS_OK,managed_remove_failure=LKS_STATUS_OK;
+static LksStatus test_managed_insert(LksManagedOrder *order,void *item,const LksOrderHandle **out) {
+  if(managed_insert_failure!=LKS_STATUS_OK){*out=NULL;return managed_insert_failure;}
+  return lks_managed_order_insert(order,item,out);
+}
+static LksStatus test_managed_remove(LksManagedOrder *order,const LksOrderHandle *handle,void **out) {
+  if(managed_remove_failure!=LKS_STATUS_OK){if(out)*out=NULL;return managed_remove_failure;}
+  return lks_managed_order_remove(order,handle,out);
+}
 static OwStatus test_order_insert(LksOrder *order, void *item, OwPlacement place,
     const LksOrderHandle *anchor, const LksOrderHandle **out) {
   if (order_insert_failure != OW_OK) { *out=NULL;return order_insert_failure; }
@@ -27,7 +36,11 @@ static void *test_calloc(size_t n, size_t s) {
 #define calloc test_calloc
 #define ow_order_insert test_order_insert
 #define lks_order_remove test_order_remove
+#define lks_managed_order_insert test_managed_insert
+#define lks_managed_order_remove test_managed_remove
 #include "../src/ordweave.c"
+#undef lks_managed_order_insert
+#undef lks_managed_order_remove
 #undef ow_order_insert
 #undef lks_order_remove
 #undef malloc
@@ -106,6 +119,7 @@ static void upstream_failures(void) {
   T(0);
 }
 #endif
+#include "index_failures.inc"
 static void import_preparation_failures(void) {
   OwDatabase *source,*copy;OwRecordId r;OwCollectionId c;OwOccurrenceId o;
   unsigned char id[16]={0},anchor[32]={0},*bytes;size_t size;
@@ -135,6 +149,10 @@ static void import_preparation_failures(void) {
   ow_database_destroy(copy);free(bytes);ow_database_destroy(source);
 }
 int main(void) {
+  index_failures();
+#ifdef OW_UPSTREAM_ALLOC_TEST
+  index_upstream_failures();
+#endif
   import_preparation_failures();
   radix_contracts();
 #ifdef OW_UPSTREAM_ALLOC_TEST
