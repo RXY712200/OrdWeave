@@ -4,7 +4,8 @@
 
 OrdWeave 是面向 **Windows x64 的 C17 嵌入式静态数据库**，使用独立维护的 LayerKeySort Full 管理顺序和ID索引。它把“共享的数据”和“某次出现的位置”分开，适合需要重复成员、独立移动和历史恢复的有序清单、图层成员或编排数据。
 
-当前分支为 **1.1.0-preview.4 开发版**，尚未发布。[v1.0.0 Stable](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) 保持在 `32f853defc0a2e9f0ca809fb3535a90c977c7665`，使用Full4.1。本分支集成Full4.2及经回归验证的cleanup入口guard修复；见 [Preview.1决策](docs/PREVIEW_1.md)。历史RC.1和Stable标签、Release均不改变，详细旧指南保留准确RC源码基线。
+
+v1.1.0 技术基线：48个公开函数、Full4.2、压缩永久Occurrence ID索引、显式字段索引和类型范围查询。[实际发布状态及源码](docs/HANDOFF.md) · [API](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md)。
 
 ## 数据模型与能力
 
@@ -17,14 +18,13 @@ Record拥有具名字段：null、bool、int64、有限double、UTF-8字符串�
 需要Windows x64、Git递归子模块、CMake 3.21+、C17编译器；启用测试还需Python 3。Visual Studio：
 
 ```powershell
-git clone --recurse-submodules --branch dev/v1.1.0-preview.4 https://github.com/RXY712200/OrdWeave.git
-cd OrdWeave
+# Run in a recursive checkout of the v1.1.0 source revision listed in docs/HANDOFF.md.
 cmake -S . -B build -A x64
 cmake --build build --config Release
 ctest --test-dir build -C Release --output-on-failure
 ```
 
-GCC/MinGW与Ninja使用独立目录并改为 `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release`，不要传 `-A x64`。已有clone执行 `git submodule update --init --recursive`。GitHub自动ZIP/tar不包含子模块，不是自包含源码包。需要本套新文档时阅读main；克隆RC标签获得的是原发布状态。
+GCC/MinGW与Ninja使用独立目录并改为 `cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release`，不要传 `-A x64`。已有clone执行 `git submodule update --init --recursive`。GitHub自动ZIP/tar不包含子模块，不是自包含源码包。按交接记录选择准确源码提交；旧版本标签保留当时的源码与文档。
 
 固定LayerKeySort Full v4.2.0 Stable提交 `f751e1ee2afd682874281d6dc495969f9eca49eb`，仅通过公开API集成，不修改上游源码。
 
@@ -70,17 +70,16 @@ int main(void) {
 
 ## 边界与许可
 
-不支持SQL、持久化/自动二级字段索引、网络服务、多写者/并发调用保证、跨Collection原子转移、Linux/macOS、Last Days或增量备份。checkpoint恢复减少普通构造路径的tail，但整体open还会独立语义审计保留WAL，不承诺整体启动加速。索引重建、多轮重放、完整缓冲/复制、SHA provider初始化等真实成本见技术债登记。进程终止测试不等于物理掉电认证。
+不支持SQL、持久化/自动二级字段索引、网络服务、多写者/并发调用保证、跨Collection原子转移、Linux/macOS、Last Days或增量备份。checkpoint恢复减少普通构造路径的tail，但整体open还会独立语义审计保留WAL，不承诺整体启动加速。多轮重放、完整缓冲/复制、SHA provider初始化等真实成本见技术债登记。进程终止测试不等于物理掉电认证。
 
 OrdWeave使用 [MIT License](LICENSE)；LayerKeySort和Obscura64适配来源与SHA见 [第三方声明](THIRD_PARTY_NOTICES.md)。没有引入ProbSpan代码。
 
 
-Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
 
 
-## Preview.4 Step15 扩展（未发布）
+## 字段有序查询
 
-当前48函数保留历史44函数，新增显式有界索引启停及 live/history 类型范围查询。索引是会话级可选缓存；维护失败释放配置，显式再次启用前一直扫描。结果为按值及永久ID排序的独立数组。条目和复制键字节预算不是总内存上限。详见[完整契约](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
+v1.1.0 的48函数保留历史44函数，新增显式有界索引启停及 live/history 类型范围查询。索引是会话级可选缓存；维护失败释放配置，显式再次启用前一直扫描。结果为按值及永久ID排序的独立数组。条目和复制键字节预算不是总内存上限。详见[完整契约](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
 
 ```c
 OwRecordId *ids = NULL;

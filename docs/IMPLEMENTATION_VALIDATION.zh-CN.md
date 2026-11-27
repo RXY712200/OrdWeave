@@ -1,8 +1,8 @@
-# RC.1 验证地图与可复现证据
+# OrdWeave v1.1.0 验证地图与可复现证据
 
 [中文入口](../README.zh-CN.md) · [使用](USAGE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [维护](DEVELOPMENT.zh-CN.md)
 
-代码基线为 `3f99029da73e3b4f0a75a538dd241cf94cda23d7`，即已发布 Prerelease `v1.0.0-rc.1` 的 peeled commit。此后的文档提交属于 main，不属于不可变标签。本页区分测试设计、曾经执行和本次执行；测试数量不是覆盖率，也不是正确性的形式证明。
+本文按 **OrdWeave v1.1.0** 当前源码说明；48个公开函数以 [ordweave.h](../include/ordweave.h) 为准，Full4.2 固定 `f751e1ee2afd682874281d6dc495969f9eca49eb`。实际发布状态与准确来源集中在 [HANDOFF](HANDOFF.md)，这里不把技术基线当成发布声明。 测试数量不是覆盖率或形式证明；以下明确区分源码断言、历史证据和当前执行。
 
 ## 1. 五种证据不能互相替代
 
@@ -14,9 +14,7 @@
 |本任务新运行|完成报告中命令、配置和提交实际结果|独立审查完成或全部输入正确|
 |真实硬件掉电|需专门设备、文件系统、固件和断电实验|TerminateProcess、故障注入和FlushFileBuffers源码都不能代替它|
 
-RC发布基线的 [Windows CI 43809986388](https://github.com/RXY712200/OrdWeave/actions/runs/43809986388) 对应上述SHA，MSVC x64 Debug、Release各12个CTest。修正实现的 [Phase 6 CI 43808017874](https://github.com/RXY712200/OrdWeave/actions/runs/43808017874) 对应 `15d14dc85187a1ee18b252c281511e1059e49b55`。查看run的headSha、jobs、CTest日志确认对应关系，不以绿色图标替代具体断言。文档更新后的新CI应按新的main SHA查询；本页不预填一个尚未发生的运行编号。
-
-本次文档稳定化已在Windows本机GCC/MinGW 16.2.0、Python 3.13.14、Ninja执行上述 `build/docs-release` 和 `build/docs-debug` 两组命令，原12项分别全部成功（15.23秒/15.21秒为这两次运行观察值，不作性能保证）。隔离文档项目也在两种配置编译并运行完整C示例。最终新main提交的MSVC CI编号与结果由提交后完成报告给出；不把RC旧run标成文档新run。
+v1.0.0历史候选 `3f99029da73e3b4f0a75a538dd241cf94cda23d7` 的 [CI43809986388](https://github.com/RXY712200/OrdWeave/actions/runs/43809986388) 和Phase6修正CI是历史执行，不代表v1.1.0当前源码。已接受Preview.4实现 `5ab01df34bcb62a9feb1c61a443a1f08c0a56a06` 的 [MSVC CI45950372644](https://github.com/RXY712200/OrdWeave/actions/runs/45950372644) 两配置各12/12；其[不可变生产证据](https://github.com/RXY712200/OrdWeave/tree/41d49ed610879de00e9464f29b9cf0935a69501f/handoff/v1.1.0-preview.4/step15-implementation)含范围、预算和上游分配失败。当前精确提交的新执行结果在独立证据分支，不预填尚未产生的自SHA或CI编号。
 
 ## 2. 构建与重复执行
 
@@ -50,7 +48,7 @@ ctest --test-dir build/docs-debug --output-on-failure
 |---|---|---|
 |ordweave_smoke / [smoke.c](../tests/smoke.c)|版本串；三个调用方对象的真实LKS order、compare、move、traverse、内存serialize/destroy/restore|不创建磁盘数据库，不代替checkpoint测试|
 |ordweave_core / [core.c](../tests/core.c) main、members|六类字段、UTF-8/NaN/预算、复制所有权；refs限制；四种插入/移动和no-op；ID序查询；固定种子1234567的4000步独立数组顺序模型|确定性伪随机，不是全部排列或所有分配点|
-|ordweave_failures / [failures.c](../tests/failures.c)|白盒malloc/calloc失败注入，失败原子性、输出清零、adapter重复ID、ID/Revision上限、上限时合法no-op|只覆盖注入的本库分配边界；非OS/上游全分配穷举|
+|ordweave_failures / [failures.c](../tests/failures.c)|白盒malloc/calloc失败注入，失败原子性、输出清零、adapter重复ID、ID/Revision上限、上限时合法no-op|常规CTest以本库边界为主；额外隔离上游故障证据只覆盖列出的分配序号，不是所有OS/上游组合|
 |ordweave_persistence / [persistence.c](../tests/persistence.c)|第二进程BUSY；真实child退出/终止；post-write/pre-flush与post-flush/pre-report；fault 1..7；六类值；500步模型反复reopen；66次1MiB覆盖触发生产64MiB分段（最终Revision67）|没有模拟任意设备缓存损坏；reopen验证已提交状态不等于断电认证|
 |ordweave_format / [format_oracle.py](../tests/format_oracle.py)|固定manifest/segment/first-frame字节，真实输出比对，44个损坏/非规范输入场景|独立编码/哈希，不是独立数据库核心|
 |ordweave_checkpoint / [checkpoint.c](../tests/checkpoint.c) main、check_members|native恢复和普通尾部应用计数各1；六值/嵌NUL、重复成员、多/空Collection、高水位；keep1/2/3；分配故障和20..25/27发布边界|统计排除semantic_scan；计数1不表示整体只重放1次|
@@ -59,7 +57,7 @@ ctest --test-dir build/docs-debug --output-on-failure
 |ordweave_history_format / [history_oracle.py](../tests/history_oracle.py)|固定root/policy与实际root；21种损坏/缺失/不一致；段8之前前缀实际消失且35..40仍可重建|不为已经删除的历史内容提供审计|
 |ordweave_audit_format / [audit_oracle.py](../tests/audit_oracle.py)|4种哈希完全有效但语义非法的pre-checkpoint操作；190字符未知checkpoint文件名应CORRUPT|有针对性的回归，不代表覆盖所有恶意语义组合|
 |ordweave_adversarial / [audit.c](../tests/audit.c) audit_cases、spawn_crash|逐一检查0..14的字段、已删除ID、重复次数/顺序；cp7/9/13和尾部14；保证范围全部历史；root70..74真实TerminateProcess；备份完成53故障；结果跨view/db销毁；比较不分配且忽略字段插入顺序|进程边界与故障点固定；不模拟OS或设备突然断电|
-|ordweave_external_consumer / [consumer_check.py](../tests/consumer_check.py)、[consumer/main.c](../tests/consumer/main.c)|独立临时CMake项目、BUILD_TESTING=OFF、公有target、仅ordweave.h；C17 ID/枚举断言及内存/持久化生命周期|源码集成，不是已安装SDK或跨CRT二进制兼容测试|
+|ordweave_external_consumer / [consumer_check.py](../tests/consumer_check.py)、[consumer/main.c](../tests/consumer/main.c)|独立临时CMake项目、BUILD_TESTING=OFF、公有target、仅ordweave.h；C17 ID/枚举断言、内存/持久化及四个索引/range函数链接调用|源码集成，不是已安装SDK或跨CRT二进制兼容测试|
 
 ## 4. 独立格式oracle为什么有价值
 
@@ -89,7 +87,7 @@ python tools/validate_docs.py --examples --generator Ninja --config Release
 python tools/validate_docs.py --examples --generator Ninja --config Debug
 ```
 
-脚本核对公开声明与44个条目、6个生产TU与3个inc/5个私有头的文档覆盖、当前文档基线、UTF-8、仓库内部Markdown文件/锚点和保护路径无差异。`--examples` 在 `build/` 临时目录单独配置 [examples/CMakeLists.txt](examples/CMakeLists.txt)，只链接公有target，运行quickstart、lifecycle及两个README共有的完整C示例；后者目录父路径由测试准备。它不修改原12个测试或生产CMake。不把字符串检查当成所有语义描述准确性的证明；仍需源码复核。
+脚本核对历史44及批准新增4个声明与48个条目、6个生产TU与5个inc/5个私有头的文档覆盖、v1.1.0文档基线、UTF-8、仓库内部Markdown文件/锚点和保护路径仅有显式授权版本差异。`--examples` 在 `build/` 临时目录单独配置 [examples/CMakeLists.txt](examples/CMakeLists.txt)，只链接公有target，运行quickstart、lifecycle及两个README共有的完整C示例；后者目录父路径由测试准备。它不修改原12个测试或生产CMake。不把字符串检查当成所有语义描述准确性的证明；仍需源码复核。
 
 ## 8. 定位准确提交的验证结果
 
@@ -102,3 +100,26 @@ gh run view RUN_ID --log
 ```
 
 CI成功只说明该commit在该配置执行了相应断言，不构成全部正确性证明。源码基线、已完成阶段和维护状态见 [HANDOFF](HANDOFF.md)；发布基线与兼容性证据见 [RELEASE_CANDIDATE](RELEASE_CANDIDATE.md)。
+
+## 9. 48函数族与新增断言的真实覆盖
+
+|公开函数族|源码断言和独立预期|边界与未证实部分|
+|---|---|---|
+|版本、create/destroy/open/close、release|smoke、core、persistence、external consumer；版本精确字符串、输出清零、锁与独立生命周期|不是跨CRT二进制SDK认证|
+|Record/字段/revision/equality|core、failures、persistence、range_cases；六类、UTF-8、refs、预算、no-op/高水位、复制值/ID|既有字段链查找仍线性；不证明所有输入组合|
+|Collection/Occurrence|4000步独立数组模型；failures radix稀疏ID/prepare abort/折叠页与容量；persistence500步重开|固定种子不等于fuzz全覆盖|
+|checkpoint/retention|checkpoint与独立oracle；直接未发布import、native restore计数、分配失败、候选硬错误与anchor复用断言|native计数排除独立语义重放|
+|history/policy/cleanup/backup/verify|history、audit及Python三类oracle；保证范围逐Revision、根发布/删除真实进程边界、独立备份|进程终止不等于掉电；已删历史无法审计|
+|field_index_enable/disable|range_cases/index_failures；准确present/name+payload预算、失败enable保留、替换、无Revision、两个DB、teardown/exchange|固定metadata与LKS分配不计入key预算|
+|query_range及匹配equality|range_cases的显式预期ID数组；Null/缺失、六类、数值极值/零、NUL/空/prefix、duplicate、全部界限flag；index_failures OOM/容量/最大ID|benchmark仅Int，不能外推所有类型性能|
+|history_query_range与guard|history.c独立历史Int/当前值、跨view关闭复制结果；busy、COMMIT_UNKNOWN隔离；consumer四新函数|不是历史六类全组合独立矩阵；共享core已测六类|
+
+维护失败测试直接检查cache/config变NULL、权威数据和Revision成功、后续不自动分配重建；no-op/失败/无关字段验证原缓存保留。上游 `LKS_ENABLE_ALLOC_DIAGNOSTICS` / `OW_UPSTREAM_ALLOC_TEST` 只在隔离测试构建启用，接受的Step15实测4个enable失败序号和2个维护失败序号均析构到上游live blocks=0，正常生产库没有hooks。不能将它冒充64个上游API重新资格测试。
+
+## 10. 累计性能和证据预算
+
+v1.1.0累计实验分别测A=1.0原Full4.1，B=相同1.0运行时代码仅换Full4.2，C=当前Full4.2运行时（字段索引关闭）。同机器/编译器/固定seed17 trace，在128/2048内存和128持久场景warmup+三次测量，报告配对中位数，持久setup、修改、checkpoint、reopen和history分列。C关闭/开启的字段索引另列，8192/257选择性读取及1024/19真正交错；步长17与桶数互质，并记录occupancy。旧1024/17初始值全落一个桶，只能视为低选择性历史结果，不能标均匀。
+
+一次最终本地Debug/Release矩阵、一次文档/示例gate和最终精确HEAD MSVC矩阵足够支持本阶段执行证据。代码/测试/构建完全未变时复用既有OOM/双向兼容证据；不用反复整套运行制造信心。EG-001真实掉电、EG-002工具覆盖及EG-003 checkpoint OOM观测缺口保留，未进行独立重现campaign。新的真实失败需保留首失败状态/目录/调用点，限定追踪相关路径；不从时序噪声推导损坏。
+
+历史包装补充：RC coverage map发现history_collection_count、occurrence_get、occurrence_compare、query_equal没有直接测试调用；history.c仅追加已知Revision40的计数6、所属ID、首末比较和counter29等值断言。原测试内容完整保留，validator核对精确插入块；只重跑受影响history，不重复本地全矩阵。

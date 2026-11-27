@@ -1,6 +1,6 @@
 # Checkpoints and selection metadata — format 1
 
-RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+Technical baseline: **OrdWeave v1.1.0**, Windows x64 C17, LayerKeySort Full4.2 pinned at `f751e1ee2afd682874281d6dc495969f9eca49eb`. Actual release/version status and exact source provenance are recorded in [HANDOFF](HANDOFF.md).
 
 [中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
 
@@ -49,7 +49,7 @@ Each Collection is captured with lks_order_snapshot_capture, sized with lks_snap
 
 The native format is upstream's frozen grammar: magic LKS4SNP1 (8), flags zero (4), namespace length (4), row count (8), namespace, and for every row association length (8) and association bytes. OrdWeave does not implement this encoder or order engine; only the independent test oracle assembles expected bytes.
 
-Import builds complete Records, Collections and Occurrences before invoking lks_snapshot_deserialize and lks_snapshot_restore_order. The resolver maps IDs to stable database-owned Occurrences, checks Collection ownership and rejects duplicate resolution. Namespace, row counts and association lengths must match. Restored orders replace unpublished construction orders; traversal installs new runtime handles. Every live Occurrence must be seen once. Failure destroys all unpublished objects/containers without dereferencing expired handles.
+Import builds complete Records, Collections and Occurrences before invoking lks_snapshot_deserialize and lks_snapshot_restore_order. The resolver maps IDs to stable database-owned Occurrences, checks Collection ownership and rejects duplicate resolution. Namespace, row counts and association lengths must match. Restored orders replace the initially empty Collection orders; traversal installs new runtime handles. Every live Occurrence must be seen once. Failure destroys all unpublished objects/containers without dereferencing expired handles.
 
 ## Selection metadata — exactly 416 bytes
 
@@ -128,3 +128,9 @@ A versioned recovery root can retain a mandatory native baseline after WAL-prefi
 ## Semantic audit requirement (hardened in Phase 6)
 
 A checkpoint only initializes the ordinary result-construction path. Independent semantic replay and logical comparison prevent it from hiding earlier invalid operations. See [the architecture audit](ARCHITECTURE.md#phase-6-semantic-validation-hardening), [checkpoint internals](IMPLEMENTATION_INTERNALS.zh-CN.md) and TD-002/TD-101 in [the register](TECHNICAL_DEBT.md).
+
+## v1.1.0 importer and call-local verification
+
+Occurrence objects are constructed directly in the unpublished compressed radix after validating IDs, associations, counts and minimum mutation Revision. No temporary per-Occurrence Order insertion occurs; native restore alone creates residences. Resolver membership/uniqueness/namespace/all-seen checks and recorded high-water/Revision publication remain mandatory. Failure destroys the whole unpublished core.
+
+Within one checkpoint_load call, at most six successful identical (revision,digest) anchor checks can be reused. Failed checks are not cached; hard errors/complete bad frames are not swallowed. This is not cross-call trust and does not skip semantic audit or final comparison. Field-cache rows/configuration are not exported/imported; exchange drops cache before replacing borrowed Records. All format tables and canonical bytes above remain unchanged.

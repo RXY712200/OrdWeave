@@ -178,6 +178,20 @@ int main(int argc, char **argv) {
   populate(db, &record, &collection);
   OK(ow_field_index_enable(db,"counter",4,8));
   latest = revision(db);
+  /* RC_FACADE_COVERAGE_BEGIN: explicit historical wrapper assertions. */
+  {
+    OwHistory *current=NULL;size_t n=0;OwCollectionId c={0};OwRecordId r={0},*ids=NULL;
+    int order=0;OwValue last={.type=OW_INT,.as.integer=29};
+    OK(ow_history_open(db,latest,&current));
+    OK(ow_history_collection_count(current,collection,&n));T(n==6);
+    OK(ow_history_occurrence_get(current,(OwOccurrenceId){1},&c,&r));
+    T(c.value==collection.value&&r.value==record.value);
+    OK(ow_history_occurrence_compare(current,(OwOccurrenceId){1},(OwOccurrenceId){6},&order));T(order<0);
+    OK(ow_history_query_equal(current,"counter",&last,&ids,&n));
+    T(n==1&&ids[0].value==record.value);ow_history_close(current);
+    T(ids[0].value==record.value);ow_array_release(ids);
+  }
+  /* RC_FACADE_COVERAGE_END */
   before = segments(path);
   T(before > 3);
   OK(ow_history_open(db, 5, &view));

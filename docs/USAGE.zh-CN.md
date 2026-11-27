@@ -1,22 +1,21 @@
-# OrdWeave RC.1 使用指南
+# OrdWeave v1.1.0 使用指南
 
-[中文入口](../README.zh-CN.md) · [44 个 API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [实现导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md)
+[中文入口](../README.zh-CN.md) · [48 个 API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [实现导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md)
 
-代码基线：`3f99029da73e3b4f0a75a538dd241cf94cda23d7`，已发布的 `v1.0.0-rc.1` **Prerelease**。本指南是发布之后追加到 main 的文档，不在原标签内。Stable 尚未获准发布。
+本文按 **OrdWeave v1.1.0** 当前源码说明；48个公开函数以 [ordweave.h](../include/ordweave.h) 为准，Full4.2 固定 `f751e1ee2afd682874281d6dc495969f9eca49eb`。实际发布状态与准确来源集中在 [HANDOFF](HANDOFF.md)，这里不把技术基线当成发布声明。
 
 ## 1. 先理解要保存什么
 
 Record 是字段的所有者；Collection 保存有序的成员；Occurrence 表示“某 Record 在某 Collection 中的一次出现”。同一 Record 可出现四次而只保存一份字段，每次出现都有不同的 Occurrence ID，可以分别移动和删除。更改 Record 的字段会被所有引用它的出现共享；移动某次出现不会修改 Record 的数据。
 
-适合表达有序清单、图层成员、编排条目等嵌入式数据。它没有 SQL、联网服务、二级字段索引、多写者并发或跨 Collection 原子转移。查询字段相等是线性扫描，不是查询优化器。
+适合表达有序清单、图层成员、编排条目等嵌入式数据。它没有 SQL、联网服务、自动/持久化二级字段索引、多写者并发或跨 Collection 原子转移。字段相等默认扫描；可显式启用单字段缓存加速重复查询，范围结果支持值升序，仍不是通用查询优化器。
 
 ## 2. 取得源码、构建与外部链接
 
 支持 Windows x64、C17、CMake 3.21+。需要 Git；启用测试需要 Python 3。MSVC 和 GCC/MinGW 的 Debug/Release 有执行证据。不要把“代码使用 C17”解释为 Linux/macOS 已获支持；当前根 CMake 明确拒绝非 Windows 后端。
 
 ```powershell
-git clone --recurse-submodules --branch v1.0.0-rc.1 https://github.com/RXY712200/OrdWeave.git
-cd OrdWeave
+# 在已选定的 v1.1.0 源码检出目录执行（准确来源见 HANDOFF）
 cmake -S . -B build -A x64
 cmake --build build --config Release
 ctest --test-dir build -C Release --output-on-failure
@@ -144,9 +143,9 @@ target_link_libraries(myapp PRIVATE OrdWeave::ordweave)
 
 完整示例可以复现 API 用法，不替代系统故障处理策略。继续阅读[验证与证据](IMPLEMENTATION_VALIDATION.zh-CN.md)、[内部机制](IMPLEMENTATION_INTERNALS.zh-CN.md)或[交接入口](HANDOFF.md)。
 
-## Preview.4 Step15 扩展（未发布）
+## 12. 显式字段缓存与有序范围
 
-当前48函数保留历史44函数，新增显式有界索引启停及 live/history 类型范围查询。索引是会话级可选缓存；维护失败释放配置，显式再次启用前一直扫描。结果为按值及永久ID排序的独立数组。条目和复制键字节预算不是总内存上限。详见[完整契约](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
+v1.1.0 的48函数保留原有44函数，新增显式有界索引启停及 live/history 类型范围查询。索引是会话级可选缓存；维护失败释放配置，显式再次启用前一直扫描。结果为按值及永久ID排序的独立数组。条目和复制键字节预算不是总内存上限。详见[完整契约](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15)。
 
 ```c
 OwRecordId *ids = NULL;
@@ -162,3 +161,5 @@ if (status == OW_OK) {
     ow_field_index_disable(db);
 }
 ```
+
+未启用索引也可以直接调用ow_query_range；enable不是查询前置条件。需要的正预算不足时，应用可记录错误并继续扫描查询；不要把enable失败当作数据不完整。禁用不会释放已经返回的ID数组。history范围同样使用OwValue界限，但通过已有OwHistory读取，不能为历史view启用live缓存。

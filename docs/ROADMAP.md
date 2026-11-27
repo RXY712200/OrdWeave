@@ -26,6 +26,8 @@ All six implementation phases below are completed and passed independent review.
 
    Acceptance: Complete correctness and failure testing, Windows x64 compatibility review, accurate documentation, and stable release readiness review.
 
-## Subsequent development
+## v1.1.0 follow-up roadmap
 
-Published v1.0.0 remains the immutable production baseline. Current unreleased Preview.1 integrates Full4.2 and a narrow cleanup guard correction; [the review](PREVIEW_1.md) records decisions and proposed later criteria. It does not reopen the six completed phases above or renumber the separately fixed six-stage/twenty-step follow-up plan. No later step is implemented or authorized by these recommendations.
+The approved follow-up plan retains six stages/twenty steps. Accepted Preview.1 Steps1–4 integrates Full4.2/guard, Preview.2 Steps5–8 compressed ID core, Preview.3 Steps9–12 recovery construction, Preview.4 Steps13–15 capability convergence including approved index/range. Exact sources are in [HANDOFF](HANDOFF.md); historical decisions: [Preview.1](PREVIEW_1.md), [Preview.2](PREVIEW_2.md), [Preview.3](PREVIEW_3.md), [Preview.4](PREVIEW_4.md).
+
+Current RC.1 Steps16–18 validates correctness/compatibility, matched cumulative performance and final v1.1.0 technical documents. Steps19–20 Stable preparation/publication are not authorized or automatic. Execution completion is not independent acceptance. Original six phases above remain historical completion, not renumbered follow-up steps.

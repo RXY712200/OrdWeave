@@ -167,11 +167,39 @@ def check() -> None:
                     "src/core_names.h", "src/core_internal.h", "src/persistence.c", "src/history_windows.inc",
                     "tests/core.c", "tests/range_cases.inc", "tests/failures.c", "tests/index_failures.inc",
                     "tests/history.c", "tests/consumer/main.c"}
-    step15_delta = set(command("git", "diff", "--name-only", research, "--", *protected, capture=True).splitlines())
+    preview4 = "5ab01df34bcb62a9feb1c61a443a1f08c0a56a06"
+    step15_delta = set(command("git", "diff", "--name-only", research, preview4, "--", *protected, capture=True).splitlines())
     assert step15_delta <= step15_paths, f"unexpected approved Step15 delta: {step15_delta-step15_paths}"
-    assert 'return "1.1.0-preview.4"' in (ROOT / "src/ordweave.c").read_text(encoding="utf-8")
+    # RC-to-Stable permits only this narrow version transition. Accepted
+    # Preview production/test/build content is otherwise immutable here.
+    version = re.search(r'ordweave_version\(void\) \{ return "([^"]+)";',
+                        (ROOT / "src/ordweave.c").read_text(encoding="utf-8")).group(1)
+    assert version in {"1.1.0-rc.1", "1.1.0"}, version
+    rc_delta = set(command("git", "diff", "--name-only", preview4, "--", *protected, capture=True).splitlines())
+    assert rc_delta <= version_paths | {"tests/history.c"}, f"unexpected RC implementation delta: {rc_delta-version_paths}"
+    for path in sorted(version_paths):
+        old = subprocess.check_output(["git", "show", f"{preview4}:{path}"], cwd=ROOT).decode()
+        assert (ROOT / path).read_text(encoding="utf-8") == old.replace('"1.1.0-preview.4"', f'"{version}"'), path
+    original_history = subprocess.check_output(["git", "show", f"{preview4}:tests/history.c"], cwd=ROOT).decode()
+    facade_block = """  /* RC_FACADE_COVERAGE_BEGIN: explicit historical wrapper assertions. */
+  {
+    OwHistory *current=NULL;size_t n=0;OwCollectionId c={0};OwRecordId r={0},*ids=NULL;
+    int order=0;OwValue last={.type=OW_INT,.as.integer=29};
+    OK(ow_history_open(db,latest,&current));
+    OK(ow_history_collection_count(current,collection,&n));T(n==6);
+    OK(ow_history_occurrence_get(current,(OwOccurrenceId){1},&c,&r));
+    T(c.value==collection.value&&r.value==record.value);
+    OK(ow_history_occurrence_compare(current,(OwOccurrenceId){1},(OwOccurrenceId){6},&order));T(order<0);
+    OK(ow_history_query_equal(current,"counter",&last,&ids,&n));
+    T(n==1&&ids[0].value==record.value);ow_history_close(current);
+    T(ids[0].value==record.value);ow_array_release(ids);
+  }
+  /* RC_FACADE_COVERAGE_END */
+"""
+    expected_history = original_history.replace("  latest = revision(db);\n", "  latest = revision(db);\n" + facade_block, 1)
+    assert (ROOT / "tests/history.c").read_text(encoding="utf-8") == expected_history, "historical tests changed beyond approved facade coverage"
     for name in GUIDES:
-        assert BASELINE in (ROOT / "docs" / name).read_text(encoding="utf-8"), name
+        assert "v1.1.0" in (ROOT / "docs" / name).read_text(encoding="utf-8"), name
     for name in ("PERSISTENCE.md", "CHECKPOINTS.md", "HISTORY.md"):
         original = subprocess.check_output(["git", "show", f"{BASELINE}:docs/{name}"], cwd=ROOT)
         try:

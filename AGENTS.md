@@ -38,12 +38,6 @@ Select checks appropriate to the changed behavior. Keep source inspection, local
 
 ## Release and maintenance safeguards
 
-The six implementation phases are complete. Published `v1.0.0-rc.1` is a Prerelease at `3f99029da73e3b4f0a75a538dd241cf94cda23d7`; preserve its tag and Release. `v1.0.0` is published Stable at `32f853defc0a2e9f0ca809fb3535a90c977c7665`. This branch is unreleased `1.1.0-preview.4` development, limited to the approved Step15 field-index/range implementation and validation; see [Preview.4](docs/PREVIEW_4.md). Further development or releases require a separate task. Documentation maintenance does not authorize production/API/format/dependency changes, upstream edits, new tags or Releases. Actual release evidence and compatibility constraints remain in [RELEASE_CANDIDATE](docs/RELEASE_CANDIDATE.md).
+Technical documents describe v1.1.0,48 functions and unchanged formats. Actual candidate is unreleased1.1.0-rc.1; accepted Preview.4 parent5ab01df34bcb62a9feb1c61a443a1f08c0a56a06. Current authorization: RC.1 Steps16–18 bounded correctness/compatibility, cumulative validation and documentation. See [handoff](docs/HANDOFF.md) for release facts, accepted sources and anticipated narrow transition.
 
-
-Current Preview.3 decisions and limits: [persistence/recovery review](docs/PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
-
-
-## Approved Step15 implementation state
-
-The approved Preview.4 Step15 continuation adds exactly four public functions (48 total), an advisory session-local field index and live/history typed range queries. See [implemented contract](docs/IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15). Earlier research-only restrictions describe the research snapshot, not this explicitly approved continuation. Six production translation units own five implementation includes. Independent acceptance is pending; no merge, RC, tag or Release is authorized. Preserve all old API/status types and persistent bytes.
+Preserve v1.0.0-rc.1 target3f99029da73e3b4f0a75a538dd241cf94cda23d7 and Stable32f853defc0a2e9f0ca809fb3535a90c977c7665. No merge/tag/Release, main/prior-preview/upstream/global-config changes or Stable preparation/publication. Stop after one local Debug/Release matrix, docs/examples, finite campaign and final exact-head MSVC CI (report pending precisely, no polling loop). Reuse unchanged accepted fault/compatibility evidence; investigate actual release-relevant defects narrowly. EG-003 remains Open absent first-failure evidence.

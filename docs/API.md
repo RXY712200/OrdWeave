@@ -1,6 +1,6 @@
 # Public C API overview
 
-RC.1 source baseline: `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. This main-branch documentation update is newer than the published tag.
+Technical baseline: **OrdWeave v1.1.0**, Windows x64 C17, LayerKeySort Full4.2 pinned at `f751e1ee2afd682874281d6dc495969f9eca49eb`. Actual release/version status and exact source provenance are recorded in [HANDOFF](HANDOFF.md).
 
 [中文使用](USAGE.zh-CN.md) · [完整API](IMPLEMENTATION_API_REFERENCE.zh-CN.md) · [执行导读](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) · [内部实现](IMPLEMENTATION_INTERNALS.zh-CN.md) · [验证地图](IMPLEMENTATION_VALIDATION.zh-CN.md) · [技术债](TECHNICAL_DEBT.md)
 
@@ -87,6 +87,16 @@ These require a healthy persistent session; in-memory instances return INVALID. 
 
 HISTORY_UNAVAILABLE identifies future/pruned Revisions; RETENTION_UNSUPPORTED identifies a conservative maintenance refusal (including insufficient baseline-generation slots). A root-publication uncertainty returns RECOVERY_REQUIRED and quarantines the session. Close/reopen before retrying maintenance; automatic retry of ordinary uncertain mutations remains unsafe. See HISTORY.md for precise inclusive boundaries, policy persistence, backup completion gates and verified-range/error semantics.
 
-## 1.0.0-rc.1 compatibility
+## Compatibility and ownership
 
-Existing public signatures, struct layouts and numeric status values are preserved. `ordweave_version()` now reports `1.0.0-rc.1`. Target C17 Windows x64; compile library/consumer with matching enum/packing/CRT settings. Native runtime LKS handles remain private. The candidate preserves every existing disk format and rejects semantically invalid WAL even before a newer checkpoint. See RELEASE_CANDIDATE.md for validation evidence and publication approval requirements.
+Existing public signatures, struct layouts and numeric status values are preserved. `ordweave_version()` reports the actual library build version; release-specific literals are recorded in [HANDOFF](HANDOFF.md). Target C17 Windows x64; compile library/consumer with matching enum/packing/CRT settings. Native runtime LKS handles remain private. v1.1.0 preserves every existing disk format and rejects semantically invalid WAL even before a newer checkpoint. See RELEASE_CANDIDATE.md for validation evidence and publication approval requirements.
+
+## Explicit field indexing and typed range queries
+
+The header exports48 functions: all44 legacy functions plus ow_field_index_enable, ow_field_index_disable, ow_query_range and ow_history_query_range. Existing types/status numbers are unchanged. Exact declarations and errors are in the [reference](IMPLEMENTATION_API_REFERENCE.zh-CN.md#preview4-step15).
+
+Enable accepts one valid field and positive entry/key-byte budgets. Only present values occupy entries; Null is indexed, missing excluded. Bytes count one copied field name including NUL and copied String/Binary payloads, not fixed rows/LKS allocations. Failure returns INVALID/NOMEM/CAPACITY as applicable and preserves the old cache. Disable is idempotent. No logical ID/Revision or WAL configuration is consumed. Successful relevant mutations maintain immutable keys; maintenance failure clears index/configuration while preserving data success, without automatic rebuild.
+
+Range works with or without indexing, selects exactly one of six types, accepts independently absent lower/upper pointers, and requires both inclusive flags0/1 even for absent bounds. Bounds match type and normal validation; lower>upper is INVALID, equal/exclusive is empty OK. Ascending value then permanent Record ID: Null singleton, Bool false<true, signed Int, finite Float with signed zeros equal, unsigned String/Binary byte-span then length (NUL/empty/prefix supported). No coercion/locale collation. Outputs initialize NULL/0 and own copied IDs released by ow_array_release. Allocation failure never returns partial success. Matching equality retains ID ordering and original equality semantics.
+
+History range scans/sorts its independent immutable core, with no live cache sharing. Live enable/disable/range guard busy/quarantined sessions before touching cache. Cache is absent after reopen and cleared before exchange/destruction. Calls remain caller-serialized. See [usage](USAGE.zh-CN.md) and [validation](IMPLEMENTATION_VALIDATION.zh-CN.md).

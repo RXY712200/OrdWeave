@@ -1,67 +1,41 @@
-# OrdWeave — maintainer and AI handoff
+# OrdWeave v1.1.0 — technical handoff and release metadata
 
-This is the public technical entry map for maintainers. Read the local [AGENTS.md](../AGENTS.md) and [development guide](DEVELOPMENT.zh-CN.md), then the task-relevant documents below. All necessary project instructions are public; verify actual source and diffs for a new change.
+## Identity and exact provenance
 
-## Identity and current state
+Windows x64 C17 embedded static database; caller-serialized, single-writer persistent session. Product technical baseline is v1.1.0 with48 public functions. **Actual current candidate is unreleased `1.1.0-rc.1`**, CMake numeric1.1.0. This does not claim a v1.1.0 Stable tag or Release exists. Only Steps16–18 convergence is authorized; no merge, tag, Release or Stable preparation/publication.
 
-OrdWeave is a Windows x64 C17 embedded static database built on the public APIs of LayerKeySort Full. Records own typed fields; Collections own ordered, independently identified Occurrences; multiple Occurrences may reference the same Record. It offers in-memory and durable single-operation databases, native checkpoints, immutable historical views, explicit anchored retention cleanup, full backups and persisted-data verification.
+Accepted Preview.4 parent `5ab01df34bcb62a9feb1c61a443a1f08c0a56a06`, [production evidence](https://github.com/RXY712200/OrdWeave/tree/41d49ed610879de00e9464f29b9cf0935a69501f/handoff/v1.1.0-preview.4/step15-implementation), [CI45950372644](https://github.com/RXY712200/OrdWeave/actions/runs/45950372644). Current source branches from that parent at dev/v1.1.0-rc.1; final SHA/CI belong in external evidence to avoid circular self-SHA promises. Full4.2 pin remains `f751e1ee2afd682874281d6dc495969f9eca49eb`.
 
-All **six** implementation phases completed independent review. [v1.0.0-rc.1](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0-rc.1) is a published GitHub **Prerelease**. [v1.0.0](https://github.com/RXY712200/OrdWeave/releases/tag/v1.0.0) is published Stable at `32f853defc0a2e9f0ca809fb3535a90c977c7665`. Current branch is unreleased `1.1.0-preview.4` development; see [Preview.1 review](PREVIEW_1.md). The RC.1 annotated tag object is `165b1a72f2c689c78d271d4ab61651e6eefc217e`, peeling to implementation baseline `3f99029da73e3b4f0a75a538dd241cf94cda23d7`. Documentation stabilization advances main after that release; these new guides are not in the immutable RC tag. The preceding documentation package was committed at `96785fd6977754d7511a1954040115f91b4b4851` with [Windows CI 43815101144](https://github.com/RXY712200/OrdWeave/actions/runs/43815101144), 12/12 tests in each MSVC configuration. The subsequent documentation-governance commit is `dc23e791b3dc37f500eed73f5f8e719ea05edcf3`, verified by [Windows CI 43825091924](https://github.com/RXY712200/OrdWeave/actions/runs/43825091924). Both are historical documentation baselines; main may advance again. Inspect current remote HEAD rather than treating either as permanently latest.
+Historical releases unchanged: v1.0.0-rc.1 Prerelease target `3f99029da73e3b4f0a75a538dd241cf94cda23d7`, annotated object `165b1a72f2c689c78d271d4ab61651e6eefc217e`; v1.0.0 Stable target `32f853defc0a2e9f0ca809fb3535a90c977c7665`, object `1a4d62b2f53ed0d4525f71dfd46de2413177dbf8`. Historical release identity is not current technical implementation. Preview.1/2/3 accepted commits: `3c5f371ca53c62912dc3d4d63aa11dc5277af020`, `2bbf7640711e6561a5d5979f0de53a7f6ee0a1e8`, `edb9675b10125cecdf936e030bd9a54a90a84146`.
 
-```powershell
-git ls-remote origin refs/heads/main refs/tags/v1.0.0-rc.1 'refs/tags/v1.0.0-rc.1^{}'
-git status --short
-git submodule status
-gh release view v1.0.0-rc.1 --repo RXY712200/OrdWeave --json url,isPrerelease,isDraft,targetCommitish
-gh run list --workflow windows.yml --branch main --limit 5 --json headSha,status,conclusion,url
-```
+## Reading order and source architecture
 
-## Read in this order
+[Usage](USAGE.zh-CN.md) → [48 API contracts](IMPLEMENTATION_API_REFERENCE.zh-CN.md) → [walkthrough](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) → [internals](IMPLEMENTATION_INTERNALS.zh-CN.md) → [validation](IMPLEMENTATION_VALIDATION.zh-CN.md). Maintainers also read [development](DEVELOPMENT.zh-CN.md), [debt](TECHNICAL_DEBT.md), [release evidence](RELEASE_CANDIDATE.md), exact [WAL](PERSISTENCE.md)/[checkpoint](CHECKPOINTS.md)/[history](HISTORY.md) grammars. Public documents are self-contained; no private access needed.
 
-1. [AGENTS.md](../AGENTS.md) and [DEVELOPMENT.zh-CN.md](DEVELOPMENT.zh-CN.md): project boundaries, build/verification and engineering invariants.
-2. [Chinese README](../README.zh-CN.md) / [English README](../README.md), then [USAGE.zh-CN.md](USAGE.zh-CN.md) for complete public examples.
-3. [IMPLEMENTATION_WALKTHROUGH.zh-CN.md](IMPLEMENTATION_WALKTHROUGH.zh-CN.md) and [IMPLEMENTATION_API_REFERENCE.zh-CN.md](IMPLEMENTATION_API_REFERENCE.zh-CN.md); [include/ordweave.h](../include/ordweave.h) defines all 44 function signatures.
-4. [IMPLEMENTATION_INTERNALS.zh-CN.md](IMPLEMENTATION_INTERNALS.zh-CN.md), the exact formats below and [TECHNICAL_DEBT.md](TECHNICAL_DEBT.md).
-5. [IMPLEMENTATION_VALIDATION.zh-CN.md](IMPLEMENTATION_VALIDATION.zh-CN.md), affected source/tests/diffs and actual exact-commit CI.
+Six production C translation units, five owned includes, five private headers. ordweave.c owns business objects plus occurrence_index.inc (compressed ID radix), field_index.inc (owned advisory keys), checkpoint_core.inc (canonical graph/native export, direct unpublished import). persistence.c dispatches guards/mutate. lks_adapter.c wraps public LKS/statuses. wal_format.c encodes/decodes/applies commands. wal_windows.c owns Windows sessions/WAL and includes checkpoint_windows.inc (selection/publication/call-local anchor reuse) and history_windows.inc (independent audit/views, root/retention/backup). sha256.c owns BCrypt resources.
 
-Exact persistent grammars: [PERSISTENCE.md](PERSISTENCE.md) (manifest/segment/frames), [CHECKPOINTS.md](CHECKPOINTS.md) (checkpoint/selection/native order), [HISTORY.md](HISTORY.md) (policy/root/backup). English [API](API.md), [architecture](ARCHITECTURE.md) and [release evidence](RELEASE_CANDIDATE.md) remain useful summaries.
+## Protected technical contracts
 
-## Authority and architecture
+Preserve48 exact signatures and old types/status values, permanent typed monotonic IDs, one Revision per state-changing mutation, no-op/ref rules and caller ownership. Handles remain private and rebuilt after restore. Record/Collection use ManagedOrder; Occurrence uses compressed16-way radix plus public LKS explicit Collection ordering. Prepare/Order-success/commit preserves failure atomicity. Optional field cache owns immutable values, explicitly budgets present entries and variable key bytes, invalidates configuration on maintenance failure, never auto-rebuilds, never changes committed data status. Historical range owns an independent core; copied arrays outlive cache/view/source.
 
-Current source, public header, CMake and independently observed behavior outrank old plans, phase prompts, handoff prose and chat recollections. A test's presence is not evidence that it ran; a successful historical run does not certify a new commit. Report disagreement rather than silently choosing the convenient account.
+WAL/manifest/segment/frame v3; checkpoint/selection/root/policy v1; native LKS4SNP1. Direct import changes construction, not bytes. Retained WAL remains semantically audited; mandatory root baseline, root agreement before deletion, backup.incomplete then independent verification/completion remain. COMMIT_UNKNOWN means stop/close/validated reopen, not blind retry.
 
-`persistence.c` exposes wrappers and sends mutations through pre-encoding, core application and durable confirmation. `ordweave.c` owns records/fields/collections/occurrences and three ID indexes; `lks_adapter.c` uses public LKS ManagedOrder/Order APIs. `wal_format.c` encodes/decodes commands and dispatches core replay. `wal_windows.c` owns paths, OS locks, append/flush/rotation/scans. `sha256.c` wraps BCrypt. There are **six** compiled production `.c` files. `checkpoint_core.inc` is included by ordweave.c; `checkpoint_windows.inc` and `history_windows.inc` by wal_windows.c, not separate object files.
+## Evidence and limits
 
-Recovery structurally checks the authoritative retained chain, independently replays its semantics, restores a candidate native checkpoint plus tail, then compares logical results. Valid checksums alone are insufficient. History reconstruction audits retained later commits even for an earlier requested view. Cleanup publishes a mandatory baseline and matching roots before deleting an eligible prefix. Backup copies into a fresh directory marked incomplete, validates independently and publishes completion last.
+Root registers12 CTests, including independent wire/graph/semantic oracles and public consumer. See validation guide for coverage/commands. RC budget: one local Windows Debug/Release matrix, docs/examples both configurations, final exact-head MSVC matrix and compact cumulative A/B/C campaign. Accepted Step15 bilateral Stable/Preview.3 compatibility,386-byte canonical hash, upstream failures and lifecycle evidence remain applicable because RC runtime delta is version-only, with a small additive historical facade test. Exact comparison and current execution results are external evidence, not inferred from old green CI.
 
-## Permanent contracts and product boundaries
+Unsupported: SQL, network service, multiwriter/concurrent guarantee, automatic/persistent field cache, cross-collection transaction, Linux/macOS backend, Last Days, incremental backup. Checkpoint256MiB limit is not a total database-size guarantee. Repeated semantic scans, whole buffers/copies and BCrypt setup remain costs. EG-001 physical power-loss, EG-002 instrumentation scope, EG-003 checkpoint OOM observation remain open; no standalone campaign or unproven attribution. All debt IDs/history remain.
 
-Preserve public signatures/status values, copied-result ownership, per-type nonreused successful IDs, one-Revision-per-state-changing-operation, no-op semantics, referential constraints, native Handle rebuilding and caller-serialized access. Permanent IDs are not runtime LKS Handles. `COMMIT_UNKNOWN` requires close/reopen investigation; never advise blind mutation retry. Checkpoint/root publication uncertainty may require `RECOVERY_REQUIRED` and quarantine.
+## Completed history and current work
 
-Existing formats: manifest/segment/frame v3; checkpoint, selection, policy and recovery-root v1; native `LKS4SNP1`. Preserve byte layouts, canonical encodings, digest chains, high-water values, strict unknown-name/path handling, checkpoint ancestry and current/backup publication-before-deletion rules. A root-authorized deleted prefix is unavailable, not silently reconstructible. Windows x64 filesystem/flush contracts are prerequisites, not proof of power-loss immunity.
+Original six phases are complete: foundation; memory core; WAL/transactions/crash recovery; native checkpoints; history/retention/backup; final hardening. Separate fixed six-stage/twenty-step v1.1 plan accepted Preview.1 dependency/guard, Preview.2 compressed index, Preview.3 direct import/anchor reuse, Preview.4 research plus four-function Step15 implementation. PREVIEW_1 through PREVIEW_4 remain historical snapshots, not current authorization.
 
-Intentionally unsupported: SQL, secondary field indexes, network service, multi-operation transactions, multi-writer/concurrent-handle guarantees, Linux/macOS, Last Days (no commit timestamps), incremental backup and a prebuilt cross-CRT ABI/install SDK. Do not turn every unsupported feature into technical debt or add it without a task.
+Current Steps16–18 cover correctness/compatibility, fresh matched performance and complete documentation. Codex completion is not independent acceptance. Owner/ChatGPT review the immutable report before further work; no authorized Stable task is fabricated.
 
-## Dependencies and provenance
+## Anticipated narrow candidate-to-Stable transition (not executed)
 
-LayerKeySort Full v4.2.0 Stable is pinned under third_party/LayerKeySort at `f751e1ee2afd682874281d6dc495969f9eca49eb`; use its public APIs and do not edit the upstream checkout. Adapted Obscura64 source is fixed at `3db0122560853a8f3db3ba6888067394dc1a3e62`; SHA, write/lock/path and temporary-publication provenance is detailed in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md). No ProbSpan implementation is included. MIT notices must be preserved.
+Technical documentation is already v1.1.0-facing and should be reused if semantics remain unchanged. A separately authorized transition is expected to change only runtime/test literals in `src/ordweave.c`, `tests/smoke.c`, `tests/consumer/main.c`, from1.1.0-rc.1 to1.1.0. CMake is already1.1.0. Minimal release-status facts then update HANDOFF, RELEASE_CANDIDATE, CHANGELOG and AGENTS scope as needed. API/architecture/usage/formats/four detailed guides need no second rewrite.
 
-The LayerKeySort documentation benchmark was read at documentation commit `13998b0682e56f34b401773f754e6d2c88c51206`; it is a presentation reference, not a dependency pin change.
+Version-aware validator permits only those two strings and exact three-file substitution from accepted Preview.4; all other production/build content and historical test content stays protected. Check narrow diff, applicable version smoke/external-consumer tests and docs validator, required final exact-head CI and separately authorized tag/Release identity checks. Reuse accepted technical/compatibility/performance evidence for unchanged semantics. Actual technical/runtime changes warrant renewed affected-scope review; version text alone does not warrant another comprehensive campaign. This checklist grants no transition permission.
 
-## Tests, evidence and deferred work
-
-The root CMake registers 12 CTests covering core, OOM/atomicity, WAL/process faults, independent format vectors, native checkpoints, history/roots/deletion/backup, semantic corruption, adversarial crash boundaries and an external C17 public-target consumer. Run Windows MSVC x64 Debug and Release through [windows.yml](../.github/workflows/windows.yml); see [validation guide](IMPLEMENTATION_VALIDATION.zh-CN.md) for exact commands and assertion map. RC baseline evidence: [run 43809986388](https://github.com/RXY712200/OrdWeave/actions/runs/43809986388), 12 tests in each matrix configuration. Recheck CI for the actual new HEAD.
-
-Active debt: global Occurrence index rebuilds, repeated semantic replay, full checkpoint buffers, full-copy backup, per-call SHA provider setup, residual unpublished temporaries. Evidence gaps include physical power-loss validation and broader instrumentation. [TECHNICAL_DEBT.md](TECHNICAL_DEBT.md) separates these from resolved correctness issues (Phase 6 semantic WAL audit and safe backup filename/marker handling). Do not repay performance debt in a documentation task.
-
-## Current maintenance and next-task status
-
-The accepted Preview.1 work covered Steps 1–4: exact Full4.2 integration, isolated old/new measurements, compatibility checks, capability/architecture review and the confirmed early cleanup guard correction. See [Preview.1 decisions](PREVIEW_1.md) for the complete 64-function inventory and proposed later criteria. The existing six implementation phases remain complete; the separate fixed six-stage/twenty-step follow-up plan is not renumbered.
-
-The development and evidence branches are based independently on published Stable `32f853defc0a2e9f0ca809fb3535a90c977c7665`. Evidence is kept on `evidence/v1.1.0-preview.1` under `handoff/v1.1.0-preview.1/`. The draft PR requires independent review; no Preview.2, merge, tag or Release is authorized by this handoff. Existing RC.1 and Stable publication remain unchanged. The original TD/EG records remain except for the explicit measurement addendum and resolved guard entry.
-
-Current authorized work is Preview.4 Steps13–15: private capability prototypes, proposed contracts and version/documentation validation. See [Preview.2 decisions](PREVIEW_2.md). Earlier Preview.1 task prose is historical; no RC.1 or release is authorized.
-
-Current Preview.3 decisions and limits: [persistence/recovery review](PREVIEW_3.md). Earlier task-scope prose is historical. No RC.1 is authorized.
-
-Current Preview.4 is research-complete with no new public API or production data-path change. See [capability decisions and pending contract](PREVIEW_4.md). Earlier stage-scope paragraphs are historical. RC.1 requires a separate task.
+历史包装补充：RC coverage map发现history_collection_count、occurrence_get、occurrence_compare、query_equal没有直接测试调用；history.c仅追加已知Revision40的计数6、所属ID、首末比较和counter29等值断言。原测试内容完整保留，validator核对精确插入块；只重跑受影响history，不重复本地全矩阵。
