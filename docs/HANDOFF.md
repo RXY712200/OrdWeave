@@ -56,7 +56,7 @@ Active debt: global Occurrence index rebuilds, repeated semantic replay, full ch
 
 ## Current maintenance and next-task status
 
-Current work is authorized Preview.1 Steps 1–4: exact Full4.2 integration, isolated old/new measurements, compatibility checks, capability/architecture review and the confirmed early cleanup guard correction. See [Preview.1 decisions](PREVIEW_1.md) for the complete 64-function inventory and proposed later criteria. The existing six implementation phases remain complete; the separate fixed six-stage/twenty-step follow-up plan is not renumbered.
+The accepted Preview.1 work covered Steps 1–4: exact Full4.2 integration, isolated old/new measurements, compatibility checks, capability/architecture review and the confirmed early cleanup guard correction. See [Preview.1 decisions](PREVIEW_1.md) for the complete 64-function inventory and proposed later criteria. The existing six implementation phases remain complete; the separate fixed six-stage/twenty-step follow-up plan is not renumbered.
 
 The development and evidence branches are based independently on published Stable `32f853defc0a2e9f0ca809fb3535a90c977c7665`. Evidence is kept on `evidence/v1.1.0-preview.1` under `handoff/v1.1.0-preview.1/`. The draft PR requires independent review; no Preview.2, merge, tag or Release is authorized by this handoff. Existing RC.1 and Stable publication remain unchanged. The original TD/EG records remain except for the explicit measurement addendum and resolved guard entry.
 
