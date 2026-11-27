@@ -2,11 +2,9 @@
 
 ## Current release-specific state
 
-Candidate is unreleased `1.1.0-rc.1`, CMake1.1.0, parent accepted Preview.4 `5ab01df34bcb62a9feb1c61a443a1f08c0a56a06`, Full4.2 `f751e1ee2afd682874281d6dc495969f9eca49eb`. Only Steps16–18 is authorized. No v1.1.0 tag/Release, merge or Stable preparation/publication. Final SHA/gates/cumulative CSV are in the separate immutable RC evidence report.
+Stable release source is `1.1.0`, CMake1.1.0, based on accepted RC.1 `76484149fb51cac7d7691a6a9cacc568c4b388fa`, Full4.2 `f751e1ee2afd682874281d6dc495969f9eca49eb`. Owner authorizes integration/publication after final exact-main checks. Actual publication is verified at [v1.1.0](https://github.com/RXY712200/OrdWeave/releases/tag/v1.1.0); this source does not pre-assert a published Release. Final identities belong in separate Stable evidence.
 
-Technical documents are final v1.1.0-facing48-function contracts. Runtime/test literals remain1.1.0-rc.1 until authorized transition; minimal expected paths/checks are in [HANDOFF](HANDOFF.md). Existing formats and44 old contracts remain. Runtime delta from accepted Preview.4 is version-only; four historical facades receive additive direct assertions; accepted fault/compatibility evidence is reusable, with current local/remote execution separately recorded.
-
-[VALIDATION](IMPLEMENTATION_VALIDATION.zh-CN.md) maps actual assertions and limitations. No hardware durability certification or blanket upstream retest. One finite campaign compares exact Stable4.1 A, identical runtime Full4.2 B, current C with index disabled, plus separate opt-in indexing. No old-ratio multiplication or universal speed claim.
+[Accepted RC report](https://github.com/RXY712200/OrdWeave/blob/ac581c7324dc962daa2146e52c68039a09541792/handoff/v1.1.0-rc.1/REPORT.md) supplies unchanged technical validation. Product documentation is already v1.1.0-facing. The narrow version/metadata transition retains48 functions, formats, semantics and all debt/evidence gaps. Only targeted version/consumer/docs checks and final main MSVC matrix are newly required. No benchmark/OOM/compatibility campaign repeated. See [handoff](HANDOFF.md).
 
 ## Historical v1.0.0-rc.1 package (preserved record)
 

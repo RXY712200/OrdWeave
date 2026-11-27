@@ -70,3 +70,8 @@
 - Frozen48 functions; accepted Preview.4 semantics, formats and Full4.2 pin unchanged. Runtime/tests change only candidate version literals.
 - Rebuilt v1.1.0 technical documentation: compressed radix/publication, direct native import, call-local anchor reuse, advisory field cache and typed live/history ranges.
 - Version-aware historical/source/format/API protections and bounded matched cumulative validation; actual results in separate RC evidence. Debts/EG-003 remain; no publication or independent acceptance claim.
+
+## v1.1.0 Stable
+
+- Integrates accepted Preview.1–4 and RC.1: Full4.2, compressed Occurrence lookup, direct checkpoint import/call-local anchor reuse and four optional index/range APIs (48 total). Existing persistent formats and original contracts preserved.
+- Stable runtime version1.1.0; technical documentation reused from accepted RC. Known costs and EG-001/002/003 remain. Actual publication and precise source identity are verified through the v1.1.0 Release and external Stable evidence.

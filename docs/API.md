@@ -52,7 +52,7 @@ Collection count also serves Collection lookup. Members returns occurrence IDs i
 
 Placements are FRONT, BACK, BEFORE, AFTER. FRONT/BACK require anchor ID zero. BEFORE/AFTER require a live anchor in the target Collection; a missing anchor is NOT_FOUND and foreign Collection is INVALID. An occurrence never changes its associated Record or Collection. Moving relative to itself, to its existing endpoint, or to its already-satisfied adjacency is an OK no-op. Each duplicate Record membership has an independent ID.
 
-Equality queries scan Records and return matching Record IDs in increasing ID order. Missing fields do not equal null. Empty results are NULL/zero. Queries never change Revision.
+Equality queries use a matching valid enabled field index or otherwise scan Records, returning matching Record IDs in increasing ID order. Missing fields do not equal null. Empty results are NULL/zero. Queries never change Revision.
 
 Core failures preserve observable database contents, membership, ordering, IDs, Revision, and index consistency. Persistent commit uncertainty is an explicit exception to determinate outcomes, as described below. Caller serialization is mandatory, including reads versus writes/destruction. No internal locking or cross-collection atomic transfer is promised. Limits and logical Record budget are specified in ARCHITECTURE.md.
 
